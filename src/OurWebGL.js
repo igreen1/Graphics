@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from './glsl-utilities'
 import { polygon, icosahedron, toRawLineArray, toRawTriangleArray } from './shapes'
-
+import { Our3DObject, OurMesh, Our3DGroup, RegularPolygon } from './Our3DObject'
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
   #ifdef GL_ES
@@ -127,6 +127,8 @@ const OurWebGL = props => {
 
     // Build the objects to display.
     const objectsToDraw = [
+      Our3DObject(RegularPolygon(5),[], gl.TRIANGLES  ),
+      // new Our3DGroup(new OurMesh( {vertices: [1.0, 0.0, 0.0, 0.9, 0.1, 0.0, 1.0, 0.0, 0.0, 0.9, -0.1, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0],facesByIndex:[],gl.LINES,gl}))
       // {
       //   color: { r: 0.5, g: 0, b: 0 },
       //   vertices: [1.0, 0.0, 0.0, 0.9, 0.1, 0.0, 1.0, 0.0, 0.0, 0.9, -0.1, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0],
@@ -169,11 +171,11 @@ const OurWebGL = props => {
       //   mode: gl.LINE_LOOP
       // },
 
-      {
-        color: { r: 0.0, g: 0.0, b: 0.5 },
-        vertices: toRawTriangleArray(polygon(3)),
-        mode: gl.TRIANGLES
-      }
+      // {
+      //   color: { r: 0.0, g: 0.0, b: 0.5 },
+      //   vertices: toRawTriangleArray(polygon(3)),
+      //   mode: gl.TRIANGLES
+      // }
     ]
 
     // Pass the vertices to WebGL.
