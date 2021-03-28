@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from './glsl-utilities'
 import { polygon, icosahedron, toRawLineArray, toRawTriangleArray } from './shapes'
-import { Our3DObject, OurMesh, Our3DGroup, RegularPolygon } from './Our3DObject'
+import { Our3DObject, OurMesh, Our3DGroup } from './Our3DObject'
+import {RegularPolygon} from './RegularPolygon'
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
   #ifdef GL_ES
