@@ -3,7 +3,8 @@ import { useState, useEffect, useRef } from 'react'
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from './glsl-utilities'
 import { polygon, icosahedron, toRawLineArray, toRawTriangleArray } from './shapes'
 import { Our3DObject, OurMesh, Our3DGroup } from './Our3DObject'
-import {RegularPolygon} from './RegularPolygon'
+import { RegularPolygon } from './RegularPolygon'
+import { ExtrudeGeometry } from './ExtrudeGeometry'
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
   #ifdef GL_ES
@@ -128,7 +129,35 @@ const OurWebGL = props => {
 
     // Build the objects to display.
     const objectsToDraw = [
-      Our3DObject(RegularPolygon(5),[], gl.TRIANGLES  ),
+      // Our3DObject(RegularPolygon(5), [], gl.TRIANGLES),
+      Our3DObject(
+        ExtrudeGeometry(
+          [
+            [0, 1],
+            [0.25, 0.3],
+            [1, 0.3],
+            [0.4, -0.1],
+            [0.6, -0.8],
+            [0, -0.35],
+            [-0.6, -0.8],
+            [-0.4, -0.1],
+            [-1, 0.3],
+            [-0.25, 0.3]
+          ],
+          [
+            [0, 9, 1],
+            [2, 1, 3],
+            [4, 3, 5],
+            [6, 5, 7],
+            [8, 7, 9],
+            [1, 9, 5],
+            [3, 1, 5],
+            [7, 5, 9]
+          ]
+        ),
+        [],
+        gl.TRIANGLES
+      )
       // new Our3DGroup(new OurMesh( {vertices: [1.0, 0.0, 0.0, 0.9, 0.1, 0.0, 1.0, 0.0, 0.0, 0.9, -0.1, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0],facesByIndex:[],gl.LINES,gl}))
       // {
       //   color: { r: 0.5, g: 0, b: 0 },
@@ -260,7 +289,7 @@ const OurWebGL = props => {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
       // Set up the rotation matrix.
-      gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
+      gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 1, 1, 0)))
 
       // Display the objects.
       objectsToDraw.forEach(drawObject)

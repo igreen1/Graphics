@@ -1,16 +1,15 @@
-import { OurMesh } from "./Our3DObject"
+import { OurMesh } from './Our3DObject'
 
-const RegularPolygon = (numberOfSides) => {
-
-  let vertices = function createVertices(numberOfPoints, radius = 1) {
-    let arr = []
+const RegularPolygon = numberOfSides => {
+  let vertices = (function createVertices(numberOfPoints, radius = 1) {
+    let vertices = []
     let increment = (2 * Math.PI) / numberOfPoints
-    arr.push([0, 0, 0])
+    vertices.push([0, 0, 0])
     for (let i = 0; i < numberOfPoints; i++) {
-      arr.push([(Math.cos(i * increment) * radius), (Math.sin(i * increment) * radius), 0])
+      vertices.push([Math.cos(i * increment) * radius, Math.sin(i * increment) * radius, 0])
     }
-    return arr
-  }(numberOfSides)
+    return vertices
+  })(numberOfSides)
 
   let facesByIndex = []
   for (let i = 1; i <= numberOfSides; i++) {
