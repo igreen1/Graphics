@@ -20,7 +20,6 @@ const ExtrudeGeometry = (vertices2D, faces2D, height = 0.5) => {
   })(vertices2D, height)
 
   let facesByIndex = (function createFacesByIndex(vertices, faces2D) {
-    console.log(faces2D)
     let facesByIndex = []
     const half = vertices.length / 2
     //splits the front and back faces into triangles using 2D faces
@@ -37,7 +36,6 @@ const ExtrudeGeometry = (vertices2D, faces2D, height = 0.5) => {
     return facesByIndex
   })(vertices, faces2D)
 
-  console.log(vertices, facesByIndex)
   return OurMesh({ vertices, facesByIndex }, false)
 }
 
