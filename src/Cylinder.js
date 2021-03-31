@@ -1,5 +1,3 @@
-import { RegularPolygon } from './RegularPolygon'
-
 const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegments = 32, closed = true) => {
 
 
@@ -21,19 +19,20 @@ const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegment
 
   //Add top/bottom if necessary
   if (closed) {
+    
     //Add center of bottom circle
-
     vertices.push([0, 0, 0])
     for (let i = 0; i < radialSegments; i++) {
       //add bottom circle for cylinder
       facesByIndex.push([i, (i + 1) % radialSegments, vertices.length - 1])
     }
 
+    //Add center of top circle
     vertices.push([0, 0, height])
-    const vertexOffset = radialSegments*(heightSegments-1)
+    const vertexOffset = radialSegments * (heightSegments - 1)
     for (let i = 0; i < radialSegments; i++) {
       //add top circle for cylinder
-      facesByIndex.push([vertexOffset + i, vertexOffset +((i + 1) % radialSegments), vertices.length - 1])
+      facesByIndex.push([vertexOffset + i, vertexOffset + ((i + 1) % radialSegments), vertices.length - 1])
     }
 
   }

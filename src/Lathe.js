@@ -1,4 +1,4 @@
-import { OurMesh, Our3DGroup, Our3DObject } from './Our3DObject'
+import { OurMesh } from './Our3DObject'
 
 
 const Lathe = (points, segments = 32, phiStart = 0, phiLength = 2 * Math.PI) => {
@@ -6,13 +6,6 @@ const Lathe = (points, segments = 32, phiStart = 0, phiLength = 2 * Math.PI) => 
    * Lathe rotates points by phiLength amount, starting at phiStart creating segments number of segments
    * It does this about the z-axis, assuming point is a [radius, height] tuple in array form
    */
-
-  // Lathe is a series of points that described the radius and the height of a line
-  // then this line is rotated
-  // phiStart says where to start this rotation
-  // segements is how many points to put over the entire rotatoins
-  // phiLength is how far the rotation goes (2pi means a full circle, pi means 1 half circle)
-
 
   const rotationPerSegment = (phiLength / segments);
 
@@ -24,7 +17,7 @@ const Lathe = (points, segments = 32, phiStart = 0, phiLength = 2 * Math.PI) => 
   })
 
   const facesByIndex = []
-  for (let i = 0; i < (vertices.length - segments -1 ); i++) {
+  for (let i = 0; i < (vertices.length - segments - 1); i++) {
     facesByIndex.push([i, i + 1, i + segments + 1])
     facesByIndex.push([i, i + segments + 1, i + segments])
   }
@@ -37,14 +30,15 @@ const Lathe = (points, segments = 32, phiStart = 0, phiLength = 2 * Math.PI) => 
 }
 
 const LatheExampleFromThreeJs = () => {
+  //https://threejs.org/docs/index.html?q=cylin#api/en/geometries/LatheGeometry
+  // example from here to compare to threejs lathe geometry
   let points = [];
   for (let i = 0; i < 11; i++) {
     points.push([Math.sin(i * 0.2) * 10 + 5, (i - 5) * 2]);
   }
-  points = points.map((point)=>point.map((coordinate)=>coordinate/20))
-  const geometry = OurMesh(Lathe(points, 33))
-  console.log(geometry)
-  return geometry
+  points = points.map((point) => point.map((coordinate) => coordinate / 20))
+  return OurMesh(Lathe(points, 33))
+
 }
 
 const CylinderByLathe = () => {
