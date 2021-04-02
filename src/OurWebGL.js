@@ -5,6 +5,7 @@ import { polygon, icosahedron, toRawLineArray, toRawTriangleArray } from './shap
 import { Our3DObject, OurMesh, Our3DGroup } from './Our3DObject'
 import { RegularPolygon } from './RegularPolygon'
 import { ExtrudeGeometry } from './ExtrudeGeometry'
+import { Cone } from './Cone'
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
   #ifdef GL_ES
@@ -130,31 +131,36 @@ const OurWebGL = props => {
     // Build the objects to display.
     const objectsToDraw = [
       // Our3DObject(RegularPolygon(5), [], gl.TRIANGLES),
+      // Our3DObject(
+      //   ExtrudeGeometry(
+      //     [
+      //       [0, 1],
+      //       [0.25, 0.3],
+      //       [1, 0.3],
+      //       [0.4, -0.1],
+      //       [0.6, -0.8],
+      //       [0, -0.35],
+      //       [-0.6, -0.8],
+      //       [-0.4, -0.1],
+      //       [-1, 0.3],
+      //       [-0.25, 0.3]
+      //     ],
+      //     [
+      //       [0, 9, 1],
+      //       [2, 1, 3],
+      //       [4, 3, 5],
+      //       [6, 5, 7],
+      //       [8, 7, 9],
+      //       [1, 9, 5],
+      //       [3, 1, 5],
+      //       [7, 5, 9]
+      //     ]
+      //   ),
+      //   [],
+      //   gl.TRIANGLES
+      // ),
       Our3DObject(
-        ExtrudeGeometry(
-          [
-            [0, 1],
-            [0.25, 0.3],
-            [1, 0.3],
-            [0.4, -0.1],
-            [0.6, -0.8],
-            [0, -0.35],
-            [-0.6, -0.8],
-            [-0.4, -0.1],
-            [-1, 0.3],
-            [-0.25, 0.3]
-          ],
-          [
-            [0, 9, 1],
-            [2, 1, 3],
-            [4, 3, 5],
-            [6, 5, 7],
-            [8, 7, 9],
-            [1, 9, 5],
-            [3, 1, 5],
-            [7, 5, 9]
-          ]
-        ),
+        Cone(),
         [],
         gl.TRIANGLES
       )
