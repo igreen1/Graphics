@@ -6,6 +6,7 @@ import { Our3DObject, OurMesh, Our3DGroup } from './Our3DObject'
 import { RegularPolygon } from './RegularPolygon'
 import { ExtrudeGeometry } from './ExtrudeGeometry'
 import { Cone } from './Cone'
+import { Sphere } from './Sphere'
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
   #ifdef GL_ES
@@ -160,8 +161,8 @@ const OurWebGL = props => {
       //   gl.TRIANGLES
       // ),
       Our3DObject(
-        Cone(),
-        [],
+        Sphere(),
+        [0.7, 0.0, 1.0],
         gl.TRIANGLES
       )
       // new Our3DGroup(new OurMesh( {vertices: [1.0, 0.0, 0.0, 0.9, 0.1, 0.0, 1.0, 0.0, 0.0, 0.9, -0.1, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0],facesByIndex:[],gl.LINES,gl}))

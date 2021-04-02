@@ -11,13 +11,12 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false) => {
   return result
 }
 
-const Our3DObject = (mesh, colorArrayByVertex = [], mode) => {
+const Our3DObject = (mesh, colorArrayByVertex, mode) => {
   return {
     mesh,
     mode,
-    // colorArrayByVertex, TODO
     vertices: mesh.vertices,
-    color: { r: 0.0, g: 0.0, b: 0.5 },
+    color: { r: colorArrayByVertex[0], g: colorArrayByVertex[1], b: colorArrayByVertex[2] },
     setWireframe: mesh.setWireframe
   }
 }

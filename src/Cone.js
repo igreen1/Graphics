@@ -22,16 +22,12 @@ const Cone = (radius = .5, height = 1, radialSegments = 32, heightSegments = 32)
         radius -= deltaRadius
     }
 
-    console.log(vertices)
-
     const facesByIndex = []
     // BASE:
     for (let i = 0; i < radialSegments; i++) {
         //facesByIndex.push([0,i+1,(i+2) % radialSegments])
         facesByIndex.push([0,i+1,(i+2)])
     }
-
-    console.log(facesByIndex)
 
     // CONE:
     for (let i = 1; i < (vertices.length - radialSegments - 1); i++) {
