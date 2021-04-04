@@ -7,6 +7,8 @@ import { RegularPolygon } from './RegularPolygon'
 import { ExtrudeGeometry } from './ExtrudeGeometry'
 import { Cone } from './Cone'
 import { Sphere } from './Sphere'
+import { Tube } from './Tube'
+import { Cylinder } from './Cylinder'
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
   #ifdef GL_ES
@@ -160,8 +162,14 @@ const OurWebGL = props => {
       //   [],
       //   gl.TRIANGLES
       // ),
+      // Our3DObject(
+      //   Sphere(),
+      //   [0.7, 0.0, 1.0],
+      //   gl.TRIANGLES
+      // )
+
       Our3DObject(
-        Sphere(),
+        Tube(),
         [0.7, 0.0, 1.0],
         gl.TRIANGLES
       )

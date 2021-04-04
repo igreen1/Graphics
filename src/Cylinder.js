@@ -1,3 +1,6 @@
+import { OurMesh } from './Our3DObject'
+
+
 const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegments = 32, closed = true) => {
 
 
@@ -19,7 +22,7 @@ const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegment
 
   //Add top/bottom if necessary
   if (closed) {
-    
+
     //Add center of bottom circle
     vertices.push([0, 0, 0])
     for (let i = 0; i < radialSegments; i++) {
@@ -37,10 +40,7 @@ const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegment
 
   }
 
-  return {
-    vertices,
-    facesByIndex
-  }
+  return OurMesh({ vertices, facesByIndex }, false)
 }
 
 export { Cylinder }
