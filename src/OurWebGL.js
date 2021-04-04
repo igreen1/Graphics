@@ -9,6 +9,8 @@ import { Cone } from './Cone'
 import { Sphere } from './Sphere'
 import { Tube } from './Tube'
 import { Cylinder } from './Cylinder'
+import { Torus } from './Torus'
+
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
   #ifdef GL_ES
@@ -168,11 +170,9 @@ const OurWebGL = props => {
       //   gl.TRIANGLES
       // )
 
-      Our3DObject(
-        Tube(),
-        [0.7, 0.0, 1.0],
-        gl.TRIANGLES
-      )
+      Our3DObject(Torus(), [0.7, 0.0, 1.0], gl.TRIANGLES)
+
+      // Our3DObject(Tube(), [0.7, 0.0, 1.0], gl.TRIANGLES)
       // new Our3DGroup(new OurMesh( {vertices: [1.0, 0.0, 0.0, 0.9, 0.1, 0.0, 1.0, 0.0, 0.0, 0.9, -0.1, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0],facesByIndex:[],gl.LINES,gl}))
       // {
       //   color: { r: 0.5, g: 0, b: 0 },
