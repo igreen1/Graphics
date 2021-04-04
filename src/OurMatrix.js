@@ -74,13 +74,26 @@ const Matrix = (initialValue) => {
 
   }
 
-  const rotation = (radians) => {
-    const rotationMatrix = Matrix([
-        [Math.cos(radians), -Math.sin(radians), 0, 0],
-        [Math.sin(radians),  Math.cos(radians), 0, 0],
-        [0                ,  0                , 0, 1]
+  const rotation = (x,y,z) => {
+    const xRotationMatrix = Matrix([
+        [1, 0          ,  0          , 0],
+        [0, Math.cos(x), -Math.sin(x), 0],
+        [0, Math.sin(x),  Math.cos(x), 0],
+        [0                ,  0    , 0, 1]
       ])
-    return (multiply(rotationMatrix))
+      const yRotationMatrix = Matrix([
+        [Math.cos(y) , 0, Math.sin(y), 0],
+        [0           , 1, 0          , 0],
+        [-Math.sin(y), 0, Math.cos(y), 0],
+        [0           , 0, 0          , 1]
+      ])
+      const zRotationMatrix = Matrix([
+        [Math.cos(z), -Math.sin(z), 0, 0],
+        [Math.sin(z),  Math.cos(z), 0, 0],
+        [0                , 0     , 0, 1],
+        [0                , 0     , 0, 1],
+      ])
+    return (multiply(xRotationMatrix.multiply(yRotationMatrix.multiply(zRotationMatrix) ) ) )
   }
 
   const scale = (width, height, depth) => {
