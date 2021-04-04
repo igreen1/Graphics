@@ -1,23 +1,29 @@
 import { toRawLineArray, toRawTriangleArray } from './shapes'
 
 const OurMesh = ({ vertices, facesByIndex }, wireframe = false) => {
-  const result = {
+
+  let isWireframe = wireframe
+
+  const Mesh = {
     facesByIndex,
     vertices,
-    setWireframeOrSolid: isWireframe => OurMesh({ vertices, facesByIndex }, isWireframe)
+    lines: toRawLineArray(vertices),
+    triangles: toRawTriangleArray(vertices),
+    isWireframe,
+    setWireframe: (wireframe) => isWireframe = wireframe
   }
-  result.vertices = wireframe ? toRawLineArray(result) : toRawTriangleArray(result)
-
-  return result
+  return Mesh
 }
 
 const Our3DObject = (mesh, colorArrayByVertex, mode) => {
   return {
     mesh,
-    mode,
     vertices: mesh.vertices,
     color: { r: colorArrayByVertex[0], g: colorArrayByVertex[1], b: colorArrayByVertex[2] },
-    setWireframe: mesh.setWireframe
+    setWireframe: mesh.setWireframe,
+    transform: (matrix) => {
+      // TODO
+    }
   }
 }
 
@@ -25,8 +31,8 @@ const Our3DGroup = () => {
   const group = []
   return {
     group,
-    // mesh, //TODO!!
-    add: object => group.push(object)
+    add: object => group.push(object),
+    transform: matrix => group.forEach((object) => object.transform(matrix))
   }
 }
 

@@ -45,6 +45,27 @@ const FRAGMENT_SHADER = `
   }
 `
 
+
+const Scene = () => {
+  const objectsToDraw = []
+  return {
+    objectsToDraw,
+    add: (object) => objectsToDraw.push(object),
+    remove: (object) => objectsToDraw.filter((sceneObject) => sceneObject !== object)
+  }
+}
+
+const Renderer = () => {
+}
+
+/**
+ * If you don’t know React well, don’t worry about the trappings. Just focus on the code inside
+ * the useEffect hook.
+ */
+
+
+
+
 /**
  * This code does not really belong here: it should live
  * in a separate library of matrix and transformation
@@ -54,7 +75,7 @@ const FRAGMENT_SHADER = `
  * Based on the original glRotate reference:
  *     https://www.khronos.org/registry/OpenGL-Refpages/es1.1/xhtml/glRotate.xml
  */
-const getRotationMatrix = (angle, x, y, z) => {
+ const getRotationMatrix = (angle, x, y, z) => {
   // In production code, this function should be associated
   // with a matrix object with associated functions.
   const axisLength = Math.sqrt(x * x + y * y + z * z)
@@ -107,7 +128,7 @@ const getRotationMatrix = (angle, x, y, z) => {
  * If you don’t know React well, don’t worry about the trappings. Just focus on the code inside
  * the useEffect hook.
  */
-const OurWebGL = props => {
+const OurWebGL = (scene) => {
   const [universe, setUniverse] = useState(null)
   const canvasRef = useRef()
 
@@ -134,50 +155,11 @@ const OurWebGL = props => {
     gl.viewport(0, 0, canvas.width, canvas.height)
 
     // Build the objects to display.
-    const objectsToDraw = [
-      // Our3DObject(RegularPolygon(5), [], gl.TRIANGLES),
-      // Our3DObject(
-      //   ExtrudeGeometry(
-      //     [
-      //       [0, 1],
-      //       [0.25, 0.3],
-      //       [1, 0.3],
-      //       [0.4, -0.1],
-      //       [0.6, -0.8],
-      //       [0, -0.35],
-      //       [-0.6, -0.8],
-      //       [-0.4, -0.1],
-      //       [-1, 0.3],
-      //       [-0.25, 0.3]
-      //     ],
-      //     [
-      //       [0, 9, 1],
-      //       [2, 1, 3],
-      //       [4, 3, 5],
-      //       [6, 5, 7],
-      //       [8, 7, 9],
-      //       [1, 9, 5],
-      //       [3, 1, 5],
-      //       [7, 5, 9]
-      //     ]
-      //   ),
-      //   [],
-      //   gl.TRIANGLES
-      // ),
-      // Our3DObject(
-      //   Sphere(),
-      //   [0.7, 0.0, 1.0],
-      //   gl.TRIANGLES
-      // )
-
-      Our3DObject(Torus(), [0.7, 0.0, 1.0], gl.TRIANGLES)
-
-      // Our3DObject(Tube(), [0.7, 0.0, 1.0], gl.TRIANGLES)
-    ]
+    const objectsToDraw = scene.objectsToDraw
 
     // Pass the vertices to WebGL.
     objectsToDraw.forEach(objectToDraw => {
-      objectToDraw.verticesBuffer = initVertexBuffer(gl, objectToDraw.vertices)
+      objectToDraw.verticesBuffer = initVertexBuffer(gl, objectToDraw.vertices.map(objectsToDraw.mesh.isWireframe ? objectsToDraw.mesh.lines : objectsToDraw.mesh.triangles))
 
       if (!objectToDraw.colors) {
         // If we have a single color, we expand that into an array
@@ -243,7 +225,7 @@ const OurWebGL = props => {
       // Set the varying vertex coordinates.
       gl.bindBuffer(gl.ARRAY_BUFFER, object.verticesBuffer)
       gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0)
-      gl.drawArrays(object.mode, 0, object.vertices.length / 3)
+      gl.drawArrays((object.mesh.isWireframe ? gl.LINES : gl.TRIANGLES ), 0, object.vertices.length / 3)
     }
 
     /*
@@ -256,7 +238,7 @@ const OurWebGL = props => {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
       // Set up the rotation matrix.
-      gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 1, 1, 0)))
+      // gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
 
       // Display the objects.
       objectsToDraw.forEach(drawObject)
