@@ -74,9 +74,39 @@ const Matrix = (initialValue) => {
 
   }
 
+  const rotation = (radians) => {
+    const rotationMatrix = Matrix([
+        [Math.cos(radians), -Math.sin(radians), 0, 0],
+        [Math.sin(radians),  Math.cos(radians), 0, 0],
+        [0                ,  0                , 0, 1]
+      ])
+    return (multiply(rotationMatrix))
+  }
+
+  const scale = (width, height, depth) => {
+    const scaleMatrix = Matrix([
+      [width, 0     , 0    , 0],
+      [0    , height, 0    , 0],
+      [0    , 0     , depth, 1]
+    ])
+    return (multiply(scaleMatrix))
+  }
+
+  const translate = (x,y,z) => {
+    const translationMatrix = Matrix([
+      [1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [x, y, z, 1]
+    ])
+    return (multiply(translationMatrix))
+  }
+
   return {
     elements,
     multiply,
+    rotation,
+    scale,
+    translate,
     toArray,
   }
 
