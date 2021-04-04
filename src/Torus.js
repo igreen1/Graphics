@@ -32,7 +32,7 @@ const Torus = (innerRadius = 0.5, tubeRadius = 0.2, radialSegments = 36, tubular
       ])
     }
   }
-  return OurMesh({ vertices, facesByIndex }, false)
+  return { vertices, facesByIndex }
 }
 
 export { Torus }

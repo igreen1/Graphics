@@ -67,7 +67,7 @@ const Tube = (innerRadius = 0.1, outerRadius = 0.6, height = 0.5, radialSegments
     }
 
 
-  return OurMesh({ vertices, facesByIndex }, false)
+  return { vertices, facesByIndex }
 }
 
 export { Tube }

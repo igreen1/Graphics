@@ -173,54 +173,6 @@ const OurWebGL = props => {
       Our3DObject(Torus(), [0.7, 0.0, 1.0], gl.TRIANGLES)
 
       // Our3DObject(Tube(), [0.7, 0.0, 1.0], gl.TRIANGLES)
-      // new Our3DGroup(new OurMesh( {vertices: [1.0, 0.0, 0.0, 0.9, 0.1, 0.0, 1.0, 0.0, 0.0, 0.9, -0.1, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0],facesByIndex:[],gl.LINES,gl}))
-      // {
-      //   color: { r: 0.5, g: 0, b: 0 },
-      //   vertices: [1.0, 0.0, 0.0, 0.9, 0.1, 0.0, 1.0, 0.0, 0.0, 0.9, -0.1, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0],
-      //   mode: gl.LINES
-      // },
-
-      // {
-      //   color: { r: 0, g: 0.5, b: 0 },
-      //   vertices: [0.0, 1.0, 0.0, -0.1, 0.9, 0.0, 0.0, 1.0, 0.0, 0.1, 0.9, 0.0, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0],
-      //   mode: gl.LINES
-      // },
-
-      // {
-      //   color: { r: 0, g: 0, b: 0.5 },
-      //   vertices: [0.0, 0.0, 1.0, 0.0, 0.1, 0.9, 0.0, 0.0, 1.0, 0.0, -0.1, 0.9, 0.0, 0.0, 1.0, 0.0, 0.0, -1.0],
-      //   mode: gl.LINES
-      // },
-
-      // {
-      //   vertices: [0.0, 0.0, 0.0, 0.5, 0.0, -0.75, 0.0, 0.5, 0.0],
-      //   colors: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
-      //   mode: gl.TRIANGLES
-      // },
-
-      // {
-      //   color: { r: 0.0, g: 1.0, b: 0 },
-      //   vertices: [0.25, 0.0, -0.5, 0.75, 0.0, -0.5, 0.25, 0.5, -0.5],
-      //   mode: gl.TRIANGLES
-      // },
-
-      // {
-      //   color: { r: 0.0, g: 0.0, b: 1.0 },
-      //   vertices: [-0.25, 0.0, 0.5, 0.5, 0.0, 0.5, -0.25, 0.5, 0.5],
-      //   mode: gl.TRIANGLES
-      // },
-
-      // {
-      //   color: { r: 0.0, g: 0.0, b: 1.0 },
-      //   vertices: [-1.0, -1.0, 0.75, -1.0, -0.1, -1.0, -0.1, -0.1, -1.0, -0.1, -1.0, 0.75],
-      //   mode: gl.LINE_LOOP
-      // },
-
-      // {
-      //   color: { r: 0.0, g: 0.0, b: 0.5 },
-      //   vertices: toRawTriangleArray(polygon(3)),
-      //   mode: gl.TRIANGLES
-      // }
     ]
 
     // Pass the vertices to WebGL.

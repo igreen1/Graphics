@@ -40,7 +40,7 @@ const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegment
 
   }
 
-  return OurMesh({ vertices, facesByIndex }, false)
+  return { vertices, facesByIndex }
 }
 
 export { Cylinder }

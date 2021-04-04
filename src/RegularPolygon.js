@@ -19,7 +19,7 @@ const RegularPolygon = numberOfSides => {
       facesByIndex.push([0, i, 1])
     }
   }
-  return OurMesh({ vertices, facesByIndex }, false)
+  return { vertices, facesByIndex }
 }
 
 export { RegularPolygon }

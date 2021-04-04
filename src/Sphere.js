@@ -1,11 +1,7 @@
 import { OurMesh } from './Our3DObject'
 
 /*
-ExtrudeGeometry takes vertices2D, which is
-an array of 2D coordinates ordered counter-clockwise,
-and faces2D, or the indexes of the vertices2D grouped
-into faces. The 2D shape formed by the vertices is
-then extruded by the height to form a 3D geometry.
+Sphere ... add description
 */
 
 const Sphere = (radius = .5, radialSegments = 32) => {
@@ -39,7 +35,7 @@ const Sphere = (radius = .5, radialSegments = 32) => {
 
     console.log(facesByIndex)
 
-    return OurMesh({ vertices, facesByIndex }, false)
+    return { vertices, facesByIndex }
 }
 
 export { Sphere }

@@ -1,5 +1,3 @@
-import { OurMesh } from './Our3DObject'
-
 /*
 ExtrudeGeometry takes vertices2D, which is
 an array of 2D coordinates ordered counter-clockwise,
@@ -36,7 +34,7 @@ const ExtrudeGeometry = (vertices2D, faces2D, height = 0.5) => {
     return facesByIndex
   })(vertices, faces2D)
 
-  return OurMesh({ vertices, facesByIndex }, false)
+  return { vertices, facesByIndex }
 }
 
 /*
