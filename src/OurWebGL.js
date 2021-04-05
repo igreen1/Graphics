@@ -4,7 +4,7 @@ import { getGL, initVertexBuffer, initSimpleShaderProgram } from './glsl-utiliti
 import { polygon, icosahedron, toRawLineArray, toRawTriangleArray } from './shapes'
 import { Our3DObject, OurMesh, Our3DGroup } from './Our3DObject'
 import { Cone, Cylinder, Extrude, RegularPolygon, Sphere, Tube, Torus } from './GeometryLibrary'
-import { MatrixLibrary } from './OurMatrix'
+import { Matrix, MatrixLibrary } from './OurMatrix'
 import { BigBang, Scene } from './Universe'
 
 // Slightly-leveled-up GLSL shaders.
@@ -18,10 +18,10 @@ const VERTEX_SHADER = `
   // Note this new additional output.
   attribute vec3 vertexColor;
   varying vec4 finalVertexColor;
-  uniform mat4 rotationMatrix;
+  uniform mat4 matrix;
 
   void main(void) {
-    gl_Position = rotationMatrix * vec4(vertexPosition, 1.0);
+    gl_Position = matrix * vec4(vertexPosition, 1.0);
     finalVertexColor = vec4(vertexColor, 1.0);
   }
 `
@@ -125,15 +125,26 @@ const InitWebGL = (universe) => {
     gl.enableVertexAttribArray(vertexPosition)
     const vertexColor = gl.getAttribLocation(shaderProgram, 'vertexColor')
     gl.enableVertexAttribArray(vertexColor)
-    const rotationMatrix = gl.getUniformLocation(shaderProgram, 'rotationMatrix')
+    const matrix = gl.getUniformLocation(shaderProgram, 'matrix')
 
     /*
      * Displays an individual object.
      */
-    const drawObject = object => {
+    const drawObject = (object, parentMatrix) => {
+
+      if (!parentMatrix) {
+        parentMatrix = Matrix()
+      }
+
+      // If object is a group
+      if (object.group) {
+        object.forEach(( element) => drawObject(element, parentMatrix.multiply(object.matrix)) )
+      }
+
       // Set up the rotation matrix.
-      //gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
-      gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, object.matrix.toArray())
+      object.transform(Matrix())
+      //object.transform(parentMatrix)
+      gl.uniformMatrix4fv(matrix, gl.FALSE, object.matrix.toArray())
 
       // Set the varying colors.
       gl.bindBuffer(gl.ARRAY_BUFFER, object.colorsBuffer)

@@ -34,11 +34,13 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
 
 const Our3DGroup = () => {
   const group = []
+  let matrix = Matrix()
   return {
     get group() { return group },
     add: object => group.push(object),
     remove: (object) => group.filter((sceneObject) => sceneObject !== object),
-    transform: matrix => group.forEach((object) => object.transform(matrix))
+    transform: (otherMatrix) => matrix = matrix.multiply(otherMatrix)
+    //transform: matrix => group.forEach((object) => object.transform(matrix))
   }
 }
 

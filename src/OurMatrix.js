@@ -19,6 +19,11 @@ https://en.wikipedia.org/wiki/Row-_and_column-major_order
 */
 
 const MatrixLibrary = {
+
+  identityMatrix: () => {
+    return Matrix()
+  },
+
   scaleMatrix: (width, height, depth) => {
     // prettier-ignore
     return Matrix([
