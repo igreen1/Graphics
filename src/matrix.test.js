@@ -26,7 +26,6 @@ describe('Matrix implementation', () => {
         [0, 0, 1, 5],
         [0, 0, 0, 1]
       ]
-
       expect(MatrixLibrary.translationMatrix(xTranslation, yTranslation, zTranslation).elements).toStrictEqual(resultMatrix)
     })
 
@@ -41,7 +40,13 @@ describe('Matrix implementation', () => {
         [0, 0, 0, 1]
       ]
 
-      expect(MatrixLibrary.rotationMatrix(xRotation, yRotation, zRotation).elements).toStrictEqual(resultMatrix)
+      for (let i=0; i<resultMatrix.length; i++) {
+        for (let j=0; j<resultMatrix[0].length; j++) {
+          expect(MatrixLibrary.rotationMatrix(xRotation, yRotation, zRotation).elements[i][j]).toBeCloseTo(resultMatrix[i][j])
+        }
+      }
+
+      
     })
   })
 
