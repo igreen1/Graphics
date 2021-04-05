@@ -37,6 +37,7 @@ const Our3DGroup = () => {
   return {
     get group() { return group },
     add: object => group.push(object),
+    remove: (object) => group.filter((sceneObject) => sceneObject !== object),
     transform: matrix => group.forEach((object) => object.transform(matrix))
   }
 }

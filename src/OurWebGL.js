@@ -4,6 +4,8 @@ import { getGL, initVertexBuffer, initSimpleShaderProgram } from './glsl-utiliti
 import { polygon, icosahedron, toRawLineArray, toRawTriangleArray } from './shapes'
 import { Our3DObject, OurMesh, Our3DGroup } from './Our3DObject'
 import { Cone, Cylinder, Extrude, RegularPolygon, Sphere, Tube, Torus } from './GeometryLibrary'
+import { MatrixLibrary } from './OurMatrix'
+import { BigBang, Scene } from './Universe'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -38,88 +40,7 @@ const FRAGMENT_SHADER = `
     gl_FragColor = vec4((1.0 - gl_FragCoord.z) * finalVertexColor.rgb, 1.0);
   }
 `
-
-
-const Scene = () => {
-  const objectsToDraw = []
-  return {
-    objectsToDraw,
-    add: (object) => objectsToDraw.push(object),
-    remove: (object) => objectsToDraw.filter((sceneObject) => sceneObject !== object)
-  }
-}
-
-const Renderer = () => {
-}
-
-/**
- * If you don’t know React well, don’t worry about the trappings. Just focus on the code inside
- * the useEffect hook.
- */
-
-
-
-
-/**
- * This code does not really belong here: it should live
- * in a separate library of matrix and transformation
- * functions.  It is here only to show you how matrices
- * can be used with GLSL.
- *
- * Based on the original glRotate reference:
- *     https://www.khronos.org/registry/OpenGL-Refpages/es1.1/xhtml/glRotate.xml
- */
- const getRotationMatrix = (angle, x, y, z) => {
-  // In production code, this function should be associated
-  // with a matrix object with associated functions.
-  const axisLength = Math.sqrt(x * x + y * y + z * z)
-  const s = Math.sin((angle * Math.PI) / 180.0)
-  const c = Math.cos((angle * Math.PI) / 180.0)
-  const oneMinusC = 1.0 - c
-
-  // Normalize the axis vector of rotation.
-  x /= axisLength
-  y /= axisLength
-  z /= axisLength
-
-  // Now we can calculate the other terms.
-  // "2" for "squared."
-  const x2 = x * x
-  const y2 = y * y
-  const z2 = z * z
-  const xy = x * y
-  const yz = y * z
-  const xz = x * z
-  const xs = x * s
-  const ys = y * s
-  const zs = z * s
-
-  // GL expects its matrices in column major order.
-  return [
-    x2 * oneMinusC + c,
-    xy * oneMinusC + zs,
-    xz * oneMinusC - ys,
-    0.0,
-
-    xy * oneMinusC - zs,
-    y2 * oneMinusC + c,
-    yz * oneMinusC + xs,
-    0.0,
-
-    xz * oneMinusC + ys,
-    yz * oneMinusC - xs,
-    z2 * oneMinusC + c,
-    0.0,
-
-    0.0,
-    0.0,
-    0.0,
-    1.0
-  ]
-}
-
-const OurWebGL = props => {
-  const [universe, setUniverse] = useState(null)
+const InitWebGL = (universe) => {
   const canvasRef = useRef()
 
   useEffect(() => {
@@ -144,30 +65,15 @@ const OurWebGL = props => {
     gl.clearColor(0.0, 0.0, 0.0, 0.0)
     gl.viewport(0, 0, canvas.width, canvas.height)
 
+
     // Build the objects to display.
-    const objectsToDraw = [
-     Our3DObject(
-        OurMesh(
-          Torus(), true
-        ),
-        [0,0,1.5]
-     ),
-     Our3DObject(
-      OurMesh(
-        Torus(), true
-      ),
-      [1.5,0,0]
-   )
-    ]
+    const objectsToDraw = universe.scene.objectsToDraw
 
     // Pass the vertices to WebGL.
-
     objectsToDraw.forEach(objectToDraw => {
       objectToDraw.verticesBuffer = initVertexBuffer(gl, objectToDraw.vertices)
       //objectToDraw.verticesBuffer = initVertexBuffer(gl, toRawLineArray(icosahedron()))
 
-
-      console.log(objectToDraw)
 
       if (!objectToDraw.colors) {
         // If we have a single color, we expand that into an array
@@ -236,24 +142,17 @@ const OurWebGL = props => {
       // Set the varying vertex coordinates.
       gl.bindBuffer(gl.ARRAY_BUFFER, object.verticesBuffer)
       gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0)
-      gl.drawArrays((object.mesh.isWireframe ? gl.LINES : gl.TRIANGLES ), 0, object.vertices.length / 3)
+      gl.drawArrays((object.mesh.isWireframe ? gl.LINES : gl.TRIANGLES), 0, object.vertices.length / 3)
     }
 
     /*
      * Displays the scene.
      */
-    let currentRotation = 0.0
 
     const drawScene = () => {
 
-      // objectsToDraw[0].matrix = objectsToDraw[0].matrix.translate(0,2,0)
-      // console.log(objectsToDraw[0].matrix)
-      objectsToDraw[0].transform(objectsToDraw[0].matrix.translate(.5,0,0))
-
       // Clear the display.
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-
-      //gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
 
       // Display the objects.
       objectsToDraw.forEach(drawObject)
@@ -262,21 +161,20 @@ const OurWebGL = props => {
       gl.flush()
     }
 
+
+    /*
+    Directions say 'static scene'
     /*
      * Animates the scene.
      */
-    let animationActive = false
     let previousTimestamp = null
 
     const FRAMES_PER_SECOND = 60
     const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
 
-    const DEGREES_PER_MILLISECOND = 0.033
-    const FULL_CIRCLE = 360.0
-
     const advanceScene = timestamp => {
       // Check if the user has turned things off.
-      if (!animationActive) {
+      if (!universe.animation || !universe?.animation?.active) {
         return
       }
 
@@ -296,12 +194,8 @@ const OurWebGL = props => {
       }
 
       // All clear.
-      currentRotation += DEGREES_PER_MILLISECOND * progress
+      universe?.animation?.tick() //not required :)
       drawScene()
-
-      if (currentRotation >= FULL_CIRCLE) {
-        currentRotation -= FULL_CIRCLE
-      }
 
       // Request the next frame.
       previousTimestamp = timestamp
@@ -310,29 +204,42 @@ const OurWebGL = props => {
 
     // Draw the initial scene.
     drawScene()
-
-    setUniverse({
-      toggleRotation: () => {
-        animationActive = !animationActive
-        if (animationActive) {
-          previousTimestamp = null
-          window.requestAnimationFrame(advanceScene)
-        }
-      }
-    })
   }, [canvasRef])
+
+  return canvasRef
+}
+
+const ExampleWebGL = props => {
+  // React wrapper and renderer
+  const test = Our3DObject(
+    OurMesh(
+      Torus(), true
+    ),
+    [0, 0, 1.5]
+  )
+  const { universe, setUniverse, addToUniverse } = BigBang([test])
+
+
+  const canvasRef = InitWebGL(universe)
 
   // Set up the rotation toggle: clicking on the canvas does it.
   const handleCanvasClick = event => universe.toggleRotation()
 
+  addToUniverse(Our3DObject(
+    OurMesh(
+      Torus(), true
+    ),
+    [0, 0, 1.5]
+  ))
+
   return (
     <article>
       {/* Yes, still square. */}
-      <canvas width="512" height="512" ref={canvasRef} onClick={universe && handleCanvasClick}>
+      <canvas width="512" height="512" ref={canvasRef} onClick={handleCanvasClick}>
         Your favorite update-your-browser message here.
       </canvas>
     </article>
   )
-  }
+}
 
-export default OurWebGL
+export {InitWebGL, ExampleWebGL}
