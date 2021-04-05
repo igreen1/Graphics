@@ -9,9 +9,9 @@ Cone... add description
 
     const vertices = []
     vertices.push([0, 0, 0])
-    for (let i = 0; i <= heightSegments; i++) {
+    for (let i = -heightSegments/2; i <= heightSegments/2; i++) {
         for (let j = 0; j <= radialSegments; j++) {
-        vertices.push([radius * Math.sin(j * deltaRotation), radius * Math.cos(j * deltaRotation), i * deltaHeight])
+        vertices.push([radius * Math.sin(j * deltaRotation), i * deltaHeight, radius * Math.cos(j * deltaRotation)])
         }
         radius -= deltaRadius
     }

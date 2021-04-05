@@ -220,6 +220,14 @@ const ExampleUniverse = () => {
   )
   addToUniverse(torus)
 
+  let cone = Our3DObject(
+    OurMesh(
+      Cone(), false
+    ),
+    [1, 0, 1.5]
+  )
+  addToUniverse(cone)
+
   let sphere = Our3DObject(
     OurMesh(
       Sphere(.3), false
@@ -254,7 +262,7 @@ const ExampleUniverse = () => {
           [3, 1, 5],
           [7, 5, 9]
         ]
-    ),true),
+    ),false),
     [0,1.5,1]
   )
   star.transform(MatrixLibrary.translationMatrix(-.5,-.2,-.5))
