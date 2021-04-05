@@ -57,6 +57,16 @@ const MatrixLibrary = {
       [0, 0, 0, 1]
     ])
     return xRotationMatrix.multiply(yRotationMatrix.multiply(zRotationMatrix))
+  },
+
+  orthographicProjectionMatrix: (top, bottom, right, left, near, far) => {
+    // prettier-ignore
+    return Matrix([
+      [2/(right - left),                0,  0                , -((right + left)/(right - left))],
+      [0               , (2/(top-bottom)),  0                , -((top+bottom)/(top - bottom))  ],
+      [0               ,                0,  -(2/(far - near)), -(far + near)/(far - near)      ],
+      [0               ,                0,  0                , 1]
+    ])
   }
 }
 
@@ -96,7 +106,7 @@ const Matrix = initialValue => {
     ) {
       throw new Error('Cannot multiply matrices ')
     } else if (otherMatrix.elements.length !== elements[0].length) {
-      throw new Error('Matrix size incompatible for mulitplication')
+      throw new Error('Matrix size incompatible for multiplication')
     }
 
     let rowProduct = Array.apply(null, new Array(otherMatrix.elements[0].length)).map(Number.prototype.valueOf, 0)
