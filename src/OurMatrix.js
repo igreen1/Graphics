@@ -20,11 +20,12 @@ https://en.wikipedia.org/wiki/Row-_and_column-major_order
 
 const MatrixLibrary = {
   scaleMatrix: (width, height, depth) => {
+    // prettier-ignore
     return Matrix([
-      [width, 0, 0, 0],
-      [0, height, 0, 0],
-      [0, 0, depth, 0],
-      [0, 0, 0, 1]
+      [width,      0,     0, 0],
+      [    0, height,     0, 0],
+      [    0,      0, depth, 0],
+      [    0,      0,     0, 1]
     ])
   },
 
@@ -38,23 +39,26 @@ const MatrixLibrary = {
   },
 
   rotationMatrix: (x, y, z) => {
+    // prettier-ignore
     const xRotationMatrix = Matrix([
-      [1, 0, 0, 0],
+      [1,           0,            0, 0],
       [0, Math.cos(x), -Math.sin(x), 0],
-      [0, Math.sin(x), Math.cos(x), 0],
-      [0, 0, 0, 1]
+      [0, Math.sin(x),  Math.cos(x), 0],
+      [0,           0,            0, 1]
     ])
+    // prettier-ignore
     const yRotationMatrix = Matrix([
-      [Math.cos(y), 0, Math.sin(y), 0],
-      [0, 1, 0, 0],
+      [ Math.cos(y), 0, Math.sin(y), 0],
+      [           0, 1,           0, 0],
       [-Math.sin(y), 0, Math.cos(y), 0],
-      [0, 0, 0, 1]
+      [           0, 0,           0, 1]
     ])
+    // prettier-ignore
     const zRotationMatrix = Matrix([
       [Math.cos(z), -Math.sin(z), 0, 0],
-      [Math.sin(z), Math.cos(z), 0, 0],
-      [0, 0, 0, 1],
-      [0, 0, 0, 1]
+      [Math.sin(z),  Math.cos(z), 0, 0],
+      [          0,            0, 0, 1],
+      [          0,            0, 0, 1]
     ])
     return xRotationMatrix.multiply(yRotationMatrix.multiply(zRotationMatrix))
   },
@@ -62,10 +66,10 @@ const MatrixLibrary = {
   orthographicProjectionMatrix: (top, bottom, right, left, near, far) => {
     // prettier-ignore
     return Matrix([
-      [2/(right - left),                0,  0                , -((right + left)/(right - left))],
-      [0               , (2/(top-bottom)),  0                , -((top+bottom)/(top - bottom))  ],
-      [0               ,                0,  -(2/(far - near)), -(far + near)/(far - near)      ],
-      [0               ,                0,  0                , 1]
+      [2/(right - left),                0,                  0, -((right + left)/(right - left))],
+      [               0, (2/(top-bottom)),                  0, -((top+bottom)/(top - bottom))  ],
+      [               0,                0,  -(2/(far - near)), -(far + near)/(far - near)      ],
+      [               0,                0,                  0,                                1]
     ])
   }
 }
