@@ -1,4 +1,5 @@
 import { toRawLineArray, toRawTriangleArray } from './shapes'
+import { Matrix } from './OurMatrix'
 
 const OurMesh = ({ vertices, facesByIndex }, wireframe = false) => {
 
@@ -6,23 +7,24 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false) => {
 
   const Mesh = {
     facesByIndex,
-    vertices,
-    lines: toRawLineArray(vertices),
-    triangles: toRawTriangleArray(vertices),
+    indexes: vertices,
+    vertices: (isWireframe ? toRawLineArray({vertices, facesByIndex}) : toRawTriangleArray({vertices, facesByIndex})),
     isWireframe,
     setWireframe: (wireframe) => isWireframe = wireframe
   }
   return Mesh
 }
 
-const Our3DObject = (mesh, colorArrayByVertex, mode) => {
+const Our3DObject = (mesh, colorArrayByVertex) => {
+  let matrix = Matrix()
   return {
     mesh,
     vertices: mesh.vertices,
     color: { r: colorArrayByVertex[0], g: colorArrayByVertex[1], b: colorArrayByVertex[2] },
     setWireframe: mesh.setWireframe,
-    transform: (matrix) => {
-      // TODO
+    matrix,
+    transform: (otherMatrix) => {
+      matrix = matrix.multiply(otherMatrix)
     }
   }
 }

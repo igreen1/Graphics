@@ -199,16 +199,12 @@ const Sphere = (radius = .5, radialSegments = 32) => {
         }
     }
 
-    console.log(vertices)
-
     const facesByIndex = []
 
     for (let i = 0; i < (vertices.length - radialSegments - 1); i++) {
       facesByIndex.push([i, i + 1, i + radialSegments + 1])
       facesByIndex.push([i, i + radialSegments + 1, i + radialSegments])
     }
-
-    console.log(facesByIndex)
 
     return { vertices, facesByIndex }
 }

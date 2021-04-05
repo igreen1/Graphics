@@ -95,6 +95,15 @@ const getRotationMatrix = (angle, x, y, z) => {
   ]
 }
 
+const getIdentityMatrix = () => {
+  return [
+    1,0,0,0,
+    0,1,0,0,
+    0,0,1,0,
+    0,0,0,1
+  ]
+}
+
 /**
  * If you don’t know React well, don’t worry about the trappings. Just focus on the code inside
  * the useEffect hook.
@@ -232,11 +241,24 @@ const LessBareBonesWebGL = props => {
     const vertexColor = gl.getAttribLocation(shaderProgram, 'vertexColor')
     gl.enableVertexAttribArray(vertexColor)
     const rotationMatrix = gl.getUniformLocation(shaderProgram, 'rotationMatrix')
+    const identityMatrix = gl.getUniformLocation(shaderProgram, 'identityMatrix')
 
     /*
      * Displays an individual object.
      */
     const drawObject = object => {
+      console.log(object.vertices)
+      //gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
+      if (object === objectsToDraw[4]) {
+        let c = 0
+        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(c, 0, 1, 0)))
+      }
+
+      else {
+        console.log("identity")
+        gl.uniformMatrix4fv(identityMatrix, gl.FALSE, new Float32Array(getIdentityMatrix()))
+      }
+
       // Set the varying colors.
       gl.bindBuffer(gl.ARRAY_BUFFER, object.colorsBuffer)
       gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0)
@@ -257,7 +279,8 @@ const LessBareBonesWebGL = props => {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
       // Set up the rotation matrix.
-      gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
+     gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
+   
 
       // Display the objects.
       objectsToDraw.forEach(drawObject)
