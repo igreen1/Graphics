@@ -30,10 +30,10 @@ const MatrixLibrary = {
 
   translationMatrix: (x, y, z) => {
     return Matrix([
-      [1, 0, 0, 0],
-      [0, 1, 0, 0],
-      [0, 0, 1, 0],
-      [x, y, z, 1]
+      [1, 0, 0, x],
+      [0, 1, 0, y],
+      [0, 0, 1, z],
+      [0, 0, 0, 1]
     ])
   },
 
@@ -116,27 +116,27 @@ const Matrix = initialValue => {
     return Matrix(result)
   }
 
-  const rotate = (x, y, z) => {
-    const xRotationMatrix = Matrix([
-      [1, 0, 0, 0],
-      [0, Math.cos(x), -Math.sin(x), 0],
-      [0, Math.sin(x), Math.cos(x), 0],
-      [0, 0, 0, 1]
-    ])
-    const yRotationMatrix = Matrix([
-      [Math.cos(y), 0, Math.sin(y), 0],
-      [0, 1, 0, 0],
-      [-Math.sin(y), 0, Math.cos(y), 0],
-      [0, 0, 0, 1]
-    ])
-    const zRotationMatrix = Matrix([
-      [Math.cos(z), -Math.sin(z), 0, 0],
-      [Math.sin(z), Math.cos(z), 0, 0],
-      [0, 0, 0, 1],
-      [0, 0, 0, 1]
-    ])
-    return xRotationMatrix.multiply(yRotationMatrix.multiply(zRotationMatrix))
-  }
+  // const rotate = (x, y, z) => {
+  //   const xRotationMatrix = Matrix([
+  //     [1, 0, 0, 0],
+  //     [0, Math.cos(x), -Math.sin(x), 0],
+  //     [0, Math.sin(x), Math.cos(x), 0],
+  //     [0, 0, 0, 1]
+  //   ])
+  //   const yRotationMatrix = Matrix([
+  //     [Math.cos(y), 0, Math.sin(y), 0],
+  //     [0, 1, 0, 0],
+  //     [-Math.sin(y), 0, Math.cos(y), 0],
+  //     [0, 0, 0, 1]
+  //   ])
+  //   const zRotationMatrix = Matrix([
+  //     [Math.cos(z), -Math.sin(z), 0, 0],
+  //     [Math.sin(z), Math.cos(z), 0, 0],
+  //     [0, 0, 0, 1],
+  //     [0, 0, 0, 1]
+  //   ])
+  //   return xRotationMatrix.multiply(yRotationMatrix.multiply(zRotationMatrix))
+  // }
 
   // const getRotationMatrix = (angle, x, y, z) => {
   //   // In production code, this function should be associated
@@ -187,33 +187,33 @@ const Matrix = initialValue => {
   //   ]
   // }
 
-  const scale = (width, height, depth) => {
-    const scaleMatrix = Matrix([
-      [width, 0, 0, 0],
-      [0, height, 0, 0],
-      [0, 0, depth, 0],
-      [0, 0, 0, 1]
-    ])
-    return scaleMatrix
-  }
+  // const scale = (width, height, depth) => {
+  //   const scaleMatrix = Matrix([
+  //     [width, 0, 0, 0],
+  //     [0, height, 0, 0],
+  //     [0, 0, depth, 0],
+  //     [0, 0, 0, 1]
+  //   ])
+  //   return scaleMatrix
+  // }
 
-  const translate = (x, y, z) => {
-    const translationMatrix = Matrix([
-      [1, 0, 0, 0],
-      [0, 1, 0, 0],
-      [0, 0, 1, 0],
-      [x, y, z, 1]
-    ])
-    //return (multiply(translationMatrix))
-    return translationMatrix
-  }
+  // const translate = (x, y, z) => {
+  //   const translationMatrix = Matrix([
+  //     [1, 0, 0, 0],
+  //     [0, 1, 0, 0],
+  //     [0, 0, 1, 0],
+  //     [x, y, z, 1]
+  //   ])
+  //   //return (multiply(translationMatrix))
+  //   return translationMatrix
+  // }
 
   return {
     elements,
     multiply,
-    rotate,
-    scale,
-    translate,
+    // rotate,
+    // scale,
+    // translate,
     toArray
   }
 }
