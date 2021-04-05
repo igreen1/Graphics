@@ -16,17 +16,19 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false) => {
 }
 
 const Our3DObject = (mesh, colorArrayByVertex) => {
-  let matrix = Matrix()
-  return {
-    mesh,
-    vertices: mesh.vertices,
-    color: { r: colorArrayByVertex[0], g: colorArrayByVertex[1], b: colorArrayByVertex[2] },
-    setWireframe: mesh.setWireframe,
-    matrix,
-    transform: (otherMatrix) => {
-      matrix = matrix.multiply(otherMatrix)
+
+  class ThreeDObject {
+    constructor(mesh, colorArrayByVertex) {
+      this.mesh = mesh
+      this.vertices = mesh.vertices
+      this.color = { r: colorArrayByVertex[0], g: colorArrayByVertex[1], b: colorArrayByVertex[2] }
+      this.setWireframe = mesh.setWireframe
+      this.matrix = Matrix()
     }
-  }
+    transform = (otherMatrix) => this.matrix = this.matrix.multiply(otherMatrix)
+  } 
+
+  return new ThreeDObject(mesh, colorArrayByVertex)
 }
 
 const Our3DGroup = () => {

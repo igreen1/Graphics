@@ -74,7 +74,7 @@ const Matrix = (initialValue) => {
 
   }
 
-  const rotation = (x,y,z) => {
+  const rotate = (x,y,z) => {
     const xRotationMatrix = Matrix([
         [1, 0          ,  0          , 0],
         [0, Math.cos(x), -Math.sin(x), 0],
@@ -93,7 +93,7 @@ const Matrix = (initialValue) => {
         [0                , 0     , 0, 1],
         [0                , 0     , 0, 1],
       ])
-    return (multiply(xRotationMatrix.multiply(yRotationMatrix.multiply(zRotationMatrix) ) ) )
+    return (xRotationMatrix.multiply(yRotationMatrix.multiply(zRotationMatrix) ) )
   }
 
   // const getRotationMatrix = (angle, x, y, z) => {
@@ -149,9 +149,10 @@ const Matrix = (initialValue) => {
     const scaleMatrix = Matrix([
       [width, 0     , 0    , 0],
       [0    , height, 0    , 0],
-      [0    , 0     , depth, 1]
+      [0    , 0     , depth, 0],
+      [0    , 0     , 0    , 1]
     ])
-    return (multiply(scaleMatrix))
+    return scaleMatrix
   }
 
   const translate = (x,y,z) => {
@@ -161,13 +162,14 @@ const Matrix = (initialValue) => {
       [0, 0, 1, 0],
       [x, y, z, 1]
     ])
-    return (multiply(translationMatrix))
+    //return (multiply(translationMatrix))
+    return translationMatrix
   }
 
   return {
     elements,
     multiply,
-    rotation,
+    rotate,
     scale,
     translate,
     toArray,
