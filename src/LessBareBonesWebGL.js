@@ -247,17 +247,9 @@ const LessBareBonesWebGL = props => {
      * Displays an individual object.
      */
     const drawObject = object => {
-      console.log(object.vertices)
-      //gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
-      if (object === objectsToDraw[4]) {
-        let c = 0
-        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(c, 0, 1, 0)))
-      }
+      gl.uniformMatrix4fv(object.matrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
+      gl.uniformMatrix4fv(identityMatrix, gl.FALSE, new Float32Array(getIdentityMatrix()))
 
-      else {
-        console.log("identity")
-        gl.uniformMatrix4fv(identityMatrix, gl.FALSE, new Float32Array(getIdentityMatrix()))
-      }
 
       // Set the varying colors.
       gl.bindBuffer(gl.ARRAY_BUFFER, object.colorsBuffer)

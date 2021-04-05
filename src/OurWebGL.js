@@ -148,16 +148,16 @@ const OurWebGL = props => {
     const objectsToDraw = [
      Our3DObject(
         OurMesh(
-          Sphere(), true
+          Cone(), true
         ),
         [.7,0,1]
-     )
-
-      // {
-      //   color: { r: 0.0, g: 0.0, b: 1.0 },
-      //   vertices: [-1.0, -1.0, 0.75, -1.0, -0.1, -1.0, -0.1, -0.1, -1.0, -0.1, -1.0, 0.75],
-      //   mode: gl.LINE_LOOP
-      // }
+     ),
+     Our3DObject(
+      OurMesh(
+        Torus(), true
+      ),
+      [.5,0,0]
+   )
     ]
 
     // Pass the vertices to WebGL.
@@ -226,8 +226,8 @@ const OurWebGL = props => {
      */
     const drawObject = object => {
       // Set up the rotation matrix.
-      // gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
-      //gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, object.matrix.toArray())
+      //gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
+      gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, object.matrix.toArray())
 
       // Set the varying colors.
       gl.bindBuffer(gl.ARRAY_BUFFER, object.colorsBuffer)
@@ -246,10 +246,12 @@ const OurWebGL = props => {
 
     const drawScene = () => {
 
+      objectsToDraw[0].matrix = objectsToDraw[0].matrix.translate(0,2,0)
+
       // Clear the display.
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-      gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
+      //gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
 
       // Display the objects.
       objectsToDraw.forEach(drawObject)
