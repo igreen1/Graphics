@@ -57,7 +57,7 @@ const MatrixLibrary = {
     const zRotationMatrix = Matrix([
       [Math.cos(z), -Math.sin(z), 0, 0],
       [Math.sin(z),  Math.cos(z), 0, 0],
-      [          0,            0, 0, 1],
+      [          0,            0, 1, 0],
       [          0,            0, 0, 1]
     ])
     return xRotationMatrix.multiply(yRotationMatrix.multiply(zRotationMatrix))
