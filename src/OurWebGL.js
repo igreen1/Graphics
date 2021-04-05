@@ -209,37 +209,82 @@ const InitWebGL = (universe) => {
   return canvasRef
 }
 
-const ExampleWebGL = props => {
-  // React wrapper and renderer
-  const test = Our3DObject(
+const ExampleUniverse = () => {
+  const { universe, setUniverse, addToUniverse, removeFromUniverse } = BigBang()
+
+  let torus = Our3DObject(
     OurMesh(
       Torus(), true
     ),
-    [0, 0, 1.5]
+    [1.5, 0, 1.5]
   )
-  const { universe, setUniverse, addToUniverse } = BigBang([test])
+  addToUniverse(torus)
 
+  let sphere = Our3DObject(
+    OurMesh(
+      Sphere(.3), false
+    ),
+    [2.2, 2, .8]
+  )
+  sphere.transform(MatrixLibrary.translationMatrix(.5,.5,-.5))
+  addToUniverse(sphere)
 
-  const canvasRef = InitWebGL(universe)
-
-  // Set up the rotation toggle: clicking on the canvas does it.
-  const handleCanvasClick = event => universe.toggleRotation()
+  let star = Our3DObject(
+    OurMesh(
+      Extrude(
+        [
+          [0, 1],
+          [0.25, 0.3],
+          [1, 0.3],
+          [0.4, -0.1],
+          [0.6, -0.8],
+          [0, -0.35],
+          [-0.6, -0.8],
+          [-0.4, -0.1],
+          [-1, 0.3],
+          [-0.25, 0.3]
+        ],
+        [
+          [0, 9, 1],
+          [2, 1, 3],
+          [4, 3, 5],
+          [6, 5, 7],
+          [8, 7, 9],
+          [1, 9, 5],
+          [3, 1, 5],
+          [7, 5, 9]
+        ]
+    ),true),
+    [0,1.5,1]
+  )
+  star.transform(MatrixLibrary.translationMatrix(-.5,-.2,-.5))
+  star.transform(MatrixLibrary.scaleMatrix(.5,.5,.5))
+  star.transform(MatrixLibrary.rotationMatrix(.5,.5,.5))
+  addToUniverse(star)
 
   addToUniverse(Our3DObject(
     OurMesh(
-      Torus(), true
+      RegularPolygon(10), true
     ),
     [0, 0, 1.5]
   ))
 
+  return {universe}
+
+}
+
+const OurWebGL = props => {
+  const {universe} = ExampleUniverse()
+  const canvasRef = InitWebGL(universe)
+
   return (
     <article>
       {/* Yes, still square. */}
-      <canvas width="512" height="512" ref={canvasRef} onClick={handleCanvasClick}>
+      <canvas width="512" height="512" ref={canvasRef} >
         Your favorite update-your-browser message here.
       </canvas>
     </article>
   )
 }
 
-export {InitWebGL, ExampleWebGL}
+export {InitWebGL, OurWebGL}
