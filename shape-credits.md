@@ -1,5 +1,5 @@
 Sphere, Regular Polygon: Group code along on Zoom\
-Code: Veronica\
+Cone: Veronica\
 Extrude: Booker\
 Cylinder, Lathe: Ian\
 Torus: Halle\
