@@ -228,8 +228,10 @@ const ExampleUniverse = () => {
   addToUniverse(sphere)
 
   let group = Our3DGroup()
+  let nestedGroup = Our3DGroup()
   group.add(cone)
-  group.add(sphere)
+  group.add(nestedGroup)
+  nestedGroup.add(sphere)
   group.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
   group.transform(MatrixLibrary.translationMatrix(-1, 0.5, 0.5))
 
