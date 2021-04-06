@@ -38,13 +38,12 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
     setWireframe: mesh.setWireframe,
     transform: otherMatrix => (matrix = matrix.multiply(otherMatrix)),
     transformVertices: otherMatrix =>
-      (mesh.vertices = mesh.rawVertices.map(vertex => {
-        let temp = otherMatrix
-          .multiply(Matrix([[vertex[0]],[vertex[1]],[vertex[2]],[1]]))
+      (mesh.vertices = mesh.rawVertices.map(vertex =>
+        otherMatrix
+          .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
           .toArray()
           .slice(0, -1)
-        return temp
-      }))
+      ))
   }
 }
 

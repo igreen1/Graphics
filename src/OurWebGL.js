@@ -223,92 +223,91 @@ const ExampleUniverse = () => {
 
   let cone = Our3DObject(OurMesh(Cone(), false), [1, 0, 1.5])
   addToUniverse(cone)
-  cone.transformVertices(MatrixLibrary.translationMatrix(1,0,0))
 
-  // let sphere = Our3DObject(OurMesh(Sphere(0.3), false), [2.2, 2, 0.8])
-  // addToUniverse(sphere)
+  let sphere = Our3DObject(OurMesh(Sphere(0.3), false), [2.2, 2, 0.8])
+  addToUniverse(sphere)
 
-  // let group = Our3DGroup()
-  // let nestedGroup = Our3DGroup()
-  // group.add(cone)
-  // group.add(nestedGroup)
-  // nestedGroup.add(sphere)
-  // group.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
-  // group.transform(MatrixLibrary.translationMatrix(-1, 0.5, 0.5))
+  let group = Our3DGroup()
+  let nestedGroup = Our3DGroup()
+  group.add(cone)
+  group.add(nestedGroup)
+  nestedGroup.add(sphere)
+  group.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
+  group.transform(MatrixLibrary.translationMatrix(-1, 0.5, 0.5))
 
-  // let star = Our3DObject(
-  //   OurMesh(
-  //     Extrude(
-  //       [
-  //         [0, 1],
-  //         [0.25, 0.3],
-  //         [1, 0.3],
-  //         [0.4, -0.1],
-  //         [0.6, -0.8],
-  //         [0, -0.35],
-  //         [-0.6, -0.8],
-  //         [-0.4, -0.1],
-  //         [-1, 0.3],
-  //         [-0.25, 0.3]
-  //       ],
-  //       [
-  //         [0, 9, 1],
-  //         [2, 1, 3],
-  //         [4, 3, 5],
-  //         [6, 5, 7],
-  //         [8, 7, 9],
-  //         [1, 9, 5],
-  //         [3, 1, 5],
-  //         [7, 5, 9]
-  //       ]
-  //     ),
-  //     false
-  //   ),
-  //   [0, 1.5, 1]
-  // )
-  // console.log(star.vertices)
-  // star.transformVertices(MatrixLibrary.translationMatrix(0.5, 0.5, 0.5))
-  // star.transformVertices(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
-  // star.transformVertices(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  // console.log(star.vertices)
-  // addToUniverse(star)
+  let star = Our3DObject(
+    OurMesh(
+      Extrude(
+        [
+          [0, 1],
+          [0.25, 0.3],
+          [1, 0.3],
+          [0.4, -0.1],
+          [0.6, -0.8],
+          [0, -0.35],
+          [-0.6, -0.8],
+          [-0.4, -0.1],
+          [-1, 0.3],
+          [-0.25, 0.3]
+        ],
+        [
+          [0, 9, 1],
+          [2, 1, 3],
+          [4, 3, 5],
+          [6, 5, 7],
+          [8, 7, 9],
+          [1, 9, 5],
+          [3, 1, 5],
+          [7, 5, 9]
+        ]
+      ),
+      false
+    ),
+    [0, 1.5, 1]
+  )
+  console.log(star.vertices)
+  star.transformVertices(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
+  star.transformVertices(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
+  star.transformVertices(MatrixLibrary.translationMatrix(0.5, 0.5, 0.5))
+  console.log(star.vertices)
+  addToUniverse(star)
 
-  // let star2 = Our3DObject(
-  //   OurMesh(
-  //     Extrude(
-  //       [
-  //         [0, 1],
-  //         [0.25, 0.3],
-  //         [1, 0.3],
-  //         [0.4, -0.1],
-  //         [0.6, -0.8],
-  //         [0, -0.35],
-  //         [-0.6, -0.8],
-  //         [-0.4, -0.1],
-  //         [-1, 0.3],
-  //         [-0.25, 0.3]
-  //       ],
-  //       [
-  //         [0, 9, 1],
-  //         [2, 1, 3],
-  //         [4, 3, 5],
-  //         [6, 5, 7],
-  //         [8, 7, 9],
-  //         [1, 9, 5],
-  //         [3, 1, 5],
-  //         [7, 5, 9]
-  //       ]
-  //     ),
-  //     false
-  //   ),
-  //   [1, 0, 1]
-  // )
-  // star2.transform(MatrixLibrary.translationMatrix(0.5, 0.5, 0.5))
-  // star2.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
-  // star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  // addToUniverse(star2)
+  let star2 = Our3DObject(
+    OurMesh(
+      Extrude(
+        [
+          [0, 1],
+          [0.25, 0.3],
+          [1, 0.3],
+          [0.4, -0.1],
+          [0.6, -0.8],
+          [0, -0.35],
+          [-0.6, -0.8],
+          [-0.4, -0.1],
+          [-1, 0.3],
+          [-0.25, 0.3]
+        ],
+        [
+          [0, 9, 1],
+          [2, 1, 3],
+          [4, 3, 5],
+          [6, 5, 7],
+          [8, 7, 9],
+          [1, 9, 5],
+          [3, 1, 5],
+          [7, 5, 9]
+        ]
+      ),
+      false
+    ),
+    [1, 0, 1]
+  )
+  star2.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
+  star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
+  star2.transform(MatrixLibrary.translationMatrix(0.5, 0.5, 0.5))
+  addToUniverse(star2)
 
-  // addToUniverse(Our3DObject(OurMesh(RegularPolygon(10), true), [0, 0, 1.5]))
+  addToUniverse(Our3DObject(OurMesh(RegularPolygon(10), true), [0, 0, 1.5]))
 
   return { universe }
 }
