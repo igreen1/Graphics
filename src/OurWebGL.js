@@ -40,7 +40,7 @@ const FRAGMENT_SHADER = `
     gl_FragColor = vec4((1.0 - gl_FragCoord.z) * finalVertexColor.rgb, 1.0);
   }
 `
-const InitWebGL = (universe) => {
+const InitWebGL = universe => {
   const canvasRef = useRef()
 
   useEffect(() => {
@@ -65,7 +65,6 @@ const InitWebGL = (universe) => {
     gl.clearColor(0.0, 0.0, 0.0, 0.0)
     gl.viewport(0, 0, canvas.width, canvas.height)
 
-
     // Build the objects to display.
     const objectsToDraw = universe.scene.objectsToDraw
 
@@ -73,7 +72,6 @@ const InitWebGL = (universe) => {
     objectsToDraw.forEach(objectToDraw => {
       objectToDraw.verticesBuffer = initVertexBuffer(gl, objectToDraw.vertices)
       //objectToDraw.verticesBuffer = initVertexBuffer(gl, toRawLineArray(icosahedron()))
-
 
       if (!objectToDraw.colors) {
         // If we have a single color, we expand that into an array
@@ -142,7 +140,7 @@ const InitWebGL = (universe) => {
       // Set the varying vertex coordinates.
       gl.bindBuffer(gl.ARRAY_BUFFER, object.verticesBuffer)
       gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0)
-      gl.drawArrays((object.mesh.isWireframe ? gl.LINES : gl.TRIANGLES), 0, object.vertices.length / 3)
+      gl.drawArrays(object.mesh.isWireframe ? gl.LINES : gl.TRIANGLES, 0, object.vertices.length / 3)
     }
 
     /*
@@ -150,7 +148,6 @@ const InitWebGL = (universe) => {
      */
 
     const drawScene = () => {
-
       // Clear the display.
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
@@ -160,7 +157,6 @@ const InitWebGL = (universe) => {
       // All done.
       gl.flush()
     }
-
 
     /*
     Directions say 'static scene'
@@ -212,30 +208,15 @@ const InitWebGL = (universe) => {
 const ExampleUniverse = () => {
   const { universe, setUniverse, addToUniverse, removeFromUniverse } = BigBang()
 
-  let torus = Our3DObject(
-    OurMesh(
-      Torus(), true
-    ),
-    [1.5, 0, 1.5]
-  )
-  addToUniverse(torus)
+  // let torus = Our3DObject(OurMesh(Torus(), true), [1.5, 0, 1.5])
+  // addToUniverse(torus)
 
-  let cone = Our3DObject(
-    OurMesh(
-      Cone(), false
-    ),
-    [1, 0, 1.5]
-  )
-  addToUniverse(cone)
+  // let cone = Our3DObject(OurMesh(Cone(), false), [1, 0, 1.5])
+  // addToUniverse(cone)
 
-  let sphere = Our3DObject(
-    OurMesh(
-      Sphere(.3), false
-    ),
-    [2.2, 2, .8]
-  )
-  sphere.transform(MatrixLibrary.translationMatrix(.5,.5,-.5))
-  addToUniverse(sphere)
+  // let sphere = Our3DObject(OurMesh(Sphere(0.3), false), [2.2, 2, 0.8])
+  // sphere.transform(MatrixLibrary.translationMatrix(0.5, 0.5, -0.5))
+  // addToUniverse(sphere)
 
   let star = Our3DObject(
     OurMesh(
@@ -262,37 +243,70 @@ const ExampleUniverse = () => {
           [3, 1, 5],
           [7, 5, 9]
         ]
-    ),false),
-    [0,1.5,1]
+      ),
+      false
+    ),
+    [0, 1.5, 1]
   )
-  star.transform(MatrixLibrary.translationMatrix(-.5,-.2,-.5))
-  star.transform(MatrixLibrary.scaleMatrix(.5,.5,.5))
-  star.transform(MatrixLibrary.rotationMatrix(.5,.5,.5))
+  console.log(star.vertices)
+  star.transformVertices(MatrixLibrary.translationMatrix(0.5, 0.5, 0.5))
+  star.transformVertices(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
+  star.transformVertices(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
+  console.log(star.vertices)
   addToUniverse(star)
 
-  addToUniverse(Our3DObject(
+  let star2 = Our3DObject(
     OurMesh(
-      RegularPolygon(10), true
+      Extrude(
+        [
+          [0, 1],
+          [0.25, 0.3],
+          [1, 0.3],
+          [0.4, -0.1],
+          [0.6, -0.8],
+          [0, -0.35],
+          [-0.6, -0.8],
+          [-0.4, -0.1],
+          [-1, 0.3],
+          [-0.25, 0.3]
+        ],
+        [
+          [0, 9, 1],
+          [2, 1, 3],
+          [4, 3, 5],
+          [6, 5, 7],
+          [8, 7, 9],
+          [1, 9, 5],
+          [3, 1, 5],
+          [7, 5, 9]
+        ]
+      ),
+      false
     ),
-    [0, 0, 1.5]
-  ))
+    [1, 0, 1]
+  )
+  star2.transform(MatrixLibrary.translationMatrix(0.5, 0.5, 0.5))
+  star2.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
+  star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
+  addToUniverse(star2)
 
-  return {universe}
+  addToUniverse(Our3DObject(OurMesh(RegularPolygon(10), true), [0, 0, 1.5]))
 
+  return { universe }
 }
 
 const OurWebGL = props => {
-  const {universe} = ExampleUniverse()
+  const { universe } = ExampleUniverse()
   const canvasRef = InitWebGL(universe)
 
   return (
     <article>
       {/* Yes, still square. */}
-      <canvas width="512" height="512" ref={canvasRef} >
+      <canvas width="512" height="512" ref={canvasRef}>
         Your favorite update-your-browser message here.
       </canvas>
     </article>
   )
 }
 
-export {InitWebGL, OurWebGL}
+export { InitWebGL, OurWebGL }
