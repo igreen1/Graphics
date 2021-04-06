@@ -135,7 +135,8 @@ const Matrix = initialValue => {
     ) {
       throw new Error('Cannot multiply matrices ')
     } else if (otherMatrix.elements.length !== elements[0].length) {
-      throw new Error('Matrix size incompatible for multiplication')
+      console.log('Matrix of size', rows, 'x', columns, 'is incompatible for multiplication with a matrix of size', otherMatrix.getRows(), 'x', otherMatrix.getColumns())
+      throw new Error('Matrix is incompatible for multiplication')
     }
 
     let rowProduct = Array.apply(null, new Array(otherMatrix.elements[0].length)).map(Number.prototype.valueOf, 0)

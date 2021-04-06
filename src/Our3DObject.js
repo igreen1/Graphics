@@ -39,13 +39,10 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
     transform: otherMatrix => (matrix = matrix.multiply(otherMatrix)),
     transformVertices: otherMatrix =>
       (mesh.vertices = mesh.rawVertices.map(vertex => {
-        console.log(Matrix([[...vertex, 1]]), otherMatrix.elements, Matrix([[...vertex, 1]]).multiply(otherMatrix))
-        let temp = Matrix([[...vertex, 1]])
-          .multiply(otherMatrix)
+        let temp = otherMatrix
+          .multiply(Matrix([[vertex[0]],[vertex[1]],[vertex[2]],[1]]))
           .toArray()
           .slice(0, -1)
-
-        console.log(temp)
         return temp
       }))
   }
