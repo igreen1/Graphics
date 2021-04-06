@@ -7,11 +7,18 @@ import { BigBang } from './Universe'
 Imports a scene from a JSON file
 Format:
   {
-    "name": {
-      "type": "Cone" or "Cylinder" or "Extrude" or "RegularPolygon" or "Sphere" or "Tube" or "Torus" or "Group",
+    "object's name": {
+      "type": "Cone" or "Cylinder" or "Extrude" or "RegularPolygon" or "Sphere" or "Tube" or "Torus"
       "parameters": [ List your parameters here sorted by , ],
       "wireframe": true or false,
       "color": [#, #, #],
+      "scale": [#, #, #] //optional,
+      "rotation": [#, #, #] //optional,
+      "translation": [#, #, #] //optional
+    },
+    "group's name": {
+      "type": "Group"
+      "objects": [ List your object names here sorted by , ],
       "scale": [#, #, #] //optional,
       "rotation": [#, #, #] //optional,
       "translation": [#, #, #] //optional
