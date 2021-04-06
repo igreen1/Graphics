@@ -76,6 +76,15 @@ const MatrixLibrary = {
       [               0,                0,  -(2/(far - near)), -(far + near)/(far - near)      ],
       [               0,                0,                  0,                                1]
     ])
+  },
+
+  perspectiveMatrix: (top, bottom, right, left, near, far) => {
+    return Matrix([
+      [(2*near)/(right-left),                     0, (right+left)/(right-left),                        0],
+      [                    0, (2*near)/(top-bottom), (top+bottom)/(top-bottom),                        0],
+      [                    0,                     0,    -(far+near)/(far-near), (-2*far*near)/(far-near)],
+      [                    0,                     0,                        -1,                        0]                    ]
+    ])
   }
 }
 
