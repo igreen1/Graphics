@@ -36,7 +36,7 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
       return { r: colorArrayByVertex[0], g: colorArrayByVertex[1], b: colorArrayByVertex[2] }
     },
     setWireframe: mesh.setWireframe,
-    transform: otherMatrix => (matrix = matrix.multiply(otherMatrix)),
+    transform: otherMatrix => (matrix = otherMatrix.multiply(matrix)),
     transformVertices: otherMatrix =>
       (mesh.vertices = mesh.rawVertices.map(vertex =>
         otherMatrix

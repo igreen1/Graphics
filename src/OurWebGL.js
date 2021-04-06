@@ -233,7 +233,7 @@ const ExampleUniverse = () => {
   group.add(nestedGroup)
   nestedGroup.add(sphere)
   group.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
-  group.transform(MatrixLibrary.translationMatrix(-1, 0.5, 0.5))
+  group.transform(MatrixLibrary.translationMatrix(-0.5, 0.5, 0.5))
 
   let star = Our3DObject(
     OurMesh(
@@ -304,7 +304,7 @@ const ExampleUniverse = () => {
   )
   star2.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
   star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  star2.transform(MatrixLibrary.translationMatrix(0.5, 0.5, 0.5))
+  star2.transform(MatrixLibrary.translationMatrix(0.49, 0.5, 0.5))
   addToUniverse(star2)
 
   addToUniverse(Our3DObject(OurMesh(RegularPolygon(10), true), [0, 0, 1.5]))
