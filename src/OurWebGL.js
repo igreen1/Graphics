@@ -221,11 +221,65 @@ const ExampleUniverse = () => {
   // let torus = Our3DObject(OurMesh(Torus(), true), [1.5, 0, 1.5])
   // addToUniverse(torus)
 
-  let cone = Our3DObject(OurMesh(Cone(), false), [1, 0, 1.5])
-  addToUniverse(cone)
+  const getLibraryObject = (type, parameters, wireframe, colorParameters) => {
+    const objectDict = {
+      "Cone": Cone,
+      "Cylinder": Cylinder,
+      "Extrude": Extrude,
+      "RegularPolygon": RegularPolygon,
+      "Sphere": Sphere,
+      "Tube": Tube,
+      "Torus": Torus
+    }
+    const libraryObject = objectDict[type]
+    if (parameters) {
+      return Our3DObject(OurMesh(libraryObject(parameters), wireframe), colorParameters)
+    } else {
+      return Our3DObject(OurMesh(libraryObject(), wireframe), colorParameters)
+    }
+  }
 
-  let sphere = Our3DObject(OurMesh(Sphere(0.3), false), [2.2, 2, 0.8])
-  addToUniverse(sphere)
+
+  function renderJson(json) {
+    const jsonObject = JSON.parse(json)
+    if (jsonObject.objectType == "libraryObject") {
+      if (jsonObject.parameters !== "") {
+        let object = getLibraryObject(jsonObject.type, ...jsonObject.parameters, jsonObject.isWireframe, jsonObject.colorParameters);
+        addToUniverse(object)
+        return object
+      } else {
+        let object = getLibraryObject(jsonObject.type, false, jsonObject.isWireframe, jsonObject.colorParameters);
+        return object
+      }
+    }
+  }
+
+  let cone = renderJson(`
+  {
+    "objectType": "libraryObject",
+    "type": "Cone",
+    "parameters": "",
+    "isWireframe": false,
+    "colorParameters": [1, 0, 1.5]
+  }`)
+
+  let sphere = renderJson(`
+  {
+    "objectType": "libraryObject",
+    "type": "Sphere",
+    "parameters": [0.3],
+    "isWireframe": true,
+    "colorParameters": [2.2, 2, 0.8]
+  }`)
+
+
+
+
+  // let cone = Our3DObject(OurMesh(Cone(), false), [1, 0, 1.5])
+  // addToUniverse(cone)
+  //
+  // let sphere = Our3DObject(OurMesh(Sphere(0.3), true), [2.2, 2, 0.8])
+  // addToUniverse(sphere)
 
   let group = Our3DGroup()
   let nestedGroup = Our3DGroup()
@@ -265,11 +319,9 @@ const ExampleUniverse = () => {
     ),
     [0, 1.5, 1]
   )
-  console.log(star.vertices)
   star.transformVertices(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
   star.transformVertices(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
   star.transformVertices(MatrixLibrary.translationMatrix(0.5, 0.5, 0.5))
-  console.log(star.vertices)
   addToUniverse(star)
 
   let star2 = Our3DObject(
