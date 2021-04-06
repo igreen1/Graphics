@@ -1,4 +1,4 @@
-import Vector from './vector'
+import Vector from '../vector'
 
 describe('Vector implementation', () => {
   describe('creation and data access', () => {

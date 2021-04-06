@@ -1,4 +1,4 @@
-import { toRawLineArray, toRawTriangleArray } from './shapes'
+import { toRawLineArray, toRawTriangleArray } from '../shapes'
 
 describe('toRawLineArray', () => {
   it('converts a single-face proto-geometry into pairs of vertices', () => {

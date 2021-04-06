@@ -1,4 +1,4 @@
-import { Matrix, MatrixLibrary } from './OurMatrix'
+import { Matrix, MatrixLibrary } from '../OurMatrix'
 
 describe('Matrix implementation', () => {
   describe('Matrix Library', () => {
@@ -238,8 +238,9 @@ describe('Matrix implementation', () => {
       const yScaleFactor = 0
       const zScaleFactor = 0
 
-      expect(m1.multiply(MatrixLibrary.scaleMatrix(xScaleFactor, yScaleFactor, zScaleFactor)).elements).toStrictEqual(resultMatrix)
-      
+      expect(m1.multiply(MatrixLibrary.scaleMatrix(xScaleFactor, yScaleFactor, zScaleFactor)).elements).toStrictEqual(
+        resultMatrix
+      )
     })
 
     it('Should perform y scale correctly', () => {
@@ -260,8 +261,9 @@ describe('Matrix implementation', () => {
       const yScaleFactor = 2
       const zScaleFactor = 0
 
-      expect(m1.multiply(MatrixLibrary.scaleMatrix(xScaleFactor, yScaleFactor, zScaleFactor)).elements).toStrictEqual(resultMatrix)
-      
+      expect(m1.multiply(MatrixLibrary.scaleMatrix(xScaleFactor, yScaleFactor, zScaleFactor)).elements).toStrictEqual(
+        resultMatrix
+      )
     })
 
     it('Should perform z scale correctly', () => {
@@ -282,8 +284,9 @@ describe('Matrix implementation', () => {
       const yScaleFactor = 0
       const zScaleFactor = 2
 
-      expect(m1.multiply(MatrixLibrary.scaleMatrix(xScaleFactor, yScaleFactor, zScaleFactor)).elements).toStrictEqual(resultMatrix)
-      
+      expect(m1.multiply(MatrixLibrary.scaleMatrix(xScaleFactor, yScaleFactor, zScaleFactor)).elements).toStrictEqual(
+        resultMatrix
+      )
     })
 
     it('Should perform x,y,z scale correctly', () => {
@@ -294,18 +297,19 @@ describe('Matrix implementation', () => {
         [0, 0, 0, 4]
       ])
       const resultMatrix = [
-        [2, 0,  0, 0],
-        [0, 6,  0, 0],
+        [2, 0, 0, 0],
+        [0, 6, 0, 0],
         [0, 0, 12, 0],
-        [0, 0,  0, 4]
+        [0, 0, 0, 4]
       ]
 
       const xScaleFactor = 2
       const yScaleFactor = 3
       const zScaleFactor = 4
 
-      expect(m1.multiply(MatrixLibrary.scaleMatrix(xScaleFactor, yScaleFactor, zScaleFactor)).elements).toStrictEqual(resultMatrix)
-      
+      expect(m1.multiply(MatrixLibrary.scaleMatrix(xScaleFactor, yScaleFactor, zScaleFactor)).elements).toStrictEqual(
+        resultMatrix
+      )
     })
   })
 })
