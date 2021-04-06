@@ -53,6 +53,7 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
 
 const Our3DGroup = () => {
   const group = []
+  let matrix = Matrix()
   return {
     get group() {
       return group
