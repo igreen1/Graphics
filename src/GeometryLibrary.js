@@ -76,22 +76,23 @@ const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegment
 
 /*
 ExtrudeGeometry takes vertices2D, which is
-an array of 2D coordinates ordered counter-clockwise,
-and faces2D, or the indexes of the vertices2D grouped
-into faces. The 2D shape formed by the vertices is
-then extruded by the height to form a 3D geometry.
+a path of 2D coordinates ordered counter-clockwise,
+and faces2D, or the indexes of vertices2D grouped
+into faces (3 vertices ordered counter-clockwise).
+The 2D shape formed by the vertices is then
+extruded by the depth to form a 3D geometry.
 */
 
-const Extrude = (vertices2D, faces2D, height = 0.5) => {
-  let vertices = (function createVertices(vertices2D, height) {
+const Extrude = (vertices2D, faces2D, depth = 0.5) => {
+  let vertices = (function createVertices(vertices2D, depth) {
     let vertices = []
     //splits the 2D vertices into front and back faces
     for (let i = 0; i < vertices2D.length; i++) {
-      vertices.splice(i, 0, [...vertices2D[i], -height / 2])
-      vertices.push([...vertices2D[i], height / 2])
+      vertices.splice(i, 0, [...vertices2D[i], -depth / 2])
+      vertices.push([...vertices2D[i], depth / 2])
     }
     return vertices
-  })(vertices2D, height)
+  })(vertices2D, depth)
 
   let facesByIndex = (function createFacesByIndex(vertices, faces2D) {
     let facesByIndex = []
