@@ -122,7 +122,88 @@ describe('Matrix implementation', () => {
       expect(m1.multiply(m2).elements).toStrictEqual(result)
     })
   })
+  describe('Translation Matrix', ()=>{
+    it('Should perform x translation correctly', ()=>{
+      const resultMatrix = [
+        [1, 0, 0, 0.5],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]
+      ]
 
+      const xTranslation = 0.5
+      const yTranslation = 0
+      const zTranslation = 0
+
+      for (let i = 0; i < resultMatrix.length; i++) {
+        for (let j = 0; j < resultMatrix[0].length; j++) {
+          expect(
+            Matrix().multiply(MatrixLibrary.translationMatrix(xTranslation, yTranslation, zTranslation)).elements[i][j]
+          ).toBeCloseTo(resultMatrix[i][j])
+        }
+      }
+    })
+    it('Should perform y translation correctly', ()=>{
+      const resultMatrix = [
+        [1, 0, 0, 0],
+        [0, 1, 0, 0.5],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]
+      ]
+
+      const xTranslation = 0
+      const yTranslation = 0.5
+      const zTranslation = 0
+
+      for (let i = 0; i < resultMatrix.length; i++) {
+        for (let j = 0; j < resultMatrix[0].length; j++) {
+          expect(
+            Matrix().multiply(MatrixLibrary.translationMatrix(xTranslation, yTranslation, zTranslation)).elements[i][j]
+          ).toBeCloseTo(resultMatrix[i][j])
+        }
+      }
+    })
+    it('Should perform z translation correctly', ()=>{
+      const resultMatrix = [
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0.5],
+        [0, 0, 0, 1]
+      ]
+
+      const xTranslation = 0
+      const yTranslation = 0
+      const zTranslation = 0.5
+
+      for (let i = 0; i < resultMatrix.length; i++) {
+        for (let j = 0; j < resultMatrix[0].length; j++) {
+          expect(
+            Matrix().multiply(MatrixLibrary.translationMatrix(xTranslation, yTranslation, zTranslation)).elements[i][j]
+          ).toBeCloseTo(resultMatrix[i][j])
+        }
+      }
+    })
+    it('Should perform x,y,z translation correctly', ()=>{
+      const resultMatrix = [
+        [1, 0, 0, 0.89],
+        [0, 1, 0, 0.75],
+        [0, 0, 1, 0.5],
+        [0, 0, 0, 1]
+      ]
+
+      const xTranslation = 0.89
+      const yTranslation = 0.75
+      const zTranslation = 0.5
+
+      for (let i = 0; i < resultMatrix.length; i++) {
+        for (let j = 0; j < resultMatrix[0].length; j++) {
+          expect(
+            Matrix().multiply(MatrixLibrary.translationMatrix(xTranslation, yTranslation, zTranslation)).elements[i][j]
+          ).toBeCloseTo(resultMatrix[i][j])
+        }
+      }
+    })
+  })
   describe('Rotation Matrix', () => {
     it('Should perform x rotation correctly', () => {
       const resultMatrix = [
