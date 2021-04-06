@@ -47,8 +47,8 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
   }
 }
 
-const Our3DGroup = () => {
-  const group = []
+const Our3DGroup = (objects = []) => {
+  const group = objects
   return {
     get group() {
       return group
