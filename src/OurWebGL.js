@@ -71,7 +71,7 @@ const InitWebGL = universe => {
     // Pass the vertices to WebGL.
     objectsToDraw.forEach(objectToDraw => {
       objectToDraw.verticesBuffer = initVertexBuffer(gl, objectToDraw.vertices)
-      //objectToDraw.verticesBuffer = initVertexBuffer(gl, toRawLineArray(icosahedron()))
+      // objectToDraw.verticesBuffer = initVertexBuffer(gl, toRawLineArray(icosahedron()))
 
       if (!objectToDraw.colors) {
         // If we have a single color, we expand that into an array
@@ -239,18 +239,42 @@ const ExampleUniverse = () => {
     }
   }
 
+  // const createCustomObject = (vertex2DArray, faceArray, renderType) => {
+  //   if (renderType === "triange") {
+  //     let mesh = renderType === "triange" ? toRawTriangleArray({vertex2DArray, faceArray}) : toRawLineArray({vertex2DArray, faceArray})
+  //     addToUniverse(mesh)
+  //   }
+  // }
+  //
+  // createCustomObject(
+  //   [[-525731112119133606, 0.0, 850650808352039932],
+  //   [525731112119133606, 0.0, 850650808352039932],
+  //   [-525731112119133606, 0.0, -850650808352039932],
+  //   [525731112119133606, 0.0, -850650808352039932],
+  //   [0.0, 850650808352039932, 525731112119133606],
+  //   [0.0, 850650808352039932, -525731112119133606],
+  //   [0.0, -850650808352039932, 525731112119133606],
+  //   [0.0, -850650808352039932, -525731112119133606],
+  //   [850650808352039932, 525731112119133606, 0.0],
+  //   [-850650808352039932, 525731112119133606, 0.0],
+  //   [850650808352039932, -525731112119133606, 0.0],
+  //   [-850650808352039932, -525731112119133606, 0.0]],
+  //
+  // )
+
 
   function renderJson(json) {
     const jsonObject = JSON.parse(json)
     if (jsonObject.objectType == "libraryObject") {
       if (jsonObject.parameters !== "") {
         let object = getLibraryObject(jsonObject.type, ...jsonObject.parameters, jsonObject.isWireframe, jsonObject.colorParameters);
-        addToUniverse(object)
         return object
       } else {
         let object = getLibraryObject(jsonObject.type, false, jsonObject.isWireframe, jsonObject.colorParameters);
         return object
       }
+    } else if (jsonObject.objectType == "customObject") {
+
     }
   }
 
@@ -272,14 +296,21 @@ const ExampleUniverse = () => {
     "colorParameters": [2.2, 2, 0.8]
   }`)
 
-
+  // let icosahedron = renderJson(`
+  // {
+  //   "objectType": "libraryObject",
+  //   "type": "Sphere",
+  //   "parameters": [0.3],
+  //   "isWireframe": true,
+  //   "colorParameters": [2.2, 2, 0.8]
+  // }`)
 
 
   // let cone = Our3DObject(OurMesh(Cone(), false), [1, 0, 1.5])
-  // addToUniverse(cone)
+  addToUniverse(cone)
   //
   // let sphere = Our3DObject(OurMesh(Sphere(0.3), true), [2.2, 2, 0.8])
-  // addToUniverse(sphere)
+  addToUniverse(sphere)
 
   let group = Our3DGroup()
   let nestedGroup = Our3DGroup()
