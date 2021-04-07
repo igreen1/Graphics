@@ -300,95 +300,31 @@ describe('Matrix implementation', () => {
       }
     })
   })
-  describe('Scale Matrix', () => {
-    it('Should perform x scale correctly', () => {
+
+
+  describe('Perspective Matrix', () => {
+    it('Should change perspective of identity matrix', () => {
       const m1 = Matrix([
         [1, 0, 0, 0],
-        [0, 2, 0, 0],
-        [0, 0, 3, 0],
-        [0, 0, 0, 4]
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]
       ])
       const resultMatrix = [
-        [2, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 4]
-      ]
-
-      const xScaleFactor = 2
-      const yScaleFactor = 0
-      const zScaleFactor = 0
-
-      expect(m1.multiply(MatrixLibrary.scaleMatrix(xScaleFactor, yScaleFactor, zScaleFactor)).elements).toStrictEqual(
-        resultMatrix
-      )
-    })
-
-    it('Should perform y scale correctly', () => {
-      const m1 = Matrix([
         [1, 0, 0, 0],
-        [0, 2, 0, 0],
-        [0, 0, 3, 0],
-        [0, 0, 0, 4]
-      ])
-      const resultMatrix = [
-        [0, 0, 0, 0],
-        [0, 4, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 4]
+        [0, 1, 0, 0],
+        [0, 0, 3, 16],
+        [0, 0, -1, 0]
       ]
 
-      const xScaleFactor = 0
-      const yScaleFactor = 2
-      const zScaleFactor = 0
+      const top = 8
+      const bottom = -8
+      const left = -8
+      const right = 8
+      const near = 8
+      const far = 4
 
-      expect(m1.multiply(MatrixLibrary.scaleMatrix(xScaleFactor, yScaleFactor, zScaleFactor)).elements).toStrictEqual(
-        resultMatrix
-      )
-    })
-
-    it('Should perform z scale correctly', () => {
-      const m1 = Matrix([
-        [1, 0, 0, 0],
-        [0, 2, 0, 0],
-        [0, 0, 3, 0],
-        [0, 0, 0, 4]
-      ])
-      const resultMatrix = [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 6, 0],
-        [0, 0, 0, 4]
-      ]
-
-      const xScaleFactor = 0
-      const yScaleFactor = 0
-      const zScaleFactor = 2
-
-      expect(m1.multiply(MatrixLibrary.scaleMatrix(xScaleFactor, yScaleFactor, zScaleFactor)).elements).toStrictEqual(
-        resultMatrix
-      )
-    })
-
-    it('Should perform x,y,z scale correctly', () => {
-      const m1 = Matrix([
-        [1, 0, 0, 0],
-        [0, 2, 0, 0],
-        [0, 0, 3, 0],
-        [0, 0, 0, 4]
-      ])
-      const resultMatrix = [
-        [2, 0, 0, 0],
-        [0, 6, 0, 0],
-        [0, 0, 12, 0],
-        [0, 0, 0, 4]
-      ]
-
-      const xScaleFactor = 2
-      const yScaleFactor = 3
-      const zScaleFactor = 4
-
-      expect(m1.multiply(MatrixLibrary.scaleMatrix(xScaleFactor, yScaleFactor, zScaleFactor)).elements).toStrictEqual(
+      expect(m1.multiply(MatrixLibrary.perspectiveMatrix(top, bottom, right, left, near, far)).elements).toStrictEqual(
         resultMatrix
       )
     })
