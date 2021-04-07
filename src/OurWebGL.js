@@ -220,6 +220,7 @@ const InitWebGL = universe => {
 /* Universe from JSON with stars added dynamically */
 const ExampleUniverse = () => {
   let universe = universeFromJson(exampleScene)
+
   let star = Our3DObject(
     OurMesh(
       Extrude(
@@ -296,13 +297,17 @@ const ExampleUniverse = () => {
 // const ExampleUniverse = () => {
 //   const { universe, setUniverse, addToUniverse, removeFromUniverse } = BigBang()
 
-//   let torus = Our3DObject(OurMesh(Torus(), true), [1.5, 0, 1.5])
+//   let torus = Our3DObject(OurMesh(Torus(0.5, 0.2, 16, 16), true), [1.5, 0, 1.5])
 //   addToUniverse(torus)
 
-//   let cone = Our3DObject(OurMesh(Cone(), false), [1, 0, 1.5])
+//   let cone = Our3DObject(OurMesh(Cone(0.5, 1, 16, 16), false), [1, 0, 1.5])
+//   cone.transform(MatrixLibrary.translationMatrix(0, 0.5, 0))
+//   cone.transform(MatrixLibrary.rotationMatrix(0, 0, 3.14))
 //   addToUniverse(cone)
 
-//   let sphere = Our3DObject(OurMesh(Sphere(0.3), true), [2.2, 2, 0.8])
+//   let sphere = Our3DObject(OurMesh(Sphere(0.3, 16), true), [2.2, 2, 0.8])
+//   sphere.transform(MatrixLibrary.scaleMatrix(1.7, 1.7, 1.7))
+//   sphere.transform(MatrixLibrary.translationMatrix(0, 0.16, 0))
 //   addToUniverse(sphere)
 
 //   let group = Our3DGroup()
@@ -310,78 +315,8 @@ const ExampleUniverse = () => {
 //   group.add(cone)
 //   group.add(nestedGroup)
 //   nestedGroup.add(sphere)
-//   group.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
-//   group.transform(MatrixLibrary.translationMatrix(-0.5, 0.5, 0.5))
-
-//   let star = Our3DObject(
-//     OurMesh(
-//       Extrude(
-//         [
-//           [0, 1],
-//           [0.25, 0.3],
-//           [1, 0.3],
-//           [0.4, -0.1],
-//           [0.6, -0.8],
-//           [0, -0.35],
-//           [-0.6, -0.8],
-//           [-0.4, -0.1],
-//           [-1, 0.3],
-//           [-0.25, 0.3]
-//         ],
-//         [
-//           [0, 9, 1],
-//           [2, 1, 3],
-//           [4, 3, 5],
-//           [6, 5, 7],
-//           [8, 7, 9],
-//           [1, 9, 5],
-//           [3, 1, 5],
-//           [7, 5, 9]
-//         ]
-//       ),
-//       false
-//     ),
-//     [0, 1.5, 1]
-//   )
-//   star.transformVertices(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
-//   star.transformVertices(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-//   star.transformVertices(MatrixLibrary.translationMatrix(0.5, 0.5, 0.5))
-//   addToUniverse(star)
-
-//   let star2 = Our3DObject(
-//     OurMesh(
-//       Extrude(
-//         [
-//           [0, 1],
-//           [0.25, 0.3],
-//           [1, 0.3],
-//           [0.4, -0.1],
-//           [0.6, -0.8],
-//           [0, -0.35],
-//           [-0.6, -0.8],
-//           [-0.4, -0.1],
-//           [-1, 0.3],
-//           [-0.25, 0.3]
-//         ],
-//         [
-//           [0, 9, 1],
-//           [2, 1, 3],
-//           [4, 3, 5],
-//           [6, 5, 7],
-//           [8, 7, 9],
-//           [1, 9, 5],
-//           [3, 1, 5],
-//           [7, 5, 9]
-//         ]
-//       ),
-//       false
-//     ),
-//     [1, 0, 1]
-//   )
-//   star2.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
-//   star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-//   star2.transform(MatrixLibrary.translationMatrix(0.49, 0.5, 0.5))
-//   addToUniverse(star2)
+//   group.transform(MatrixLibrary.rotationMatrix(0.2, 0.2, 0.3))
+//   group.transform(MatrixLibrary.translationMatrix(0, 0.2, 0))
 
 //   addToUniverse(Our3DObject(OurMesh(RegularPolygon(10), true), [0, 0, 1.5]))
 
