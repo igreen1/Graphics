@@ -24,7 +24,12 @@ const VERTEX_SHADER = `
   uniform mat4 projectionMatrix;
 
   void main(void) {
-    gl_Position = matrix * projectionMatrix * vec4(vertexPosition, 1.0);
+    // Camera matrix will go here (moves the scene)
+    mat4 tempCamera = mat4(1,0,0,0,
+                              0,1,0,0,
+                              0,0,1,0,
+                              0,0,-5,1);
+    gl_Position = projectionMatrix * tempCamera * matrix * vec4(vertexPosition, 1.0);
     finalVertexColor = vec4(vertexColor, 1.0);
   }
 `
@@ -146,7 +151,7 @@ const InitWebGL = universe => {
       object.transform(Matrix())
       //object.transform(parentMatrix)
       gl.uniformMatrix4fv(matrix, gl.FALSE, object.matrix.toArray())
-      
+
 
       // Set the varying colors.
       gl.bindBuffer(gl.ARRAY_BUFFER, object.colorsBuffer)
@@ -167,8 +172,10 @@ const InitWebGL = universe => {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
       // Set up projection matrix
+      console.log(MatrixLibrary.orthographicProjectionMatrix().toArray())
       //gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, MatrixLibrary.orthographicProjectionMatrix().toArray())
-      gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, MatrixLibrary.orthographicProjectionMatrix(-3,3,-3,3,-3,3).toArray())
+      // top, bottom, right, left, near=1, far
+      gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, MatrixLibrary.perspectiveMatrix(1, -1, 1, -1, 1, 10).toArray())
       // Display the objects.
       objectsToDraw.forEach(drawObject)
 
