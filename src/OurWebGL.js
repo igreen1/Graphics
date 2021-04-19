@@ -21,9 +21,10 @@ const VERTEX_SHADER = `
   attribute vec3 vertexColor;
   varying vec4 finalVertexColor;
   uniform mat4 matrix;
+  uniform mat4 projectionMatrix;
 
   void main(void) {
-    gl_Position = matrix * vec4(vertexPosition, 1.0);
+    gl_Position = matrix * projectionMatrix * vec4(vertexPosition, 1.0);
     finalVertexColor = vec4(vertexColor, 1.0);
   }
 `
@@ -126,6 +127,7 @@ const InitWebGL = universe => {
     const vertexColor = gl.getAttribLocation(shaderProgram, 'vertexColor')
     gl.enableVertexAttribArray(vertexColor)
     const matrix = gl.getUniformLocation(shaderProgram, 'matrix')
+    const projectionMatrix = gl.getUniformLocation(shaderProgram, 'projectionMatrix')
 
     /*
      * Displays an individual object.
@@ -144,6 +146,7 @@ const InitWebGL = universe => {
       object.transform(Matrix())
       //object.transform(parentMatrix)
       gl.uniformMatrix4fv(matrix, gl.FALSE, object.matrix.toArray())
+      
 
       // Set the varying colors.
       gl.bindBuffer(gl.ARRAY_BUFFER, object.colorsBuffer)
@@ -163,6 +166,9 @@ const InitWebGL = universe => {
       // Clear the display.
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
+      // Set up projection matrix
+      //gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, MatrixLibrary.orthographicProjectionMatrix().toArray())
+      gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, MatrixLibrary.orthographicProjectionMatrix(-3,3,-3,3,-3,3).toArray())
       // Display the objects.
       objectsToDraw.forEach(drawObject)
 

@@ -1,5 +1,6 @@
 import { toRawLineArray, toRawTriangleArray } from './shapes'
 import { Matrix } from './OurMatrix'
+import {Vector} from './vector'
 
 const OurMesh = ({ vertices, facesByIndex }, wireframe = false) => {
   let isWireframe = wireframe
@@ -17,6 +18,44 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false) => {
     },
     get isWireframe() {
       return isWireframe
+    },
+
+    get facetedNormals() {
+      let normalsByIndex = Array(this.rawVertices.length)
+      normalsByIndex.fill([])
+
+      facesByIndex.forEach((face) => {
+        let v1 = Vector(this.rawVertices[face[1]][0] - this.rawVertices[face[0]][0], this.rawVertices[face[1]][1] - this.rawVertices[face[0]][1], this.rawVertices[face[1]][2] - this.rawVertices[face[0]][2])
+        let v2 = Vector(this.rawVertices[face[2]][0] - this.rawVertices[face[1]][0], this.rawVertices[face[2]][1] - this.rawVertices[face[1]][1], this.rawVertices[face[2]][2] - this.rawVertices[face[1]][2])
+        let v3 = Vector(this.rawVertices[face[0]][0] - this.rawVertices[face[2]][0], this.rawVertices[face[0]][1] - this.rawVertices[face[2]][1], this.rawVertices[face[0]][2] - this.rawVertices[face[2]][2])
+
+        normalsByIndex[face[0]].push(v3.multiply(-1).cross(v1))
+        normalsByIndex[face[1]].push(v1.multiply(-1).cross(v2))
+        normalsByIndex[face[2]].push(v2.multiply(-1).cross(v3))
+      })
+
+      // Do we need to divide each by magnitude?
+
+      return normalsByIndex
+    },
+
+    get smoothNormals() {
+      let normalsByIndex = Array(this.rawVertices.length)
+      normalsByIndex.fill(Vector(0,0,0))
+
+      facesByIndex.forEach((face) => {
+        let v1 = Vector(this.rawVertices[face[1]][0] - this.rawVertices[face[0]][0], this.rawVertices[face[1]][1] - this.rawVertices[face[0]][1], this.rawVertices[face[1]][2] - this.rawVertices[face[0]][2])
+        let v2 = Vector(this.rawVertices[face[2]][0] - this.rawVertices[face[1]][0], this.rawVertices[face[2]][1] - this.rawVertices[face[1]][1], this.rawVertices[face[2]][2] - this.rawVertices[face[1]][2])
+        let v3 = Vector(this.rawVertices[face[0]][0] - this.rawVertices[face[2]][0], this.rawVertices[face[0]][1] - this.rawVertices[face[2]][1], this.rawVertices[face[0]][2] - this.rawVertices[face[2]][2])
+
+        normalsByIndex[face[0]].add(v3.multiply(-1).cross(v1))
+        normalsByIndex[face[1]].add(v1.multiply(-1).cross(v2))
+        normalsByIndex[face[2]].add(v2.multiply(-1).cross(v3))
+      })
+
+      // Do we need to divide each by magnitude?
+
+      return normalsByIndex
     },
     setWireframe: newIsWireframe => (isWireframe = newIsWireframe)
   }

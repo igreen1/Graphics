@@ -68,7 +68,7 @@ const MatrixLibrary = {
     return xRotationMatrix.multiply(yRotationMatrix.multiply(zRotationMatrix))
   },
 
-  orthographicProjectionMatrix: (top, bottom, right, left, near, far) => {
+  orthographicProjectionMatrix: (top=-1, bottom=1, right=-1, left=1, near=-1, far=1) => {
     // prettier-ignore
     return Matrix([
       [2/(right - left),                0,                  0, -((right + left)/(right - left))],
@@ -78,7 +78,7 @@ const MatrixLibrary = {
     ])
   },
 
-  perspectiveMatrix: (top, bottom, right, left, near, far) => {
+  perspectiveMatrix: (top=-1, bottom=1, right=-1, left=1, near=-1, far=1) => {
     return Matrix([
       [(2*near)/(right-left),                     0, (right+left)/(right-left),                        0],
       [                    0, (2*near)/(top-bottom), (top+bottom)/(top-bottom),                        0],
