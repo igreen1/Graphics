@@ -64,6 +64,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false) => {
 const Our3DObject = (mesh, colorArrayByVertex) => {
   let matrix = Matrix()
   return {
+    type : Our3DObject,
     mesh,
     get vertices() {
       return mesh.vertices
@@ -92,10 +93,23 @@ const Our3DGroup = (objects = []) => {
     get group() {
       return group
     },
+    type: Our3DGroup,
     add: object => group.push(object),
     remove: object => group.filter(sceneObject => sceneObject !== object),
     transform: matrix => group.forEach(object => object.transform(matrix))
   }
 }
 
-export { OurMesh, Our3DGroup, Our3DObject }
+const OurLight = () => {
+  return{
+    type : OurLight
+  }
+}
+
+const OurCamera = () => {
+  return{
+    type : OurCamera
+  }
+}
+
+export { OurMesh, Our3DGroup, Our3DObject, OurLight, OurCamera }
