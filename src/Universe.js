@@ -1,4 +1,4 @@
-import { Our3DGroup } from './Our3DObject'
+import { Our3DGroup, Our3DObject, OurLight } from './Our3DObject'
 import { useState } from 'react'
 
 const Scene = (cast) => {
@@ -8,9 +8,18 @@ const Scene = (cast) => {
     cast.forEach((castMember) => objectsToDraw.add(castMember))
   }
 
+  const lightSources = []
+
   return {
     get objectsToDraw() { return objectsToDraw.group },
-    add: objectsToDraw.add,
+    add: (object) => {
+      if (object.type === Our3DObject || object.type === Our3DGroup) {
+        objectsToDraw.add(object)
+      }
+      else if (object.type === OurLight) {
+        lightSources.push(object)
+      } 
+    },
     remove: objectsToDraw.remove,
     transform: objectsToDraw.transform,
   }
