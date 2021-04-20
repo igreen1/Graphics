@@ -107,11 +107,7 @@ const Our3DObject = (mesh, colorArray) => {
       return matrix
     },
     get color() {
-      if (colorArray.length > 3) {
-        //vertex-by-vertex coloring
-      } else {
-        return { r: colorArray[0], g: colorArray[1], b: colorArray[2] }
-      }
+      return this.colors //backwards compatibility
     },
     get colors() {
       let colors = []
