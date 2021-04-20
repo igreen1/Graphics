@@ -34,10 +34,22 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       let normalsByIndex = Array(this.rawVertices.length)
       normalsByIndex.fill([])
 
-      facesByIndex.forEach((face) => {
-        let v1 = Vector(this.rawVertices[face[1]][0] - this.rawVertices[face[0]][0], this.rawVertices[face[1]][1] - this.rawVertices[face[0]][1], this.rawVertices[face[1]][2] - this.rawVertices[face[0]][2])
-        let v2 = Vector(this.rawVertices[face[2]][0] - this.rawVertices[face[1]][0], this.rawVertices[face[2]][1] - this.rawVertices[face[1]][1], this.rawVertices[face[2]][2] - this.rawVertices[face[1]][2])
-        let v3 = Vector(this.rawVertices[face[0]][0] - this.rawVertices[face[2]][0], this.rawVertices[face[0]][1] - this.rawVertices[face[2]][1], this.rawVertices[face[0]][2] - this.rawVertices[face[2]][2])
+      facesByIndex.forEach(face => {
+        let v1 = Vector(
+          this.rawVertices[face[1]][0] - this.rawVertices[face[0]][0],
+          this.rawVertices[face[1]][1] - this.rawVertices[face[0]][1],
+          this.rawVertices[face[1]][2] - this.rawVertices[face[0]][2]
+        )
+        let v2 = Vector(
+          this.rawVertices[face[2]][0] - this.rawVertices[face[1]][0],
+          this.rawVertices[face[2]][1] - this.rawVertices[face[1]][1],
+          this.rawVertices[face[2]][2] - this.rawVertices[face[1]][2]
+        )
+        let v3 = Vector(
+          this.rawVertices[face[0]][0] - this.rawVertices[face[2]][0],
+          this.rawVertices[face[0]][1] - this.rawVertices[face[2]][1],
+          this.rawVertices[face[0]][2] - this.rawVertices[face[2]][2]
+        )
 
         normalsByIndex[face[0]].push(v3.multiply(-1).cross(v1).normalize())
         normalsByIndex[face[1]].push(v1.multiply(-1).cross(v2).normalize())
@@ -53,10 +65,22 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       let normalsByIndex = Array(this.rawVertices.length)
       normalsByIndex.fill([Vector(0, 0, 0)])
 
-      facesByIndex.forEach((face) => {
-        let v1 = Vector(this.rawVertices[face[1]][0] - this.rawVertices[face[0]][0], this.rawVertices[face[1]][1] - this.rawVertices[face[0]][1], this.rawVertices[face[1]][2] - this.rawVertices[face[0]][2])
-        let v2 = Vector(this.rawVertices[face[2]][0] - this.rawVertices[face[1]][0], this.rawVertices[face[2]][1] - this.rawVertices[face[1]][1], this.rawVertices[face[2]][2] - this.rawVertices[face[1]][2])
-        let v3 = Vector(this.rawVertices[face[0]][0] - this.rawVertices[face[2]][0], this.rawVertices[face[0]][1] - this.rawVertices[face[2]][1], this.rawVertices[face[0]][2] - this.rawVertices[face[2]][2])
+      facesByIndex.forEach(face => {
+        let v1 = Vector(
+          this.rawVertices[face[1]][0] - this.rawVertices[face[0]][0],
+          this.rawVertices[face[1]][1] - this.rawVertices[face[0]][1],
+          this.rawVertices[face[1]][2] - this.rawVertices[face[0]][2]
+        )
+        let v2 = Vector(
+          this.rawVertices[face[2]][0] - this.rawVertices[face[1]][0],
+          this.rawVertices[face[2]][1] - this.rawVertices[face[1]][1],
+          this.rawVertices[face[2]][2] - this.rawVertices[face[1]][2]
+        )
+        let v3 = Vector(
+          this.rawVertices[face[0]][0] - this.rawVertices[face[2]][0],
+          this.rawVertices[face[0]][1] - this.rawVertices[face[2]][1],
+          this.rawVertices[face[0]][2] - this.rawVertices[face[2]][2]
+        )
 
         normalsByIndex[face[0]][0].add(v3.multiply(-1).cross(v1).normalize())
         normalsByIndex[face[1]][0].add(v1.multiply(-1).cross(v2).normalize())
@@ -85,7 +109,6 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
     get color() {
       if (colorArrayByVertex.length > 3) {
         //vertex-by-vertex coloring
-
       } else {
         return { r: colorArrayByVertex[0], g: colorArrayByVertex[1], b: colorArrayByVertex[2] }
       }
@@ -93,27 +116,28 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
     get colors() {
       if (Array.isArray(colorArrayByVertex[0])) {
         let colors = []
-        for (let i = 0, maxi = this.vertices.length / 3; i < maxi; i += 1) {
-          colors = colors.concat(
-            colorArrayByVertex[i%this.mesh.rawVertices.length],
-            colorArrayByVertex[i+1%this.mesh.rawVertices.length],
-            colorArrayByVertex[i+2%this.mesh.rawVertices.length]
-          )
+        for (let i = 0, maxi = this.vertices.length / 9; i < maxi; i += 1) {
+          colors.push(colorArrayByVertex[i][0])
+          colors.push(colorArrayByVertex[i][1])
+          colors.push(colorArrayByVertex[i][2])
+          colors.push(colorArrayByVertex[i][0])
+          colors.push(colorArrayByVertex[i][1])
+          colors.push(colorArrayByVertex[i][2])
+          colors.push(colorArrayByVertex[i][0])
+          colors.push(colorArrayByVertex[i][1])
+          colors.push(colorArrayByVertex[i][2])
         }
         console.log(colors)
         return colors
-        
-        return [].concat(colorArrayByVertex.flatMap((rgb) => rgb))
-          .concat(colorArrayByVertex.flatMap((rgb) => rgb))
-          .concat(colorArrayByVertex.flatMap((rgb) => rgb))
+
+        return []
+          .concat(colorArrayByVertex.flatMap(rgb => rgb))
+          .concat(colorArrayByVertex.flatMap(rgb => rgb))
+          .concat(colorArrayByVertex.flatMap(rgb => rgb))
       } else {
         let colors = []
         for (let i = 0, maxi = this.vertices.length / 3; i < maxi; i += 1) {
-          colors = colors.concat(
-            colorArrayByVertex[0],
-            colorArrayByVertex[1],
-            colorArrayByVertex[2]
-          )
+          colors = colors.concat(colorArrayByVertex[0], colorArrayByVertex[1], colorArrayByVertex[2])
         }
         console.log(colors)
         return colors
@@ -122,12 +146,12 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
     setWireframe: mesh.setWireframe,
     transform: otherMatrix => (matrix = otherMatrix.multiply(matrix)),
     transformVertices: otherMatrix =>
-    (mesh.vertices = mesh.rawVertices.map(vertex =>
-      otherMatrix
-        .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
-        .toArray()
-        .slice(0, -1)
-    )),
+      (mesh.vertices = mesh.rawVertices.map(vertex =>
+        otherMatrix
+          .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
+          .toArray()
+          .slice(0, -1)
+      ))
     // applyLight: lightSources => {
 
     //   let lambertianCoefficient = new Vector(0,0,0)
@@ -165,14 +189,14 @@ const Our3DGroup = (objects = []) => {
     type: Our3DGroup,
     add: object => group.push(object),
     remove: object => group.filter(sceneObject => sceneObject !== object),
-    transform: matrix => group.forEach(object => object.transform(matrix)),
+    transform: matrix => group.forEach(object => object.transform(matrix))
   }
 }
 
 const OurLight = (center, direction) => {
   return {
     type: OurLight,
-    direction: (new Vector(direction[0], direction[1], direction[2])).normalize(),
+    direction: new Vector(direction[0], direction[1], direction[2]).normalize(),
     center: center
   }
 }
@@ -186,12 +210,15 @@ const OurCamera = (center, direction, projectionOptions, projectionType = Matrix
 
   return {
     type: OurCamera,
-    get matrix() { return projectionMatrix.multiply(matrix).toArray() },
-    set matrix(newMatrix) { matrix = newMatrix },
-    translate: (x, y, z) => matrix = matrix.multiply(MatrixLibrary.translationMatrix(x, y, z)),
-    rotate: (x, y, z) => matrix = matrix.multiply(MatrixLibrary.rotationMatrix(x, y, z)),
+    get matrix() {
+      return projectionMatrix.multiply(matrix).toArray()
+    },
+    set matrix(newMatrix) {
+      matrix = newMatrix
+    },
+    translate: (x, y, z) => (matrix = matrix.multiply(MatrixLibrary.translationMatrix(x, y, z))),
+    rotate: (x, y, z) => (matrix = matrix.multiply(MatrixLibrary.rotationMatrix(x, y, z))),
     projectionMatrix
-
   }
 }
 
