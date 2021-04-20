@@ -95,7 +95,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
   }
 }
 
-const Our3DObject = (mesh, colorArrayByVertex) => {
+const Our3DObject = (mesh, colorArray) => {
   let matrix = Matrix()
   return {
     type: Our3DObject,
@@ -107,27 +107,27 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
       return matrix
     },
     get color() {
-      if (colorArrayByVertex.length > 3) {
+      if (colorArray.length > 3) {
         //vertex-by-vertex coloring
       } else {
-        return { r: colorArrayByVertex[0], g: colorArrayByVertex[1], b: colorArrayByVertex[2] }
+        return { r: colorArray[0], g: colorArray[1], b: colorArray[2] }
       }
     },
     get colors() {
       let colors = []
-      if (Array.isArray(colorArrayByVertex[0]) && colorArrayByVertex.length === this.mesh.facesByIndex.length) {
+      if (Array.isArray(colorArray[0]) && colorArray.length === this.mesh.facesByIndex.length) {
         if (!this.mesh.isWireframe) {
           // if they wish to pass color by face and it is NOT writeframe
           for (let i = 0, maxi = this.vertices.length / 9; i < maxi; i += 1) {
-            colors.push(colorArrayByVertex[i][0])
-            colors.push(colorArrayByVertex[i][1])
-            colors.push(colorArrayByVertex[i][2])
-            colors.push(colorArrayByVertex[i][0])
-            colors.push(colorArrayByVertex[i][1])
-            colors.push(colorArrayByVertex[i][2])
-            colors.push(colorArrayByVertex[i][0])
-            colors.push(colorArrayByVertex[i][1])
-            colors.push(colorArrayByVertex[i][2])
+            colors.push(colorArray[i][0])
+            colors.push(colorArray[i][1])
+            colors.push(colorArray[i][2])
+            colors.push(colorArray[i][0])
+            colors.push(colorArray[i][1])
+            colors.push(colorArray[i][2])
+            colors.push(colorArray[i][0])
+            colors.push(colorArray[i][1])
+            colors.push(colorArray[i][2])
           }
         } else {
           // they wish to pass color by face BUT its a wireframe (ahh)
@@ -137,18 +137,18 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
           for (let faceIndex = 0; faceIndex < this.mesh.facesByIndex.length; faceIndex++) {
 
             for (let i = 0, maxI = this.mesh.facesByIndex[faceIndex].length; i < maxI; i += 1) {
-              colors.push(...colorArrayByVertex[faceIndex])
-              colors.push(...colorArrayByVertex[faceIndex])
+              colors.push(...colorArray[faceIndex])
+              colors.push(...colorArray[faceIndex])
             }
 
           }
         }
-      } else if (Array.isArray(colorArrayByVertex[0]) && colorArrayByVertex.length === this.mesh.rawVertices.length) {
+      } else if (Array.isArray(colorArray[0]) && colorArray.length === this.mesh.rawVertices.length) {
         // color by vertex 
         if (!this.mesh.isWireframe) {
           this.mesh.facesByIndex.forEach((face) => {
             face.forEach(vertexIndex => {
-              colors.push(...colorArrayByVertex[vertexIndex])
+              colors.push(...colorArray[vertexIndex])
             })
           })
         } else {
@@ -156,15 +156,21 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
             for (let i = 0, maxI = face.length; i < maxI; i += 1) {
               // “Connect the dots.”
               colors.push(
-                ...colorArrayByVertex[face[i]],
-                ...colorArrayByVertex[face[(i + 1) % maxI]] // Lets us wrap around to 0.
+                ...colorArray[face[i]],
+                ...colorArray[face[(i + 1) % maxI]] // Lets us wrap around to 0.
               )
             }
           })
         }
+      } else if (Array.isArray(colorArray[0])) {
+        // poorly shaped size ; rather than explode, we will choose the first colour
+        // this is a CHOICE and this entire else-if can be removed to force errors for poorly sized colour arrays
+        for (let i = 0, maxi = this.vertices.length / 3; i < maxi; i += 1) {
+          colors = colors.concat(colorArray[0][0], colorArray[0][1], colorArray[0][2])
+        }
       } else {
         for (let i = 0, maxi = this.vertices.length / 3; i < maxi; i += 1) {
-          colors = colors.concat(colorArrayByVertex[0], colorArrayByVertex[1], colorArrayByVertex[2])
+          colors = colors.concat(colorArray[0], colorArray[1], colorArray[2])
         }
       }
 
