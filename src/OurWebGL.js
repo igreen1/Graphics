@@ -237,6 +237,7 @@ const ExampleUniverse = () => {
   // let universe = universeFromJson(exampleScene)
   let universe = BigBang()
 
+
   let star = Our3DObject(
     OurMesh(
       Extrude(
@@ -270,7 +271,7 @@ const ExampleUniverse = () => {
   star.transformVertices(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
   star.transformVertices(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
   star.transformVertices(MatrixLibrary.translationMatrix(0.5, 0.3, 0.5))
-  star.setWireframe(true)
+  // star.setWireframe(true)
   // universe.addToUniverse(star)
 
   let star2 = Our3DObject(
@@ -306,26 +307,25 @@ const ExampleUniverse = () => {
   star2.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
   star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
   star2.transform(MatrixLibrary.translationMatrix(0.49, 0.3, 0.5))
-  star2.setWireframe(true)
+  // star2.setWireframe(true)
   // universe.addToUniverse(star2)
 
-  let regpoly = Our3DObject(OurMesh(RegularPolygon(3)), 
-    [
-      [0,0,100],
-      [0,100,0],
-      [100,0,0],
-    ],
-    true
-  )
-  // regpoly.transform(MatrixLibrary.translationMatrix(0, 0, 0.5))
-
-
-  universe.addToUniverse(regpoly)
+  let colorsByFace=[]
+  for(let i = 0; i < 1122; i++){
+    colorsByFace.push([(Math.random()*10), (Math.random()*10),(Math.random*10)+10])
+  }
+  let colorsByVertex=[]
+  for(let i = 0; i < 578; i++){
+    colorsByVertex.push([(Math.random()*10), (Math.random()*10),(Math.random*10)+10])
+  }
+  let sphere = Our3DObject(OurMesh(Sphere(0.3, 16), false), colorsByFace)
+  sphere.transform(MatrixLibrary.scaleMatrix(5, 5, 5))
+  sphere.transform(MatrixLibrary.translationMatrix(0, 0.16, 0))
+  universe.addToUniverse(sphere)
+  console.log(sphere)
 
   const camera = OurCamera([0, 0, -5], [0, 0, 0], [.6, -.5, .5, -.5, 1, 10])
-  // console.log(camera)
-  // camera.rotate(25,50,15);
-  // console.log(camera)
+
   universe.addToUniverse(camera);
 
   return universe
