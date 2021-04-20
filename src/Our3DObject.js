@@ -114,44 +114,71 @@ const Our3DObject = (mesh, colorArrayByVertex) => {
       }
     },
     get colors() {
-      if (Array.isArray(colorArrayByVertex[0])) {
-        let colors = []
-        for (let i = 0, maxi = this.vertices.length / 9; i < maxi; i += 1) {
-          colors.push(colorArrayByVertex[i][0])
-          colors.push(colorArrayByVertex[i][1])
-          colors.push(colorArrayByVertex[i][2])
-          colors.push(colorArrayByVertex[i][0])
-          colors.push(colorArrayByVertex[i][1])
-          colors.push(colorArrayByVertex[i][2])
-          colors.push(colorArrayByVertex[i][0])
-          colors.push(colorArrayByVertex[i][1])
-          colors.push(colorArrayByVertex[i][2])
-        }
-        console.log(colors)
-        return colors
+      let colors = []
+      if (Array.isArray(colorArrayByVertex[0]) && colorArrayByVertex.length === this.mesh.facesByIndex.length) {
+        if (!this.mesh.isWireframe) {
+          // if they wish to pass color by face and it is NOT writeframe
+          for (let i = 0, maxi = this.vertices.length / 9; i < maxi; i += 1) {
+            colors.push(colorArrayByVertex[i][0])
+            colors.push(colorArrayByVertex[i][1])
+            colors.push(colorArrayByVertex[i][2])
+            colors.push(colorArrayByVertex[i][0])
+            colors.push(colorArrayByVertex[i][1])
+            colors.push(colorArrayByVertex[i][2])
+            colors.push(colorArrayByVertex[i][0])
+            colors.push(colorArrayByVertex[i][1])
+            colors.push(colorArrayByVertex[i][2])
+          }
+        } else {
+          // they wish to pass color by face BUT its a wireframe (ahh)
+          // this obviously cant display /that/ well because one line ALWAYS borders two faces
+          // so one object needs two colors? huh? so it logically can't display well
+          // this is simply added so that .toWireframe doesn't break the entire program
+          for (let faceIndex = 0; faceIndex < this.mesh.facesByIndex.length; faceIndex++) {
 
-        return []
-          .concat(colorArrayByVertex.flatMap(rgb => rgb))
-          .concat(colorArrayByVertex.flatMap(rgb => rgb))
-          .concat(colorArrayByVertex.flatMap(rgb => rgb))
+            for (let i = 0, maxI = this.mesh.facesByIndex[faceIndex].length; i < maxI; i += 1) {
+              colors.push(...colorArrayByVertex[faceIndex])
+              colors.push(...colorArrayByVertex[faceIndex])
+            }
+
+          }
+        }
+      } else if (Array.isArray(colorArrayByVertex[0]) && colorArrayByVertex.length === this.mesh.rawVertices.length) {
+        // color by vertex 
+        if (!this.mesh.isWireframe) {
+          this.mesh.facesByIndex.forEach((face) => {
+            face.forEach(vertexIndex => {
+              colors.push(...colorArrayByVertex[vertexIndex])
+            })
+          })
+        } else {
+          this.mesh.facesByIndex.forEach(face => {
+            for (let i = 0, maxI = face.length; i < maxI; i += 1) {
+              // “Connect the dots.”
+              colors.push(
+                ...colorArrayByVertex[face[i]],
+                ...colorArrayByVertex[face[(i + 1) % maxI]] // Lets us wrap around to 0.
+              )
+            }
+          })
+        }
       } else {
-        let colors = []
         for (let i = 0, maxi = this.vertices.length / 3; i < maxi; i += 1) {
           colors = colors.concat(colorArrayByVertex[0], colorArrayByVertex[1], colorArrayByVertex[2])
         }
-        console.log(colors)
-        return colors
       }
+
+      return colors;
     },
     setWireframe: mesh.setWireframe,
     transform: otherMatrix => (matrix = otherMatrix.multiply(matrix)),
     transformVertices: otherMatrix =>
-      (mesh.vertices = mesh.rawVertices.map(vertex =>
-        otherMatrix
-          .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
-          .toArray()
-          .slice(0, -1)
-      ))
+    (mesh.vertices = mesh.rawVertices.map(vertex =>
+      otherMatrix
+        .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
+        .toArray()
+        .slice(0, -1)
+    ))
     // applyLight: lightSources => {
 
     //   let lambertianCoefficient = new Vector(0,0,0)
