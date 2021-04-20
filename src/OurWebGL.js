@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from './glsl-utilities'
 import { polygon, icosahedron, toRawLineArray, toRawTriangleArray } from './shapes'
-import { Our3DObject, OurMesh, Our3DGroup } from './Our3DObject'
+import { Our3DObject, OurMesh, Our3DGroup, OurCamera } from './Our3DObject'
 import { Cone, Cylinder, Extrude, RegularPolygon, Sphere, Tube, Torus } from './GeometryLibrary'
 import { Matrix, MatrixLibrary } from './OurMatrix'
 import { BigBang, Scene } from './Universe'
@@ -21,16 +21,16 @@ const VERTEX_SHADER = `
   attribute vec3 vertexColor;
   varying vec4 finalVertexColor;
   uniform mat4 matrix;
-  uniform mat4 projectionMatrix;
   uniform mat4 cameraMatrix;
+  uniform mat4 projectionMatrix;
 
   void main(void) {
     // Camera matrix will go here (moves the scene)
-    mat4 tempCamera = mat4(1,0,0,0,
+    mat4 tempCamera = mat4(   1,0,0,0,
                               0,1,0,0,
                               0,0,1,0,
                               0,0,-5,1);
-    gl_Position = projectionMatrix * tempCamera * matrix * vec4(vertexPosition, 1.0);
+    gl_Position = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
     finalVertexColor = vec4(vertexColor, 1.0);
   }
 `
@@ -82,18 +82,18 @@ const InitWebGL = universe => {
       objectToDraw.verticesBuffer = initVertexBuffer(gl, objectToDraw.vertices)
       // objectToDraw.verticesBuffer = initVertexBuffer(gl, toRawLineArray(icosahedron()))
 
-      if (!objectToDraw.colors) {
-        // If we have a single color, we expand that into an array
-        // of the same color over and over.
-        objectToDraw.colors = []
-        for (let i = 0, maxi = objectToDraw.vertices.length / 3; i < maxi; i += 1) {
-          objectToDraw.colors = objectToDraw.colors.concat(
-            objectToDraw.color.r,
-            objectToDraw.color.g,
-            objectToDraw.color.b
-          )
-        }
-      }
+      // if (!objectToDraw.colors) {
+      //   // If we have a single color, we expand that into an array
+      //   // of the same color over and over.
+      //   objectToDraw.colors = []
+      //   for (let i = 0, maxi = objectToDraw.vertices.length / 3; i < maxi; i += 1) {
+      //     objectToDraw.colors = objectToDraw.colors.concat(
+      //       objectToDraw.color.r,
+      //       objectToDraw.color.g,
+      //       objectToDraw.color.b
+      //     )
+      //   }
+      // }
       objectToDraw.colorsBuffer = initVertexBuffer(gl, objectToDraw.colors)
     })
 
@@ -174,7 +174,9 @@ const InitWebGL = universe => {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
       // Set up projection matrix
-      gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, MatrixLibrary.perspectiveMatrix(.6,-.5,.5,-.5,1,10).toArray())
+      gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, MatrixLibrary.perspectiveMatrix(.6, -.5, .5, -.5, 1, 10).toArray())
+      gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, universe.scene.camera.matrix)
+
       //gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, MatrixLibrary.perspectiveMatrix(3,-3,3,-3,3,-3).toArray())
       // Display the objects.
       objectsToDraw.forEach(drawObject)
@@ -232,7 +234,8 @@ const InitWebGL = universe => {
 
 /* Universe from JSON with stars added dynamically */
 const ExampleUniverse = () => {
-  let universe = universeFromJson(exampleScene)
+  // let universe = universeFromJson(exampleScene)
+  let universe = BigBang()
 
   let star = Our3DObject(
     OurMesh(
@@ -267,7 +270,8 @@ const ExampleUniverse = () => {
   star.transformVertices(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
   star.transformVertices(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
   star.transformVertices(MatrixLibrary.translationMatrix(0.5, 0.3, 0.5))
-  universe.addToUniverse(star)
+  star.setWireframe(true)
+  // universe.addToUniverse(star)
 
   let star2 = Our3DObject(
     OurMesh(
@@ -302,7 +306,28 @@ const ExampleUniverse = () => {
   star2.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
   star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
   star2.transform(MatrixLibrary.translationMatrix(0.49, 0.3, 0.5))
-  universe.addToUniverse(star2)
+  star2.setWireframe(true)
+  // universe.addToUniverse(star2)
+
+  let regpoly = Our3DObject(OurMesh(RegularPolygon(3)), 
+    [
+      [0,0,100],
+      [0,100,0],
+      [100,0,0],
+    ],
+    true
+  )
+  // regpoly.transform(MatrixLibrary.translationMatrix(0, 0, 0.5))
+
+
+  universe.addToUniverse(regpoly)
+
+  const camera = OurCamera([0, 0, -5], [0, 0, 0], [.6, -.5, .5, -.5, 1, 10])
+  // console.log(camera)
+  // camera.rotate(25,50,15);
+  // console.log(camera)
+  universe.addToUniverse(camera);
+
   return universe
 }
 

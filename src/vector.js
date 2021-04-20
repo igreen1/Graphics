@@ -119,6 +119,10 @@ class Vector {
     return this.divide(this.magnitude)
   }
 
+  normalize(){
+    return this.divide(this.magnitude)
+  }
+
   projection(v) {
     checkDimensions(this, v)
 

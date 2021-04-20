@@ -1,4 +1,4 @@
-import { Our3DGroup, Our3DObject, OurLight } from './Our3DObject'
+import { Our3DGroup, Our3DObject, OurLight, OurCamera } from './Our3DObject'
 import { useState } from 'react'
 
 const Scene = (cast) => {
@@ -9,6 +9,7 @@ const Scene = (cast) => {
   }
 
   const lightSources = []
+  let camera = OurCamera([0,0,-5], [0,0,0], [.6,-.5,.5,-.5,1,10]); // Default camera
 
   return {
     get objectsToDraw() { return objectsToDraw.group },
@@ -18,10 +19,14 @@ const Scene = (cast) => {
       }
       else if (object.type === OurLight) {
         lightSources.push(object)
-      } 
+      } else if (object.type === OurCamera) {
+        camera = object
+      }
     },
     remove: objectsToDraw.remove,
     transform: objectsToDraw.transform,
+    get lightSources() { return lightSources },
+    get camera() { return camera },
   }
 }
 
@@ -39,10 +44,10 @@ const BigBang = (cast) => {
   }
 
   const addAnimation = anim => {
-    if(!universe.animation){
+    if (!universe.animation) {
       setUniverse({
         ...universe,
-        animation:{anim}
+        animation: { anim }
       })
     } else {
       universe.animation = {
