@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from './glsl-utilities'
 import { polygon, icosahedron, toRawLineArray, toRawTriangleArray } from './shapes'
-import { Our3DObject, OurMesh, Our3DGroup, OurCamera } from './Our3DObject'
+import { Our3DObject, OurMesh, Our3DGroup, OurCamera, OurLight } from './Our3DObject'
 import { Cone, Cylinder, Extrude, RegularPolygon, Sphere, Tube, Torus } from './GeometryLibrary'
 import { Matrix, MatrixLibrary } from './OurMatrix'
 import { BigBang, Scene } from './Universe'
@@ -20,13 +20,16 @@ const VERTEX_SHADER = `
   // Note this new additional output.
   attribute vec3 vertexColor;
   varying vec4 finalVertexColor;
+  uniform vec3 light;
+  uniform vec3 normals;
   uniform mat4 matrix;
   uniform mat4 cameraMatrix;
   uniform mat4 projectionMatrix;
 
   void main(void) {
+    float lightContribution = max(dot(light, normals),0.0);
     gl_Position = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
-    finalVertexColor = vec4(vertexColor, 1.0);
+    finalVertexColor = vec4(lightContribution * vertexColor, 1.0);
   }
 `
 
@@ -130,6 +133,8 @@ const InitWebGL = universe => {
     const matrix = gl.getUniformLocation(shaderProgram, 'matrix')
     const projectionMatrix = gl.getUniformLocation(shaderProgram, 'projectionMatrix')
     const cameraMatrix = gl.getUniformLocation(shaderProgram, 'cameraMatrix')
+    const normals = gl.getUniformLocation(shaderProgram, 'normals')
+    const light = gl.getUniformLocation(shaderProgram, 'light')
 
     /*
      * Displays an individual object.
@@ -149,6 +154,8 @@ const InitWebGL = universe => {
       //object.transform(parentMatrix)
       gl.uniformMatrix4fv(matrix, gl.FALSE, object.matrix.toArray())
 
+      // Set normals
+      gl.uniform3fv(normals, new Float32Array(object.facetedNormals))
 
       // Set the varying colors.
       gl.bindBuffer(gl.ARRAY_BUFFER, object.colorsBuffer)
@@ -171,6 +178,7 @@ const InitWebGL = universe => {
       // Set up projection matrix
       gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, MatrixLibrary.perspectiveMatrix(.6, -.5, .5, -.5, 1, 10).toArray())
       gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, universe.scene.camera.matrix)
+      gl.uniform3fv(light, new Float32Array(universe.scene.light.vector))
 
       //gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, MatrixLibrary.perspectiveMatrix(3,-3,3,-3,3,-3).toArray())
       // Display the objects.
@@ -320,8 +328,10 @@ const ExampleUniverse = () => {
   console.log(sphere)
 
   const camera = OurCamera([0, 0, -5], [0, 0, 0], [.6, -.5, .5, -.5, 1, 10])
-
   universe.addToUniverse(camera);
+
+  const light = OurLight();
+  universe.addToUniverse(light);
 
   return universe
 }

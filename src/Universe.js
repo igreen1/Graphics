@@ -8,7 +8,7 @@ const Scene = (cast) => {
     cast.forEach((castMember) => objectsToDraw.add(castMember))
   }
 
-  const lightSources = []
+  let light = OurLight([1,1,1]); // Default light
   let camera = OurCamera([0,0,-5], [0,0,0], [.6,-.5,.5,-.5,1,10]); // Default camera
 
   return {
@@ -18,14 +18,14 @@ const Scene = (cast) => {
         objectsToDraw.add(object)
       }
       else if (object.type === OurLight) {
-        lightSources.push(object)
+        light = object
       } else if (object.type === OurCamera) {
         camera = object
       }
     },
     remove: objectsToDraw.remove,
     transform: objectsToDraw.transform,
-    get lightSources() { return lightSources },
+    get light() { return light },
     get camera() { return camera },
   }
 }
