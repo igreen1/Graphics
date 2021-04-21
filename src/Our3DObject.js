@@ -75,15 +75,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       return normalsByRawVertex
     },
 
-        // let n = (new Vector(
-    //   this.vertices[i + 6] - this.vertices[i + 0],
-    //   this.vertices[i + 7] - this.vertices[i + 1],
-    //   this.vertices[i + 8] - this.vertices[i + 2]
-    // )).cross(new Vector(
-    //   this.vertices[i + 3] - this.vertices[i + 0],
-    //   this.vertices[i + 4] - this.vertices[i + 1],
-    //   this.vertices[i + 5] - this.vertices[i + 2]
-    // ))
+
 
     get facetedNormals() {
       // We could use 'normalsByFace' for this
@@ -93,13 +85,13 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       if (!wireframe) {
         for (let i = 0; i < this.vertices.length; i += 9) {
           let n = (new Vector(
-            this.vertices[i + 3] - this.vertices[i + 0],
-            this.vertices[i + 4] - this.vertices[i + 1],
-            this.vertices[i + 5] - this.vertices[i + 2]
-          )).cross(new Vector(
-            this.vertices[i + 6] - this.vertices[i + 0],
-            this.vertices[i + 7] - this.vertices[i + 1],
-            this.vertices[i + 8] - this.vertices[i + 2]
+              this.vertices[i + 6] - this.vertices[i + 0],
+              this.vertices[i + 7] - this.vertices[i + 1],
+              this.vertices[i + 8] - this.vertices[i + 2]
+            )).cross(new Vector(
+              this.vertices[i + 3] - this.vertices[i + 0],
+              this.vertices[i + 4] - this.vertices[i + 1],
+              this.vertices[i + 5] - this.vertices[i + 2]
           ))
           normalsByVertex.push(n.x, n.y, n.z) // Corresponding to vertex 0 of this face
           normalsByVertex.push(n.x, n.y, n.z)
@@ -233,6 +225,9 @@ const Our3DObject = (mesh, colorArray) => {
       }
 
       return colors;
+    },
+    get normals() {
+      return mesh.normals
     },
     setWireframe: mesh.setWireframe,
     transform: otherMatrix => (matrix = otherMatrix.multiply(matrix)),

@@ -27,10 +27,9 @@ const VERTEX_SHADER = `
   uniform mat4 projectionMatrix;
 
   void main(void) {
-    // vec3 hardCodedLight = vec3(1,1,1);
-    // vec3 lightVector = normalize(hardCodedLight - vertexPosition);
+    vec3 lightVector = normalize(light - vertexPosition);
     vec3 fakeNormal = normalize(vertexPosition);
-    float lightContribution = max(dot(light, normalize(normals)),0.0);
+    float lightContribution = max(dot(lightVector, normalize(normals)),0.0);
 
     gl_Position = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
     finalVertexColor = vec4(lightContribution * vertexColor, 1.0);
@@ -81,9 +80,8 @@ const InitWebGL = universe => {
 
     // Pass the vertices to WebGL.
     objectsToDraw.forEach(objectToDraw => {
-      console.log(objectToDraw.mesh.smoothNormals)
       objectToDraw.verticesBuffer = initVertexBuffer(gl, objectToDraw.vertices)
-      objectToDraw.normalsBuffer = initVertexBuffer(gl, objectToDraw.mesh.smoothNormals)
+      objectToDraw.normalsBuffer = initVertexBuffer(gl, objectToDraw.normals)
       objectToDraw.colorsBuffer = initVertexBuffer(gl, objectToDraw.colors)
     })
 
@@ -316,9 +314,9 @@ const ExampleUniverse = () => {
   }
   let colorsByVertex=[]
   for(let i = 0; i < 578; i++){
-    colorsByVertex.push([(Math.random()*10), (Math.random()*10),(Math.random*10)+10])
+    colorsByVertex.push([(Math.random()*10), (Math.random()*10),(Math.random())*10])
   }
-  let sphere = Our3DObject(OurMesh(Sphere(0.3, 16), false), colorsByFace)
+  let sphere = Our3DObject(OurMesh(Sphere(0.3, 16), false), colorsByVertex)
   sphere.transform(MatrixLibrary.scaleMatrix(5, 5, 5))
   sphere.transform(MatrixLibrary.translationMatrix(0, 0.16, 0))
   universe.addToUniverse(sphere)
@@ -327,7 +325,7 @@ const ExampleUniverse = () => {
   const camera = OurCamera([0, 0, -5], [0, 0, 0], [.6, -.5, .5, -.5, 1, 10])
   universe.addToUniverse(camera);
 
-  const light = OurLight([.5,.5,0]);
+  const light = OurLight([.5,.5,2]);
   universe.addToUniverse(light);
 
   return universe
