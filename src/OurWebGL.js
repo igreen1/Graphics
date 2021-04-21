@@ -16,18 +16,22 @@ const VERTEX_SHADER = `
   #endif
 
   attribute vec3 vertexPosition;
+  attribute vec3 normals;
 
   // Note this new additional output.
   attribute vec3 vertexColor;
   varying vec4 finalVertexColor;
   uniform vec3 light;
-  uniform vec3 normals;
   uniform mat4 matrix;
   uniform mat4 cameraMatrix;
   uniform mat4 projectionMatrix;
 
   void main(void) {
-    float lightContribution = max(dot(light, normals),0.0);
+    // vec3 hardCodedLight = vec3(1,1,1);
+    // vec3 lightVector = normalize(hardCodedLight - vertexPosition);
+    vec3 fakeNormal = normalize(vertexPosition);
+    float lightContribution = max(dot(light, normalize(normals)),0.0);
+
     gl_Position = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
     finalVertexColor = vec4(lightContribution * vertexColor, 1.0);
   }
@@ -77,21 +81,9 @@ const InitWebGL = universe => {
 
     // Pass the vertices to WebGL.
     objectsToDraw.forEach(objectToDraw => {
+      console.log(objectToDraw.mesh.smoothNormals)
       objectToDraw.verticesBuffer = initVertexBuffer(gl, objectToDraw.vertices)
-      // objectToDraw.verticesBuffer = initVertexBuffer(gl, toRawLineArray(icosahedron()))
-
-      // if (!objectToDraw.colors) {
-      //   // If we have a single color, we expand that into an array
-      //   // of the same color over and over.
-      //   objectToDraw.colors = []
-      //   for (let i = 0, maxi = objectToDraw.vertices.length / 3; i < maxi; i += 1) {
-      //     objectToDraw.colors = objectToDraw.colors.concat(
-      //       objectToDraw.color.r,
-      //       objectToDraw.color.g,
-      //       objectToDraw.color.b
-      //     )
-      //   }
-      // }
+      objectToDraw.normalsBuffer = initVertexBuffer(gl, objectToDraw.mesh.smoothNormals)
       objectToDraw.colorsBuffer = initVertexBuffer(gl, objectToDraw.colors)
     })
 
@@ -128,12 +120,17 @@ const InitWebGL = universe => {
     // Hold on to the important variables within the shaders.
     const vertexPosition = gl.getAttribLocation(shaderProgram, 'vertexPosition')
     gl.enableVertexAttribArray(vertexPosition)
+
     const vertexColor = gl.getAttribLocation(shaderProgram, 'vertexColor')
     gl.enableVertexAttribArray(vertexColor)
+
+    const normals = gl.getAttribLocation(shaderProgram, 'normals')
+    gl.enableVertexAttribArray(normals)
+    
     const matrix = gl.getUniformLocation(shaderProgram, 'matrix')
     const projectionMatrix = gl.getUniformLocation(shaderProgram, 'projectionMatrix')
     const cameraMatrix = gl.getUniformLocation(shaderProgram, 'cameraMatrix')
-    const normals = gl.getUniformLocation(shaderProgram, 'normals')
+    
     const light = gl.getUniformLocation(shaderProgram, 'light')
 
     /*
@@ -155,7 +152,8 @@ const InitWebGL = universe => {
       gl.uniformMatrix4fv(matrix, gl.FALSE, object.matrix.toArray())
 
       // Set normals
-      gl.uniform3fv(normals, new Float32Array(object.facetedNormals))
+      gl.bindBuffer(gl.ARRAY_BUFFER, object.normalsBuffer)
+      gl.vertexAttribPointer(normals, 3, gl.FLOAT, false, 0, 0)
 
       // Set the varying colors.
       gl.bindBuffer(gl.ARRAY_BUFFER, object.colorsBuffer)
@@ -180,7 +178,6 @@ const InitWebGL = universe => {
       gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, universe.scene.camera.matrix)
       gl.uniform3fv(light, new Float32Array(universe.scene.light.vector))
 
-      //gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, MatrixLibrary.perspectiveMatrix(3,-3,3,-3,3,-3).toArray())
       // Display the objects.
       objectsToDraw.forEach(drawObject)
 
@@ -315,7 +312,7 @@ const ExampleUniverse = () => {
 
   let colorsByFace=[]
   for(let i = 0; i < 1122; i++){
-    colorsByFace.push([(Math.random()*10), (Math.random()*10),(Math.random*10)+10])
+    colorsByFace.push([(Math.random()*10), (Math.random()*10),(Math.random())*10])
   }
   let colorsByVertex=[]
   for(let i = 0; i < 578; i++){
@@ -330,7 +327,7 @@ const ExampleUniverse = () => {
   const camera = OurCamera([0, 0, -5], [0, 0, 0], [.6, -.5, .5, -.5, 1, 10])
   universe.addToUniverse(camera);
 
-  const light = OurLight();
+  const light = OurLight([.5,.5,0]);
   universe.addToUniverse(light);
 
   return universe

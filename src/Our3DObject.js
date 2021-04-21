@@ -67,13 +67,23 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
           this.rawVertices[face[2]][1] - this.rawVertices[face[0]][1],
           this.rawVertices[face[2]][2] - this.rawVertices[face[0]][2]
         ))
-        let n = v1.cross(v2)
-        (normalsByRawVertex[face[0]]).add(n)
-        (normalsByRawVertex[face[1]]).add(n)
-        (normalsByRawVertex[face[2]]).add(n)
+        let n = v2.cross(v1)
+        normalsByRawVertex[face[0]] = (normalsByRawVertex[face[0]]).add(n)
+        normalsByRawVertex[face[1]] = (normalsByRawVertex[face[1]]).add(n)
+        normalsByRawVertex[face[2]] = (normalsByRawVertex[face[2]]).add(n)
       })
       return normalsByRawVertex
     },
+
+        // let n = (new Vector(
+    //   this.vertices[i + 6] - this.vertices[i + 0],
+    //   this.vertices[i + 7] - this.vertices[i + 1],
+    //   this.vertices[i + 8] - this.vertices[i + 2]
+    // )).cross(new Vector(
+    //   this.vertices[i + 3] - this.vertices[i + 0],
+    //   this.vertices[i + 4] - this.vertices[i + 1],
+    //   this.vertices[i + 5] - this.vertices[i + 2]
+    // ))
 
     get facetedNormals() {
       // We could use 'normalsByFace' for this
@@ -117,7 +127,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
                                 n.x, n.y, n.z)
         }
       }
-      return normalsByVertex;
+      return normalsByVertex
     },
 
     get smoothNormals() {
@@ -232,16 +242,7 @@ const Our3DObject = (mesh, colorArray) => {
         .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
         .toArray()
         .slice(0, -1)
-    )),
-    applyLight: lightSources => {
-      /*
-      Rule 1: light sources add up s.t Leq = <r1+r2+r3... , g1+g2+g3, b1+b2+b3>
-      Rule 2. material reflects based on its own colours. equivalent to multiplying the lights and materials rgb
-              --> clamp light and material colour at 1.0
-        -> reflected colour = <r-light*r-material, g-light*g-material, b-light*b-material>
-      Rule 3: 
-      */
-    }
+    ))
   }
 }
 
