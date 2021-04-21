@@ -30,69 +30,121 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       return isFaceted ? this.facetedNormals : this.smoothNormals
     },
 
-    get facetedNormals() {
-      let normalsByIndex = Array(this.rawVertices.length)
-      normalsByIndex.fill([])
+    get normalsByFace() {
+      // Kept purely for its educational value!
+      // this will be rolled into 'helperNormals' eventually
+      // because calculating separate from 'by vertex' is a waste
+      const normalsByFace = []
+      // Matches facesByIndex in parallel
 
       facesByIndex.forEach(face => {
-        let v1 = Vector(
+        // p1-p0 x p2-p0 
+        let n = (new Vector(
           this.rawVertices[face[1]][0] - this.rawVertices[face[0]][0],
           this.rawVertices[face[1]][1] - this.rawVertices[face[0]][1],
           this.rawVertices[face[1]][2] - this.rawVertices[face[0]][2]
-        )
-        let v2 = Vector(
-          this.rawVertices[face[2]][0] - this.rawVertices[face[1]][0],
-          this.rawVertices[face[2]][1] - this.rawVertices[face[1]][1],
-          this.rawVertices[face[2]][2] - this.rawVertices[face[1]][2]
-        )
-        let v3 = Vector(
-          this.rawVertices[face[0]][0] - this.rawVertices[face[2]][0],
-          this.rawVertices[face[0]][1] - this.rawVertices[face[2]][1],
-          this.rawVertices[face[0]][2] - this.rawVertices[face[2]][2]
-        )
-
-        normalsByIndex[face[0]].push(v3.multiply(-1).cross(v1).normalize())
-        normalsByIndex[face[1]].push(v1.multiply(-1).cross(v2).normalize())
-        normalsByIndex[face[2]].push(v2.multiply(-1).cross(v3).normalize())
+        )).cross(new Vector(
+          this.rawVertices[face[2]][0] - this.rawVertices[face[0]][0],
+          this.rawVertices[face[2]][1] - this.rawVertices[face[0]][1],
+          this.rawVertices[face[2]][2] - this.rawVertices[face[0]][2]
+        ))
+        normalsByFace.push(n)
       })
+      return normalsByFace
+    },
 
-      // Do we need to divide each by magnitude?
+    get normalsByRawVertex() {
+      // Sum of normals at a vertex
+      const normalsByRawVertex = Array(this.rawVertices.length).fill(new Vector(0, 0, 0))
+      facesByIndex.forEach(face => {
+        let v1 = (new Vector(
+          this.rawVertices[face[1]][0] - this.rawVertices[face[0]][0],
+          this.rawVertices[face[1]][1] - this.rawVertices[face[0]][1],
+          this.rawVertices[face[1]][2] - this.rawVertices[face[0]][2]
+        ))
+        let v2 = (new Vector(
+          this.rawVertices[face[2]][0] - this.rawVertices[face[0]][0],
+          this.rawVertices[face[2]][1] - this.rawVertices[face[0]][1],
+          this.rawVertices[face[2]][2] - this.rawVertices[face[0]][2]
+        ))
+        let n = v1.cross(v2)
+        (normalsByRawVertex[face[0]]).add(n)
+        (normalsByRawVertex[face[1]]).add(n)
+        (normalsByRawVertex[face[2]]).add(n)
+      })
+      return normalsByRawVertex
+    },
 
-      return normalsByIndex
+    get facetedNormals() {
+      // We could use 'normalsByFace' for this
+      // but i think this is moderatey more efficient :)
+      // and doesn't require weird mapping from byFace to byVertex
+      const normalsByVertex = []
+      if (!wireframe) {
+        for (let i = 0; i < this.vertices.length; i += 9) {
+          let n = (new Vector(
+            this.vertices[i + 3] - this.vertices[i + 0],
+            this.vertices[i + 4] - this.vertices[i + 1],
+            this.vertices[i + 5] - this.vertices[i + 2]
+          )).cross(new Vector(
+            this.vertices[i + 6] - this.vertices[i + 0],
+            this.vertices[i + 7] - this.vertices[i + 1],
+            this.vertices[i + 8] - this.vertices[i + 2]
+          ))
+          normalsByVertex.push(n.x, n.y, n.z) // Corresponding to vertex 0 of this face
+          normalsByVertex.push(n.x, n.y, n.z)
+          normalsByVertex.push(n.x, n.y, n.z)
+        }
+      } else {
+        for (let i = 0; i < this.vertices.length; i += 18) {
+          //         0       2       4 vertices
+          // indices 0,1,2 : 6,7,8 : 12 13 14
+          // 6 vertices per face (double counted as each line is 2 vertices)
+          let n = (new Vector(
+            this.vertices[i + 6] - this.vertices[i + 0],
+            this.vertices[i + 7] - this.vertices[i + 1],
+            this.vertices[i + 8] - this.vertices[i + 2]
+          )).cross(new Vector(
+            this.vertices[i + 12] - this.vertices[i + 0],
+            this.vertices[i + 13] - this.vertices[i + 1],
+            this.vertices[i + 14] - this.vertices[i + 2]
+          ))
+          normalsByVertex.push(n.x, n.y, n.z,  // Corresponding to vertex 0 of this face
+                                n.x, n.y, n.z,
+                                n.x, n.y, n.z,
+                                n.x, n.y, n.z,
+                                n.x, n.y, n.z,
+                                n.x, n.y, n.z)
+        }
+      }
+      return normalsByVertex;
     },
 
     get smoothNormals() {
-      let normalsByIndex = Array(this.rawVertices.length)
-      normalsByIndex.fill([Vector(0, 0, 0)])
-
-      facesByIndex.forEach(face => {
-        let v1 = Vector(
-          this.rawVertices[face[1]][0] - this.rawVertices[face[0]][0],
-          this.rawVertices[face[1]][1] - this.rawVertices[face[0]][1],
-          this.rawVertices[face[1]][2] - this.rawVertices[face[0]][2]
-        )
-        let v2 = Vector(
-          this.rawVertices[face[2]][0] - this.rawVertices[face[1]][0],
-          this.rawVertices[face[2]][1] - this.rawVertices[face[1]][1],
-          this.rawVertices[face[2]][2] - this.rawVertices[face[1]][2]
-        )
-        let v3 = Vector(
-          this.rawVertices[face[0]][0] - this.rawVertices[face[2]][0],
-          this.rawVertices[face[0]][1] - this.rawVertices[face[2]][1],
-          this.rawVertices[face[0]][2] - this.rawVertices[face[2]][2]
-        )
-
-        normalsByIndex[face[0]][0].add(v3.multiply(-1).cross(v1).normalize())
-        normalsByIndex[face[1]][0].add(v1.multiply(-1).cross(v2).normalize())
-        normalsByIndex[face[2]][0].add(v2.multiply(-1).cross(v3).normalize())
-      })
-
-      // Do we need to divide each by magnitude?
-
-      return normalsByIndex
+      const normalsByVertex = []
+      if (!wireframe) {
+        facesByIndex.forEach(face => {
+          face.forEach(vertexIndex => {
+            normalsByVertex.push(this.normalsByRawVertex[vertexIndex].x, this.normalsByRawVertex[vertexIndex].y, this.normalsByRawVertex[vertexIndex].z)
+          })
+        })
+      } else {
+        facesByIndex.forEach(face => {
+          for (let i = 0, maxI = face.length; i < maxI; i += 1) {
+            normalsByVertex.push(this.normalsByRawVertex[i].x, this.normalsByRawVertex[i].y, this.normalsByRawVertex[i].z)
+            normalsByVertex.push(this.normalsByRawVertex[i+1].x, this.normalsByRawVertex[i+1].y, this.normalsByRawVertex[i+1].z)
+          }
+        })
+      }
+      return normalsByVertex
     },
     setWireframe: newIsWireframe => (isWireframe = newIsWireframe)
   }
+
+  // normals by face
+  // then if faceted, apply face per each vertex in parallel ds
+  // if smooth, apply normal to vertex by adding
+  // for lines, faces harder to reconstruct
 }
 
 const Our3DObject = (mesh, colorArray) => {
@@ -180,33 +232,17 @@ const Our3DObject = (mesh, colorArray) => {
         .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
         .toArray()
         .slice(0, -1)
-    ))
-    // applyLight: lightSources => {
-
-    //   let lambertianCoefficient = new Vector(0,0,0)
-    //   lightSources.forEach((light)=>{
-    //     this.mesh.vertices.forEach((vertex)=>{
-
-    //     })
-    //   })
-    //   return [r0, g0, b0, r1, g1, b1, r2, g2, b2]
-    // }
+    )),
+    applyLight: lightSources => {
+      /*
+      Rule 1: light sources add up s.t Leq = <r1+r2+r3... , g1+g2+g3, b1+b2+b3>
+      Rule 2. material reflects based on its own colours. equivalent to multiplying the lights and materials rgb
+              --> clamp light and material colour at 1.0
+        -> reflected colour = <r-light*r-material, g-light*g-material, b-light*b-material>
+      Rule 3: 
+      */
+    }
   }
-  /*
-void main(void) {
-  // Calculate the normal vector
-  vec3 N = normalize(vec3(uNormalMatrix * vec4(aVertexNormal, 1.0)));
-  // Normalized light direction
-  vec3 L = normalize(uLightDirection);
-  // Dot product of the normal product and negative light direction vector
-  float lambertTerm = dot(N, -L);
-  // Calculating the diffuse color based on the Lambertian reflection model
-  vec3 Id = uMaterialDiffuse * uLightDiffuse * lambertTerm;
-  vVertexColor = vec4(Id, 1.0);
-  // Setting the vertex position
-  gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aVertexPosition, 1.0);
-}
-  */
 }
 
 const Our3DGroup = (objects = []) => {
