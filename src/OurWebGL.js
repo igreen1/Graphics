@@ -25,11 +25,6 @@ const VERTEX_SHADER = `
   uniform mat4 projectionMatrix;
 
   void main(void) {
-    // Camera matrix will go here (moves the scene)
-    mat4 tempCamera = mat4(   1,0,0,0,
-                              0,1,0,0,
-                              0,0,1,0,
-                              0,0,-5,1);
     gl_Position = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
     finalVertexColor = vec4(vertexColor, 1.0);
   }
