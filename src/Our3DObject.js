@@ -163,6 +163,9 @@ const Our3DObject = (mesh, colorArray) => {
     get color() {
       return this.colors //backwards compatibility
     },
+    set colors(newColorArray) {
+      colorArray = newColorArray
+    },
     get colors() {
       let colors = []
       if (Array.isArray(colorArray[0]) && colorArray.length === this.mesh.facesByIndex.length) {
@@ -229,6 +232,7 @@ const Our3DObject = (mesh, colorArray) => {
     get normals() {
       return mesh.normals
     },
+    setColors: newColorArray => (colorArray = newColorArray),
     setWireframe: mesh.setWireframe,
     transform: otherMatrix => (matrix = otherMatrix.multiply(matrix)),
     transformVertices: otherMatrix =>
@@ -254,7 +258,7 @@ const Our3DGroup = (objects = []) => {
   }
 }
 
-const OurLight = (direction, color) => {
+const OurLight = (direction=[0,0,0], color=[1,1,1]) => {
   return {
     type: OurLight,
     direction: direction,

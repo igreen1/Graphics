@@ -234,10 +234,7 @@ const InitWebGL = universe => {
 
 /* Universe from JSON with stars added dynamically */
 const ExampleUniverse = () => {
-  // let universe = universeFromJson(exampleScene)
   let universe = BigBang()
-
-
   let star = Our3DObject(
     OurMesh(
       Extrude(
@@ -271,8 +268,8 @@ const ExampleUniverse = () => {
   star.transformVertices(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
   star.transformVertices(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
   star.transformVertices(MatrixLibrary.translationMatrix(0.5, 0.3, 0.5))
-  // star.setWireframe(true)
-  // universe.addToUniverse(star)
+  star.setWireframe(true)
+  universe.addToUniverse(star)
 
   let star2 = Our3DObject(
     OurMesh(
@@ -302,33 +299,29 @@ const ExampleUniverse = () => {
       ),
       false
     ),
-    [1, 0, 1]
+    [1, 0, 0]
   )
-  star2.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
-  star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  star2.transform(MatrixLibrary.translationMatrix(0.49, 0.3, 0.5))
-  // star2.setWireframe(true)
-  // universe.addToUniverse(star2)
+  // star2.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
+  // star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
+  // star2.transform(MatrixLibrary.translationMatrix(0.49, 0.3, 0.5))
+  universe.addToUniverse(star2)
 
-  let colorsByFace=[]
-  for(let i = 0; i < 132; i++){
-    colorsByFace.push([(Math.random()*10), (Math.random()*10),(Math.random())*10])
-  }
+  let sphere = Our3DObject(OurMesh(Sphere(0.3, 5), false), [0,0,0])
   let colorsByVertex=[]
-  for(let i = 0; i < 72; i++){
+  for(let i = 0; i < sphere.mesh.rawVertices.length; i++){
     colorsByVertex.push([(Math.random()*10), (Math.random()*10),(Math.random())*10])
   }
-  let sphere = Our3DObject(OurMesh(Sphere(0.3, 5), false), colorsByVertex)
+  sphere.setColors(colorsByVertex)
   sphere.transform(MatrixLibrary.scaleMatrix(5, 5, 5))
   sphere.transform(MatrixLibrary.rotationMatrix(0,0,0))
   sphere.transform(MatrixLibrary.translationMatrix(0, 0.16, 0))
+  //sphere.setWireframe(true)
   universe.addToUniverse(sphere)
-  console.log(sphere)
 
   const camera = OurCamera([0, 0, -5], [0, 0, 0], [.6, -.5, .5, -.5, 1, 10])
   universe.addToUniverse(camera);
 
-  const light = OurLight([.5,.5,2],[1,0,0]);
+  const light = OurLight([2,5,2],[1.3,1.2,1]);
   universe.addToUniverse(light);
 
   return universe
