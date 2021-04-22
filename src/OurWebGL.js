@@ -21,18 +21,18 @@ const VERTEX_SHADER = `
   // Note this new additional output.
   attribute vec3 vertexColor;
   varying vec4 finalVertexColor;
-  uniform vec3 light;
+  uniform vec3 lightDirection;
+  uniform vec3 lightColor;
   uniform mat4 matrix;
   uniform mat4 cameraMatrix;
   uniform mat4 projectionMatrix;
 
   void main(void) {
-    vec3 lightVector = normalize(light - vertexPosition);
-    vec3 fakeNormal = normalize(vertexPosition);
+    vec3 lightVector = normalize(lightDirection - vertexPosition);
     float lightContribution = max(dot(lightVector, normalize(normals)),0.0);
 
     gl_Position = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
-    finalVertexColor = vec4(lightContribution * vertexColor, 1.0);
+    finalVertexColor = vec4(lightContribution * lightColor * vertexColor, 1.0);
   }
 `
 
@@ -129,7 +129,8 @@ const InitWebGL = universe => {
     const projectionMatrix = gl.getUniformLocation(shaderProgram, 'projectionMatrix')
     const cameraMatrix = gl.getUniformLocation(shaderProgram, 'cameraMatrix')
     
-    const light = gl.getUniformLocation(shaderProgram, 'light')
+    const lightDirection = gl.getUniformLocation(shaderProgram, 'lightDirection')
+    const lightColor = gl.getUniformLocation(shaderProgram, 'lightColor')
 
     /*
      * Displays an individual object.
@@ -174,7 +175,8 @@ const InitWebGL = universe => {
       // Set up projection matrix
       gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, MatrixLibrary.perspectiveMatrix(.6, -.5, .5, -.5, 1, 10).toArray())
       gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, universe.scene.camera.matrix)
-      gl.uniform3fv(light, new Float32Array(universe.scene.light.vector))
+      gl.uniform3fv(lightDirection, new Float32Array(universe.scene.light.direction))
+      gl.uniform3fv(lightColor, new Float32Array(universe.scene.light.color))
 
       // Display the objects.
       objectsToDraw.forEach(drawObject)
@@ -309,15 +311,16 @@ const ExampleUniverse = () => {
   // universe.addToUniverse(star2)
 
   let colorsByFace=[]
-  for(let i = 0; i < 1122; i++){
+  for(let i = 0; i < 132; i++){
     colorsByFace.push([(Math.random()*10), (Math.random()*10),(Math.random())*10])
   }
   let colorsByVertex=[]
-  for(let i = 0; i < 578; i++){
+  for(let i = 0; i < 72; i++){
     colorsByVertex.push([(Math.random()*10), (Math.random()*10),(Math.random())*10])
   }
-  let sphere = Our3DObject(OurMesh(Sphere(0.3, 16), false), colorsByVertex)
+  let sphere = Our3DObject(OurMesh(Sphere(0.3, 5), false), colorsByVertex)
   sphere.transform(MatrixLibrary.scaleMatrix(5, 5, 5))
+  sphere.transform(MatrixLibrary.rotationMatrix(0,0,0))
   sphere.transform(MatrixLibrary.translationMatrix(0, 0.16, 0))
   universe.addToUniverse(sphere)
   console.log(sphere)
@@ -325,7 +328,7 @@ const ExampleUniverse = () => {
   const camera = OurCamera([0, 0, -5], [0, 0, 0], [.6, -.5, .5, -.5, 1, 10])
   universe.addToUniverse(camera);
 
-  const light = OurLight([.5,.5,2]);
+  const light = OurLight([.5,.5,2],[1,0,0]);
   universe.addToUniverse(light);
 
   return universe

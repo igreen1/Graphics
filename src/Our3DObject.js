@@ -254,10 +254,11 @@ const Our3DGroup = (objects = []) => {
   }
 }
 
-const OurLight = (lightVector) => {
+const OurLight = (direction, color) => {
   return {
     type: OurLight,
-    vector: lightVector
+    direction: direction,
+    color: color
   }
 }
 
