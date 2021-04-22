@@ -75,14 +75,12 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       return normalsByRawVertex
     },
 
-
-
     get facetedNormals() {
       // We could use 'normalsByFace' for this
       // but i think this is moderatey more efficient :)
       // and doesn't require weird mapping from byFace to byVertex
       const normalsByVertex = []
-      if (!wireframe) {
+      if (!this.isWireframe) {
         for (let i = 0; i < this.vertices.length; i += 9) {
           let n = (new Vector(
               this.vertices[i + 6] - this.vertices[i + 0],
@@ -124,7 +122,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
 
     get smoothNormals() {
       const normalsByVertex = []
-      if (!wireframe) {
+      if (!this.isWireframe) {
         facesByIndex.forEach(face => {
           face.forEach(vertexIndex => {
             normalsByVertex.push(this.normalsByRawVertex[vertexIndex].x, this.normalsByRawVertex[vertexIndex].y, this.normalsByRawVertex[vertexIndex].z)
@@ -133,10 +131,11 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       } else {
         facesByIndex.forEach(face => {
           for (let i = 0, maxI = face.length; i < maxI; i += 1) {
-            normalsByVertex.push(this.normalsByRawVertex[i].x, this.normalsByRawVertex[i].y, this.normalsByRawVertex[i].z)
-            normalsByVertex.push(this.normalsByRawVertex[i+1].x, this.normalsByRawVertex[i+1].y, this.normalsByRawVertex[i+1].z)
+            normalsByVertex.push(...this.normalsByRawVertex[i].elements)
+            normalsByVertex.push(...this.normalsByRawVertex[i].elements)
           }
         })
+        console.log(normalsByVertex)
       }
       return normalsByVertex
     },
