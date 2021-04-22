@@ -34,10 +34,19 @@ const VERTEX_SHADER = `
     vec3 lightVector = normalize(lightDirection - transformedVertex.xyz);
     vec3 finalFakeNormal = normalize(transformedVertex.xyz);
 
+    float cosineBetween = dot(lightVector, finalFakeNormal);
     float lightContribution = max(dot(lightVector, finalFakeNormal),0.0);
 
+    vec3 reflection = 2.0 * cosineBetween * finalFakeNormal - lightVector;
+    vec3 specularBaseColor = vec3(1.0, 1.0, 1.0);
+    float shininess = 2.0; //temporary
+    float specularContribution = pow(max(dot(reflection, transformedVertex.xyz), 0.0), shininess);
+    if (cosineBetween < 0.0) {
+      specularBaseColor = vec3(0.0, 0.0, 0.0);
+    }
+
     gl_Position = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
-    finalVertexColor = vec4(lightContribution * lightColor * vertexColor, 1.0);
+    finalVertexColor = vec4(lightContribution * lightColor * vertexColor + specularContribution * specularBaseColor, 1.0);
   }
 `
 
