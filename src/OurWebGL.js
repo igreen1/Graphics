@@ -39,7 +39,7 @@ const VERTEX_SHADER = `
 
     vec3 reflection = 2.0 * cosineBetween * finalFakeNormal - lightVector;
     vec3 specularBaseColor = vec3(1.0, 1.0, 1.0);
-    float shininess = 2.0; //temporary
+    float shininess = 1.7;
     float specularContribution = pow(max(dot(reflection, transformedVertex.xyz), 0.0), shininess);
     if (cosineBetween < 0.0) {
       specularBaseColor = vec3(0.0, 0.0, 0.0);
@@ -250,7 +250,6 @@ const InitWebGL = universe => {
   return canvasRef
 }
 
-/* Universe from JSON with stars added dynamically */
 const ExampleUniverse = () => {
   let universe = BigBang()
   let star = Our3DObject(
@@ -283,10 +282,10 @@ const ExampleUniverse = () => {
     ),
     [0, 1.5, 1]
   )
-  star.transformVertices(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
+  star.transformVertices(MatrixLibrary.scaleMatrix(0.7, 0.7, 0.7))
   star.transformVertices(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  star.transformVertices(MatrixLibrary.translationMatrix(0.5, 0.3, 0.5))
-  star.setWireframe(true)
+  star.transformVertices(MatrixLibrary.translationMatrix(0.8, 0.4, 2))
+  // star.setWireframe(true)
   universe.addToUniverse(star)
 
   let star2 = Our3DObject(
@@ -319,9 +318,9 @@ const ExampleUniverse = () => {
     ),
     [1, 0, 0]
   )
-  // star2.transform(MatrixLibrary.scaleMatrix(0.5, 0.5, 0.5))
-  // star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  // star2.transform(MatrixLibrary.translationMatrix(0.49, 0.3, 0.5))
+  star2.transform(MatrixLibrary.scaleMatrix(0.7, 0.7, 0.7))
+  star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
+  star2.transform(MatrixLibrary.translationMatrix(0.79, 0.4, 2))
   universe.addToUniverse(star2)
 
   let sphere = Our3DObject(OurMesh(Sphere(0.3, 5), false), [0, 0, 0])
@@ -330,50 +329,29 @@ const ExampleUniverse = () => {
     colorsByVertex.push([Math.random() * 10, Math.random() * 10, Math.random() * 10])
   }
   sphere.setColors(colorsByVertex)
-  sphere.transform(MatrixLibrary.scaleMatrix(5, 5, 5))
-  sphere.transform(MatrixLibrary.rotationMatrix(0, 0, 0))
-  sphere.transform(MatrixLibrary.translationMatrix(0, 0.16, 0))
-  //sphere.setWireframe(true)
+  sphere.transform(MatrixLibrary.scaleMatrix(2.4, 2.4, 2.4))
+  sphere.transform(MatrixLibrary.rotationMatrix(0, 0, 0.5))
+  sphere.transform(MatrixLibrary.translationMatrix(-0.6, 0.4, 2))
   universe.addToUniverse(sphere)
 
-  const camera = OurCamera([0, 0, -5], [0, 0, 0], [0.6, -0.5, 0.5, -0.5, 1, 10])
+  let cone = Our3DObject(OurMesh(Cone(0.5, 1, 8, 8), false), [0.7, 0, 0.8])
+  let colorsByFace = []
+  for (let i = 0; i < cone.mesh.facesByIndex.length; i++) {
+    colorsByFace.push([Math.random() * 5, Math.random() * 5, Math.random() * 5])
+  }
+  cone.setColors(colorsByFace)
+  cone.transform(MatrixLibrary.rotationMatrix(0, -0.3, 3.14))
+  cone.transform(MatrixLibrary.translationMatrix(0, -0.7, 2))
+  universe.addToUniverse(cone)
+
+  const camera = OurCamera([0, 0, -4.8], [0, 0, 0], [0.6, -0.5, 0.5, -0.5, 1, 10])
   universe.addToUniverse(camera)
 
-  const light = OurLight([1, 4, 3], [1.3, 1.2, 1])
+  const light = OurLight([0, -1, 10], [1.3, 1.2, 1])
   universe.addToUniverse(light)
 
   return universe
 }
-
-/* Universe Built Dynamically */
-// const ExampleUniverse = () => {
-//   const { universe, setUniverse, addToUniverse, removeFromUniverse } = BigBang()
-
-//   let torus = Our3DObject(OurMesh(Torus(0.5, 0.2, 16, 16), true), [1.5, 0, 1.5])
-//   addToUniverse(torus)
-
-//   let cone = Our3DObject(OurMesh(Cone(0.5, 1, 16, 16), false), [1, 0, 1.5])
-//   cone.transform(MatrixLibrary.translationMatrix(0, 0.5, 0))
-//   cone.transform(MatrixLibrary.rotationMatrix(0, 0, 3.14))
-//   addToUniverse(cone)
-
-//   let sphere = Our3DObject(OurMesh(Sphere(0.3, 16), true), [2.2, 2, 0.8])
-//   sphere.transform(MatrixLibrary.scaleMatrix(1.7, 1.7, 1.7))
-//   sphere.transform(MatrixLibrary.translationMatrix(0, 0.16, 0))
-//   addToUniverse(sphere)
-
-//   let group = Our3DGroup()
-//   let nestedGroup = Our3DGroup()
-//   group.add(cone)
-//   group.add(nestedGroup)
-//   nestedGroup.add(sphere)
-//   group.transform(MatrixLibrary.rotationMatrix(0.2, 0.2, 0.3))
-//   group.transform(MatrixLibrary.translationMatrix(0, 0.2, 0))
-
-//   addToUniverse(Our3DObject(OurMesh(RegularPolygon(10), true), [0, 0, 1.5]))
-
-//   return { universe }
-// }
 
 const OurWebGL = props => {
   const { universe } = ExampleUniverse()
