@@ -324,22 +324,14 @@ const ExampleUniverse = () => {
   universe.addToUniverse(star2)
 
   let sphere = Our3DObject(OurMesh(Sphere(0.3, 5), false), [0, 0, 0])
-  let colorsByVertex = []
-  for (let i = 0; i < sphere.mesh.rawVertices.length; i++) {
-    colorsByVertex.push([Math.random() * 10, Math.random() * 10, Math.random() * 10])
-  }
-  sphere.setColors(colorsByVertex)
+  sphere.setRandomColors(10)
   sphere.transform(MatrixLibrary.scaleMatrix(2.4, 2.4, 2.4))
   sphere.transform(MatrixLibrary.rotationMatrix(0, 0, 0.5))
   sphere.transform(MatrixLibrary.translationMatrix(-0.6, 0.4, 2))
   universe.addToUniverse(sphere)
 
   let cone = Our3DObject(OurMesh(Cone(0.5, 1, 8, 8), false), [0.7, 0, 0.8])
-  let colorsByFace = []
-  for (let i = 0; i < cone.mesh.facesByIndex.length; i++) {
-    colorsByFace.push([Math.random() * 5, Math.random() * 5, Math.random() * 5])
-  }
-  cone.setColors(colorsByFace)
+  cone.setRandomColors(5,false)
   cone.transform(MatrixLibrary.rotationMatrix(0, -0.3, 3.14))
   cone.transform(MatrixLibrary.translationMatrix(0, -0.7, 2))
   universe.addToUniverse(cone)
@@ -347,7 +339,7 @@ const ExampleUniverse = () => {
   const camera = OurCamera([0, 0, -4.8], [0, 0, 0], [0.6, -0.5, 0.5, -0.5, 1, 10])
   universe.addToUniverse(camera)
 
-  const light = OurLight([0, 0, 7], [1.3, 1.2, 1])
+  const light = OurLight([0, 0, 10], [1.3, 1.2, 1])
   universe.addToUniverse(light)
 
   return universe

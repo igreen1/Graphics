@@ -250,6 +250,19 @@ const Our3DObject = (mesh, colorArray) => {
       return mesh.normals
     },
     setColors: newColorArray => (colorArray = newColorArray),
+    setRandomColors: (n=5, byVertex=true) => {
+      colorArray = []
+      if (byVertex) {
+        for (let i = 0; i < mesh.rawVertices.length; i++) {
+          colorArray.push([Math.random() * n, Math.random() * n, Math.random() * n])
+        }
+      } else {
+        for (let i = 0; i < mesh.facesByIndex.length; i++) {
+          colorArray.push([Math.random() * n, Math.random() * n, Math.random() * n])
+        }
+      }
+
+    },
     setWireframe: mesh.setWireframe,
     transform: otherMatrix => (matrix = otherMatrix.multiply(matrix)),
     transformVertices: otherMatrix =>
