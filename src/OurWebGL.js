@@ -39,7 +39,7 @@ const VERTEX_SHADER = `
 
     vec3 reflection = 2.0 * cosineBetween * finalFakeNormal - lightVector;
     vec3 specularBaseColor = vec3(1.0, 1.0, 1.0);
-    float shininess = 1.7;
+    float shininess = 5.0;
     float specularContribution = pow(max(dot(reflection, transformedVertex.xyz), 0.0), shininess);
     if (cosineBetween < 0.0) {
       specularBaseColor = vec3(0.0, 0.0, 0.0);
@@ -284,7 +284,7 @@ const ExampleUniverse = () => {
   )
   star.transformVertices(MatrixLibrary.scaleMatrix(0.7, 0.7, 0.7))
   star.transformVertices(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  star.transformVertices(MatrixLibrary.translationMatrix(0.8, 0.4, 2))
+  star.transformVertices(MatrixLibrary.translationMatrix(0.8, 0.4, 1.9))
   // star.setWireframe(true)
   universe.addToUniverse(star)
 
@@ -320,7 +320,7 @@ const ExampleUniverse = () => {
   )
   star2.transform(MatrixLibrary.scaleMatrix(0.7, 0.7, 0.7))
   star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  star2.transform(MatrixLibrary.translationMatrix(0.79, 0.4, 2))
+  star2.transform(MatrixLibrary.translationMatrix(0.79, 0.4, 1.9))
   universe.addToUniverse(star2)
 
   let sphere = Our3DObject(OurMesh(Sphere(0.3, 5), false), [0, 0, 0])
@@ -347,7 +347,7 @@ const ExampleUniverse = () => {
   const camera = OurCamera([0, 0, -4.8], [0, 0, 0], [0.6, -0.5, 0.5, -0.5, 1, 10])
   universe.addToUniverse(camera)
 
-  const light = OurLight([0, -1, 10], [1.3, 1.2, 1])
+  const light = OurLight([0, 0, 7], [1.3, 1.2, 1])
   universe.addToUniverse(light)
 
   return universe
