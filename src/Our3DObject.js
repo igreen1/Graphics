@@ -38,16 +38,18 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       // Matches facesByIndex in parallel
 
       facesByIndex.forEach(face => {
-        // p1-p0 x p2-p0 
-        let n = (new Vector(
+        // p1-p0 x p2-p0
+        let n = new Vector(
           this.rawVertices[face[1]][0] - this.rawVertices[face[0]][0],
           this.rawVertices[face[1]][1] - this.rawVertices[face[0]][1],
           this.rawVertices[face[1]][2] - this.rawVertices[face[0]][2]
-        )).cross(new Vector(
-          this.rawVertices[face[2]][0] - this.rawVertices[face[0]][0],
-          this.rawVertices[face[2]][1] - this.rawVertices[face[0]][1],
-          this.rawVertices[face[2]][2] - this.rawVertices[face[0]][2]
-        ))
+        ).cross(
+          new Vector(
+            this.rawVertices[face[2]][0] - this.rawVertices[face[0]][0],
+            this.rawVertices[face[2]][1] - this.rawVertices[face[0]][1],
+            this.rawVertices[face[2]][2] - this.rawVertices[face[0]][2]
+          )
+        )
         normalsByFace.push(n)
       })
       return normalsByFace
@@ -57,20 +59,20 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       // Sum of normals at a vertex
       const normalsByRawVertex = Array(this.rawVertices.length).fill(new Vector(0, 0, 0))
       facesByIndex.forEach(face => {
-        let v1 = (new Vector(
+        let v1 = new Vector(
           this.rawVertices[face[1]][0] - this.rawVertices[face[0]][0],
           this.rawVertices[face[1]][1] - this.rawVertices[face[0]][1],
           this.rawVertices[face[1]][2] - this.rawVertices[face[0]][2]
-        ))
-        let v2 = (new Vector(
+        )
+        let v2 = new Vector(
           this.rawVertices[face[2]][0] - this.rawVertices[face[0]][0],
           this.rawVertices[face[2]][1] - this.rawVertices[face[0]][1],
           this.rawVertices[face[2]][2] - this.rawVertices[face[0]][2]
-        ))
+        )
         let n = v2.cross(v1)
-        normalsByRawVertex[face[0]] = (normalsByRawVertex[face[0]]).add(n)
-        normalsByRawVertex[face[1]] = (normalsByRawVertex[face[1]]).add(n)
-        normalsByRawVertex[face[2]] = (normalsByRawVertex[face[2]]).add(n)
+        normalsByRawVertex[face[0]] = normalsByRawVertex[face[0]].add(n)
+        normalsByRawVertex[face[1]] = normalsByRawVertex[face[1]].add(n)
+        normalsByRawVertex[face[2]] = normalsByRawVertex[face[2]].add(n)
       })
       return normalsByRawVertex
     },
@@ -82,15 +84,17 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       const normalsByVertex = []
       if (!this.isWireframe) {
         for (let i = 0; i < this.vertices.length; i += 9) {
-          let n = (new Vector(
-              this.vertices[i + 6] - this.vertices[i + 0],
-              this.vertices[i + 7] - this.vertices[i + 1],
-              this.vertices[i + 8] - this.vertices[i + 2]
-            )).cross(new Vector(
+          let n = new Vector(
+            this.vertices[i + 6] - this.vertices[i + 0],
+            this.vertices[i + 7] - this.vertices[i + 1],
+            this.vertices[i + 8] - this.vertices[i + 2]
+          ).cross(
+            new Vector(
               this.vertices[i + 3] - this.vertices[i + 0],
               this.vertices[i + 4] - this.vertices[i + 1],
               this.vertices[i + 5] - this.vertices[i + 2]
-          ))
+            )
+          )
           normalsByVertex.push(n.x, n.y, n.z) // Corresponding to vertex 0 of this face
           normalsByVertex.push(n.x, n.y, n.z)
           normalsByVertex.push(n.x, n.y, n.z)
@@ -100,21 +104,37 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
           //         0       2       4 vertices
           // indices 0,1,2 : 6,7,8 : 12 13 14
           // 6 vertices per face (double counted as each line is 2 vertices)
-          let n = (new Vector(
+          let n = new Vector(
             this.vertices[i + 6] - this.vertices[i + 0],
             this.vertices[i + 7] - this.vertices[i + 1],
             this.vertices[i + 8] - this.vertices[i + 2]
-          )).cross(new Vector(
-            this.vertices[i + 12] - this.vertices[i + 0],
-            this.vertices[i + 13] - this.vertices[i + 1],
-            this.vertices[i + 14] - this.vertices[i + 2]
-          ))
-          normalsByVertex.push(n.x, n.y, n.z,  // Corresponding to vertex 0 of this face
-                                n.x, n.y, n.z,
-                                n.x, n.y, n.z,
-                                n.x, n.y, n.z,
-                                n.x, n.y, n.z,
-                                n.x, n.y, n.z)
+          ).cross(
+            new Vector(
+              this.vertices[i + 12] - this.vertices[i + 0],
+              this.vertices[i + 13] - this.vertices[i + 1],
+              this.vertices[i + 14] - this.vertices[i + 2]
+            )
+          )
+          normalsByVertex.push(
+            n.x,
+            n.y,
+            n.z, // Corresponding to vertex 0 of this face
+            n.x,
+            n.y,
+            n.z,
+            n.x,
+            n.y,
+            n.z,
+            n.x,
+            n.y,
+            n.z,
+            n.x,
+            n.y,
+            n.z,
+            n.x,
+            n.y,
+            n.z
+          )
         }
       }
       return normalsByVertex
@@ -125,7 +145,11 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       if (!this.isWireframe) {
         facesByIndex.forEach(face => {
           face.forEach(vertexIndex => {
-            normalsByVertex.push(this.normalsByRawVertex[vertexIndex].x, this.normalsByRawVertex[vertexIndex].y, this.normalsByRawVertex[vertexIndex].z)
+            normalsByVertex.push(
+              this.normalsByRawVertex[vertexIndex].x,
+              this.normalsByRawVertex[vertexIndex].y,
+              this.normalsByRawVertex[vertexIndex].z
+            )
           })
         })
       } else {
@@ -171,15 +195,11 @@ const Our3DObject = (mesh, colorArray) => {
         if (!this.mesh.isWireframe) {
           // if they wish to pass color by face and it is NOT writeframe
           for (let i = 0, maxi = this.vertices.length / 9; i < maxi; i += 1) {
-            colors.push(colorArray[i][0])
-            colors.push(colorArray[i][1])
-            colors.push(colorArray[i][2])
-            colors.push(colorArray[i][0])
-            colors.push(colorArray[i][1])
-            colors.push(colorArray[i][2])
-            colors.push(colorArray[i][0])
-            colors.push(colorArray[i][1])
-            colors.push(colorArray[i][2])
+            for (let j = 0; j < 3; j++) {
+              colors.push(colorArray[i][0])
+              colors.push(colorArray[i][1])
+              colors.push(colorArray[i][2])
+            }
           }
         } else {
           // they wish to pass color by face BUT its a wireframe (ahh)
@@ -187,18 +207,16 @@ const Our3DObject = (mesh, colorArray) => {
           // so one object needs two colors? huh? so it logically can't display well
           // this is simply added so that .toWireframe doesn't break the entire program
           for (let faceIndex = 0; faceIndex < this.mesh.facesByIndex.length; faceIndex++) {
-
             for (let i = 0, maxI = this.mesh.facesByIndex[faceIndex].length; i < maxI; i += 1) {
               colors.push(...colorArray[faceIndex])
               colors.push(...colorArray[faceIndex])
             }
-
           }
         }
       } else if (Array.isArray(colorArray[0]) && colorArray.length === this.mesh.rawVertices.length) {
-        // color by vertex 
+        // color by vertex
         if (!this.mesh.isWireframe) {
-          this.mesh.facesByIndex.forEach((face) => {
+          this.mesh.facesByIndex.forEach(face => {
             face.forEach(vertexIndex => {
               colors.push(...colorArray[vertexIndex])
             })
@@ -226,7 +244,7 @@ const Our3DObject = (mesh, colorArray) => {
         }
       }
 
-      return colors;
+      return colors
     },
     get normals() {
       return mesh.normals
@@ -235,12 +253,12 @@ const Our3DObject = (mesh, colorArray) => {
     setWireframe: mesh.setWireframe,
     transform: otherMatrix => (matrix = otherMatrix.multiply(matrix)),
     transformVertices: otherMatrix =>
-    (mesh.vertices = mesh.rawVertices.map(vertex =>
-      otherMatrix
-        .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
-        .toArray()
-        .slice(0, -1)
-    ))
+      (mesh.vertices = mesh.rawVertices.map(vertex =>
+        otherMatrix
+          .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
+          .toArray()
+          .slice(0, -1)
+      ))
   }
 }
 
@@ -257,7 +275,7 @@ const Our3DGroup = (objects = []) => {
   }
 }
 
-const OurLight = (direction=[0,0,0], color=[1,1,1]) => {
+const OurLight = (direction = [0, 0, 0], color = [1, 1, 1]) => {
   return {
     type: OurLight,
     direction: direction,
