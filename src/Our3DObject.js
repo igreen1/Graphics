@@ -172,7 +172,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
   // for lines, faces harder to reconstruct
 }
 
-const Our3DObject = (mesh, colorArray) => {
+const Our3DObject = (mesh, colorArray=[0,0,0]) => {
   let matrix = Matrix()
   return {
     type: Our3DObject,
@@ -277,9 +277,13 @@ const Our3DObject = (mesh, colorArray) => {
 
 const Our3DGroup = (objects = []) => {
   const group = objects
+  let matrix = Matrix()
   return {
     get group() {
       return group
+    },
+    get matrix() {
+      return matrix
     },
     type: Our3DGroup,
     add: object => group.push(object),
