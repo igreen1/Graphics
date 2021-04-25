@@ -336,34 +336,34 @@ const ExampleUniverse = () => {
   sphere.setRandomColors(10)
   sphere.transform(MatrixLibrary.scaleMatrix(2, 2, 2))
   sphere.transform(MatrixLibrary.rotationMatrix(0, 0, 0.5))
-  sphere.transform(MatrixLibrary.translationMatrix(3, .3, .5))
+  sphere.transform(MatrixLibrary.translationMatrix(3, -.2, .5))
   universe.addToUniverse(sphere)
 
   let cone = Our3DObject(OurMesh(Cone(0.5, 1, 8, 8), false), [0.7, 0, 0.8])
   cone.setRandomColors(5,false)
   cone.transform(MatrixLibrary.rotationMatrix(0, -0.3, 3.14))
-  cone.transform(MatrixLibrary.translationMatrix(3, -.5, 0.5))
+  cone.transform(MatrixLibrary.translationMatrix(3, -1, 0.5))
   universe.addToUniverse(cone)
 
-  let pyramid = Our3DObject(OurMesh(Cone(1.5, 2, 4, 4), false), [1, 1, .1])
+  let pyramid = Our3DObject(OurMesh(Cone(2.5, 3, 4, 4), false), [1, 1, .1])
   pyramid.transform(MatrixLibrary.rotationMatrix(0, 0, 0))
-  pyramid.transform(MatrixLibrary.translationMatrix(-.2, 0, -1))
+  pyramid.transform(MatrixLibrary.translationMatrix(-.2, -1, -3))
   universe.addToUniverse(pyramid)
 
-  let pyramid2 = Our3DObject(OurMesh(Cone(1.5, 2, 4, 4), false), [1, 1, .1])
+  let pyramid2 = Our3DObject(OurMesh(Cone(2.5, 3, 4, 4), false), [1, 1, .1])
   pyramid2.transform(MatrixLibrary.rotationMatrix(0, 0, 0))
-  pyramid2.transform(MatrixLibrary.translationMatrix(-2, 0, -2))
+  pyramid2.transform(MatrixLibrary.translationMatrix(-4, -1, -4))
   universe.addToUniverse(pyramid2)
 
-  let pyramid3 = Our3DObject(OurMesh(Cone(1.5, 2, 4, 4), false), [1, 1, .1])
+  let pyramid3 = Our3DObject(OurMesh(Cone(2.5, 3, 4, 4), false), [1, 1, .1])
   pyramid3.transform(MatrixLibrary.rotationMatrix(0, 0, 0))
-  pyramid3.transform(MatrixLibrary.translationMatrix(2, 0, -2))
+  pyramid3.transform(MatrixLibrary.translationMatrix(4, -1, -4))
   universe.addToUniverse(pyramid3)
 
 
   let ground = Our3DObject(OurMesh(RegularPolygon(4), false),[.5,.4,.2])
   ground.transform(MatrixLibrary.scaleMatrix(15,15,1))
-  ground.transform(MatrixLibrary.rotationMatrix(-Math.PI/3, 0, Math.PI/4))
+  ground.transform(MatrixLibrary.rotationMatrix(-Math.PI/2, 0, Math.PI/4))
   ground.transform(MatrixLibrary.translationMatrix(0, -2.5, 0))
   universe.addToUniverse(ground)
 
@@ -373,7 +373,7 @@ const ExampleUniverse = () => {
   sky.transform(MatrixLibrary.translationMatrix(0, 0, -3))
   universe.addToUniverse(sky)
 
-  const camera = OurCamera([0, 0, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
+  const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
   universe.addToUniverse(camera)
 
   const light = OurLight([-2, 0, 10], [11, 9.2, 9])
