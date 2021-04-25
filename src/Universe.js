@@ -13,9 +13,11 @@ const Scene = (cast) => {
 
   return {
     get objectsToDraw() { return objectsToDraw.group },
-    add: (object) => {
-      if (object.type === Our3DObject || object.type === Our3DGroup) {
+    add: function (object) {
+      if (object.type === Our3DObject) {
         objectsToDraw.add(object)
+      } else if (object.type === Our3DGroup){
+        object.group.forEach(this.add)
       }
       else if (object.type === OurLight) {
         light = object

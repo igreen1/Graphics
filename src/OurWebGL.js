@@ -150,20 +150,7 @@ const InitWebGL = universe => {
     /*
      * Displays an individual object.
      */
-    const drawObject = (object, parentMatrix) => {
-      
-      if (!parentMatrix) {
-        parentMatrix = Matrix()
-      }
-
-      // If object is a group
-      if (object.group) {
-        object.group.forEach(element => {
-          console.log(parentMatrix)
-          drawObject(element, parentMatrix.multiply(object.matrix))
-        })
-        return
-      }
+    const drawObject = (object) => {
 
       // Set up the rotation matrix.
       object.transform(Matrix())
