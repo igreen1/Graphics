@@ -8,15 +8,15 @@ const Scene = (cast) => {
     cast.forEach((castMember) => objectsToDraw.add(castMember))
   }
 
-  let light = OurLight([1,1,1],[1,1,1]); // Default light
-  let camera = OurCamera([0,0,-5], [0,0,0], [.6,-.5,.5,-.5,1,10]); // Default camera
+  let light = OurLight([1, 1, 1], [1, 1, 1]); // Default light
+  let camera = OurCamera([0, 0, -5], [0, 0, 0], [.6, -.5, .5, -.5, 1, 10]); // Default camera
 
   return {
     get objectsToDraw() { return objectsToDraw.group },
     add: function (object) {
       if (object.type === Our3DObject) {
         objectsToDraw.add(object)
-      } else if (object.type === Our3DGroup){
+      } else if (object.type === Our3DGroup) {
         object.group.forEach(this.add)
       }
       else if (object.type === OurLight) {
@@ -25,7 +25,18 @@ const Scene = (cast) => {
         camera = object
       }
     },
-    remove: objectsToDraw.remove,
+    remove: function (object) {
+      if (object.type === Our3DObject) {
+        objectsToDraw.remove(object)
+      } else if (object.type === Our3DGroup) {
+        object.group.forEach(this.remove)
+      } else if (object.type === OurCamera && object === light) {
+        light = OurLIght([0, 0, 0], [0, 0, 0]); //easier to make a black light than a null object
+
+      } else if (object.type === OurCamera && object === camera) {
+        camera = OurCamera([0, 0, 0], [0, 0, 0], [0, 0, 0, 0, 0, 0]); // should show nothing without breaking the app
+      }
+    },
     transform: objectsToDraw.transform,
     get light() { return light },
     get camera() { return camera },
