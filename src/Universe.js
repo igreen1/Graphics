@@ -11,32 +11,37 @@ const Scene = (cast) => {
   let light = OurLight([1, 1, 1], [1, 1, 1]); // Default light
   let camera = OurCamera([0, 0, -5], [0, 0, 0], [.6, -.5, .5, -.5, 1, 10]); // Default camera
 
+  // Recursion requires functions to be declared outside object
+  const add = (object) => {
+    if (object.type === Our3DObject) {
+      objectsToDraw.add(object)
+    } else if (object.type === Our3DGroup) {
+      object.group.forEach(add)
+    }
+    else if (object.type === OurLight) {
+      light = object
+    } else if (object.type === OurCamera) {
+      camera = object
+    }
+  }
+
+  const remove = (object) => {
+    if (object.type === Our3DObject) {
+      objectsToDraw.remove(object)
+    } else if (object.type === Our3DGroup) {
+      object.group.forEach(remove)
+    } else if (object.type === OurCamera && object === light) {
+      light = OurLight([0, 0, 0], [0, 0, 0]); //easier to make a black light than a null object
+
+    } else if (object.type === OurCamera && object === camera) {
+      camera = OurCamera([0, 0, 0], [0, 0, 0], [0, 0, 0, 0, 0, 0]); // should show nothing without breaking the app
+    }
+  }
+
   return {
     get objectsToDraw() { return objectsToDraw.group },
-    add: function (object) {
-      if (object.type === Our3DObject) {
-        objectsToDraw.add(object)
-      } else if (object.type === Our3DGroup) {
-        object.group.forEach(this.add)
-      }
-      else if (object.type === OurLight) {
-        light = object
-      } else if (object.type === OurCamera) {
-        camera = object
-      }
-    },
-    remove: function (object) {
-      if (object.type === Our3DObject) {
-        objectsToDraw.remove(object)
-      } else if (object.type === Our3DGroup) {
-        object.group.forEach(this.remove)
-      } else if (object.type === OurCamera && object === light) {
-        light = OurLIght([0, 0, 0], [0, 0, 0]); //easier to make a black light than a null object
-
-      } else if (object.type === OurCamera && object === camera) {
-        camera = OurCamera([0, 0, 0], [0, 0, 0], [0, 0, 0, 0, 0, 0]); // should show nothing without breaking the app
-      }
-    },
+    add,
+    remove,
     transform: objectsToDraw.transform,
     get light() { return light },
     get camera() { return camera },
