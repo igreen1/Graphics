@@ -8,6 +8,7 @@ import { Matrix, MatrixLibrary } from './OurMatrix'
 import { BigBang, Scene } from './Universe'
 import { universeFromJson } from './UniverseFromJson'
 import exampleScene from './scenes/exampleScene.json'
+import {sphinx} from './objects/sphinx.js'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -359,6 +360,8 @@ const ExampleUniverse = () => {
   sky.transform(MatrixLibrary.rotationMatrix(0, 0, Math.PI/4))
   sky.transform(MatrixLibrary.translationMatrix(0, 0, -3))
   universe.addToUniverse(sky)
+
+  universe.addToUniverse(sphinx)
 
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
   universe.addToUniverse(camera)
