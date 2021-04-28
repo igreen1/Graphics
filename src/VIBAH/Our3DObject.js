@@ -302,7 +302,8 @@ const Our3DGroup = (objects = []) => {
       return this;
     },
     remove: function (object) {
-      group = group.filter(sceneObject => sceneObject !== object)
+      group = group.filter(object => object.type !== Our3DGroup).filter(sceneObject => sceneObject !== object)
+      group = group.filter(object => object.type === Our3DGroup).forEach(nestedGroup => nestedGroup.remove(object))
       return this;
     },
     transform: function (transformMatrix) {
