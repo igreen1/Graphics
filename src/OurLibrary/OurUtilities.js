@@ -17,7 +17,7 @@
  */
  const checkDimensions = (v1, v2) => {
   if (v1.dimensions !== v2.dimensions) {
-    throw 'Vectors have different dimensions'
+    throw Error('Vectors have different dimensions')
   }
 }
 
@@ -105,7 +105,7 @@ class Vector {
 
   cross(v) {
     if (this.dimensions !== 3 || v.dimensions !== 3) {
-      throw 'Cross product is for 3D vectors only.'
+      throw Error('Cross product is for 3D vectors only.')
     }
 
     // With 3D vectors, we can just return the result directly.

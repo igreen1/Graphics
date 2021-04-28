@@ -325,7 +325,6 @@ const Tube = (innerRadius = 0.1, outerRadius = 0.6, height = 0.5, radialSegments
 
   const vertices = []
   const cylinderVertices = heightSegments * (radialSegments + 1)
-  let iter = 0
 
   // Outer cylinder
   for (let i = 0; i < heightSegments; i++) {
@@ -335,7 +334,6 @@ const Tube = (innerRadius = 0.1, outerRadius = 0.6, height = 0.5, radialSegments
         outerRadius * Math.cos(j * deltaRotation),
         i * deltaHeight
       ])
-      iter++
     }
   }
 

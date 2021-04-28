@@ -1,6 +1,6 @@
-import { Our3DObject, OurMesh, Our3DGroup, OurCamera, OurLight } from '../OurLibrary/Our3DObject'
-import { Cone, Cylinder, Extrude, RegularPolygon, Sphere, Tube, Torus } from '../OurLibrary/OurGeometryLibrary'
-import { Matrix, MatrixLibrary } from '../OurLibrary/OurMatrix'
+import { Our3DObject, OurMesh, Our3DGroup } from '../OurLibrary/Our3DObject'
+import { Cylinder, Sphere, } from '../OurLibrary/OurGeometryLibrary'
+import { MatrixLibrary } from '../OurLibrary/OurMatrix'
 
 let leg1 = Our3DObject(OurMesh(Cylinder(.2, 3, 8, 8), false), [1, 1, .1])
 leg1.transform(MatrixLibrary.rotationMatrix(0,Math.PI/4,0))

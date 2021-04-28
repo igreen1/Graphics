@@ -246,7 +246,7 @@ const InitWebGL = universe => {
       }
     })
 
-  }, [canvasRef])
+  }, [canvasRef, universe])
 
   return { canvasRef, animationWrapper }
 }
