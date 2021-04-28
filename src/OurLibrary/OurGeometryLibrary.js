@@ -99,7 +99,7 @@ const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegment
   const deltaHeight = 1.0 * height / heightSegments
 
   const vertices = []
-  for (let i = 0; i < heightSegments; i++) {
+  for (let i = 0; i <= heightSegments; i++) {
     for (let j = 0; j <= radialSegments; j++) {
       vertices.push([radius * Math.sin(j * deltaRotation), radius * Math.cos(j * deltaRotation), i * deltaHeight])
     }
