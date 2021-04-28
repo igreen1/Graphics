@@ -92,7 +92,11 @@ const ExampleUniverse = () => {
   let stars = Our3DGroup()
   stars.add(star)
   stars.add(star2);
-  console.log(stars)
+
+  universe.addAnimation(
+    Animations.RotateAboutPoint(stars, [0.79, 0.4, 1.9], [0.01, 0.01, 0.01])
+  )
+
   universe.addToUniverse(stars)
 
   let sphere = Our3DObject(OurMesh(Geometries.Sphere(0.3, 5), false), [0, 0, 0])
@@ -112,7 +116,7 @@ const ExampleUniverse = () => {
   universe.addToUniverse(IceCream)
 
   universe.addAnimation(
-    Animations.RotateAboutPoint(IceCream, [-3, 1, 0.5], [0, 0, 0.1])
+    Animations.RotateAboutPoint(IceCream, [3, -1, 0.5], [0, 0, 0.1])
   )
 
   let pyramid = Our3DObject(OurMesh(Geometries.Cone(2.5, 3, 4, 4), false), [1, 1, .1])
@@ -154,15 +158,6 @@ const ExampleUniverse = () => {
 
   const light = OurLight([-2, 0, 10], [11, 9.2, 9])
   universe.addToUniverse(light)
-
-  universe.addAnimation(
-    {
-      tick: () => {
-        star.transform(MatrixLibrary.rotationMatrix(1, 1, 1))
-      }
-    }
-  )
-
   return universe
 }
 
