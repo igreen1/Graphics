@@ -74,10 +74,6 @@ const BigBang = (cast) => {
 
   universe.tick = universe.scene.tick;
 
-  // universe.tick = (progress) => {
-  //   console.log("They're horrible bugs");
-  // }
-
   return {
     universe,
     setUniverse,

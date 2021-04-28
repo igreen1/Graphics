@@ -149,7 +149,6 @@ const Matrix = initialValue => {
     ) {
       throw new Error('Cannot multiply matrices ')
     } else if (otherMatrix.elements.length !== elements[0].length) {
-      console.log('Matrix of size', rows, 'x', columns, 'is incompatible for multiplication with a matrix of size', otherMatrix.getRows(), 'x', otherMatrix.getColumns())
       throw new Error('Matrix is incompatible for multiplication')
     }
 

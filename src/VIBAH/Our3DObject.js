@@ -159,11 +159,10 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
             normalsByVertex.push(...this.normalsByRawVertex[i].elements)
           }
         })
-        console.log(normalsByVertex)
       }
       return normalsByVertex
     },
-    setWireframe: function(newIsWireframe){
+    setWireframe: function (newIsWireframe) {
       (isWireframe = newIsWireframe)
       return this;
     }
@@ -298,11 +297,11 @@ const Our3DGroup = (objects = []) => {
       return matrix
     },
     type: Our3DGroup,
-    add: function(object){ 
+    add: function (object) {
       group.push(object)
       return this;
     },
-    remove: function(object) {
+    remove: function (object) {
       group = group.filter(sceneObject => sceneObject !== object)
       return this;
     },
@@ -310,9 +309,25 @@ const Our3DGroup = (objects = []) => {
       group.forEach(object => object.transform(transformMatrix))
       return this;
     },
-    setColors: function(newColorArray){
-       group.forEach(object => object.setColors(newColorArray))
-       return this;
+    setColors: function (newColorArray) {
+      group.forEach(object => object.setColors(newColorArray))
+      return this;
+    },
+    setWireframe: function (newIsWireframe) {
+      group.forEach(object => object.setWireframe(newIsWireframe))
+      return this
+    },
+    setColors: function (newColorArray) {
+      group.forEach(object => object.setColors(newColorArray))
+      return this
+    },
+    setRandomColors: function (n = 5, byVertex = true) {
+      group.forEach(object => object.setRandomColors(n, byVertex))
+      return this
+    },
+    transformVertices: function (transformMatrix) {
+      group.forEach(object => object.transformVertices(transformMatrix))
+      return this
     }
   }
 }
@@ -340,11 +355,11 @@ const OurCamera = (center, direction, projectionOptions, projectionType = Matrix
     set matrix(newMatrix) {
       matrix = newMatrix
     },
-    translate: function(x, y, z) {
+    translate: function (x, y, z) {
       (matrix = matrix.multiply(MatrixLibrary.translationMatrix(x, y, z)))
       return this
     },
-    rotate: function(x, y, z) { 
+    rotate: function (x, y, z) {
       (matrix = matrix.multiply(MatrixLibrary.rotationMatrix(x, y, z)))
       return this
     },
