@@ -1,5 +1,6 @@
-import { toRawLineArray, toRawTriangleArray, Vector} from './OurUtilities'
+import { toRawLineArray, toRawTriangleArray, Vector } from './OurUtilities'
 import { Matrix, MatrixLibrary } from './OurMatrix'
+import { TransformableObject } from './OurTransformations'
 
 const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false) => {
   let isWireframe = wireframe
@@ -164,16 +165,13 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     },
     setWireframe: newIsWireframe => (isWireframe = newIsWireframe)
   }
-
-  // normals by face
-  // then if faceted, apply face per each vertex in parallel ds
-  // if smooth, apply normal to vertex by adding
-  // for lines, faces harder to reconstruct
 }
 
-const Our3DObject = (mesh, colorArray=[0,0,0]) => {
+
+const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
   let matrix = Matrix()
   return {
+    ...TransformableObject(),
     type: Our3DObject,
     mesh,
     get vertices() {
@@ -249,7 +247,7 @@ const Our3DObject = (mesh, colorArray=[0,0,0]) => {
       return mesh.normals
     },
     setColors: newColorArray => (colorArray = newColorArray),
-    setRandomColors: (n=5, byVertex=true) => {
+    setRandomColors: (n = 5, byVertex = true) => {
       colorArray = []
       if (byVertex) {
         for (let i = 0; i < mesh.rawVertices.length; i++) {
@@ -263,17 +261,17 @@ const Our3DObject = (mesh, colorArray=[0,0,0]) => {
 
     },
     setWireframe: mesh.setWireframe,
-    transform: function(transformMatrix){
+    transform: function (transformMatrix) {
       matrix = transformMatrix.multiply(matrix);
       return this;
     },
     transformVertices: otherMatrix =>
-      (mesh.vertices = mesh.rawVertices.map(vertex =>
-        otherMatrix
-          .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
-          .toArray()
-          .slice(0, -1)
-      ))
+    (mesh.vertices = mesh.rawVertices.map(vertex =>
+      otherMatrix
+        .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
+        .toArray()
+        .slice(0, -1)
+    ))
   }
 }
 
@@ -281,6 +279,8 @@ const Our3DGroup = (objects = []) => {
   let group = objects
   let matrix = Matrix()
   return {
+    ...TransformableObject(),
+    get self() {return this},
     get group() {
       return group
     },
@@ -290,7 +290,7 @@ const Our3DGroup = (objects = []) => {
     type: Our3DGroup,
     add: object => group.push(object),
     remove: object => group = group.filter(sceneObject => sceneObject !== object),
-    transform: function (transformMatrix ) {
+    transform: function (transformMatrix) {
       group.forEach(object => object.transform(transformMatrix))
       return this;
     },

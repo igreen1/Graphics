@@ -168,7 +168,7 @@ const ExampleUniverse = () => {
   // From our cast
   universe.addToUniverse(sphinx)
   const camel1 = CamelFactory()
-    .transform(MatrixLibrary.scaleMatrix(0.25, 0.25, 0.25))
+  camel1.scale(0.25, 0.25, 0.25)
     .transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
   const camel2 = CamelFactory()
   camel2.transform(MatrixLibrary.scaleMatrix(0.25, 0.25, 0.25))
