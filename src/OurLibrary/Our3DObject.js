@@ -340,8 +340,14 @@ const OurCamera = (center, direction, projectionOptions, projectionType = Matrix
     set matrix(newMatrix) {
       matrix = newMatrix
     },
-    translate: (x, y, z) => (matrix = matrix.multiply(MatrixLibrary.translationMatrix(x, y, z))),
-    rotate: (x, y, z) => (matrix = matrix.multiply(MatrixLibrary.rotationMatrix(x, y, z))),
+    translate: function(x, y, z) {
+      (matrix = matrix.multiply(MatrixLibrary.translationMatrix(x, y, z)))
+      return this
+    },
+    rotate: function(x, y, z) { 
+      (matrix = matrix.multiply(MatrixLibrary.rotationMatrix(x, y, z)))
+      return this
+    },
     projectionMatrix
   }
 }
