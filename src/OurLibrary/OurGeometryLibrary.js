@@ -91,12 +91,12 @@ const Cone = (radius = 0.5, height = 1, radialSegments = 32, heightSegments = 32
 }
 
 /*
-Cylinder
+Cylinder - Extra (based on lathe)
 */
 
 const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegments = 32, closed = true) => {
   const deltaRotation = (2 * Math.PI) / radialSegments
-  const deltaHeight = height / heightSegments
+  const deltaHeight = 1.0 * height / heightSegments
 
   const vertices = []
   for (let i = 0; i < heightSegments; i++) {
@@ -113,6 +113,7 @@ const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegment
 
   //Add top/bottom if necessary
   if (closed) {
+    const vertexOffset = vertices.length - radialSegments
     //Add center of bottom circle
     vertices.push([0, 0, 0])
     for (let i = 0; i < radialSegments; i++) {
@@ -121,11 +122,10 @@ const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegment
     }
 
     //Add center of top circle
-    vertices.push([0, 0, height])
-    const vertexOffset = radialSegments * (heightSegments - 1)
+    vertices.push([0, 0, deltaHeight*heightSegments]) 
     for (let i = 0; i < radialSegments; i++) {
       //add top circle for cylinder
-      facesByIndex.push([vertexOffset + i, vertexOffset + ((i + 1) % radialSegments), vertices.length - 1])
+      facesByIndex.push([vertexOffset + i , vertexOffset + ((i + 1) % radialSegments), vertices.length-1])
     }
   }
 
