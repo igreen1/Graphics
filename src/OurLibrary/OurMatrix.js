@@ -85,6 +85,11 @@ const MatrixLibrary = {
       [                    0,                     0,    -((far+near)/(far-near)), -((2*far*near)/(far-near))],
       [                    0,                     0,                        -1,                        0]
     ])
+  },
+  rotateAboutPoint : (point = [0, 0, 0], rotation = [0, 0, 0]) => {
+    return MatrixLibrary.translationMatrix(...point)
+      .multiply(MatrixLibrary.rotationMatrix(...rotation))
+      .multiply(MatrixLibrary.translationMatrix(...point.map(element => -element)))
   }
 }
 

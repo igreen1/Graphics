@@ -18,7 +18,7 @@ const RotateAboutPoint = (objectToAffect, point = [0, 0, 0], rotation = [0, 0, 0
   3. Inverse of before rotation
   */
 
-  const affectMatrix = Transformations.RotateAboutPoint(point, rotation)
+  const affectMatrix = MatrixLibrary.rotateAboutPoint(point, rotation)
 
   return {
     tick: () => {

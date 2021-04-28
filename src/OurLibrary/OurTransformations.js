@@ -1,11 +1,5 @@
 import { Matrix, MatrixLibrary } from './OurMatrix'
 
-const RotateAboutPoint = (point = [0, 0, 0], rotation = [0, 0, 0]) => {
-  return MatrixLibrary.translationMatrix(...point)
-    .multiply(MatrixLibrary.rotationMatrix(...rotation))
-    .multiply(MatrixLibrary.translationMatrix(...point.map(element => -element)))
-
-}
 
 // Just an 'apply' for our Transform
 const Transform = (object, matrix) => {
@@ -24,6 +18,10 @@ const Scale = (object, width, height, depth) => {
   Transform(object, MatrixLibrary.scaleMatrix(width, height, depth))
 }
 
+const RotateAboutPoint = (object, point, rotation) => {
+  Transform(object, MatrixLibrary.rotateAboutPoint(point, rotation))
+}
+
 const TransformableObject = () => {
   // A method to add 'transform' functions to our objects
   // a way to do a parent class without actually doing a parent class
@@ -40,6 +38,10 @@ const TransformableObject = () => {
       Scale(this, width, height, depth)
       return this
     },
+    rotateAboutPoint: function(point, rotation){
+      RotateAboutPoint(this, point, rotation)
+      return this;
+    }
   }
 }
 
