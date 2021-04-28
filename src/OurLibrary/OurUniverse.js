@@ -56,14 +56,6 @@ const Scene = (cast) => {
   }
 }
 
-const MatrixAnimation = (objectToAffect, animationMatri) => {
-  return {
-    tick: () => {
-      objectToAffect.transform(animationMatri);
-    }
-  }
-}
-
 const BigBang = (cast) => {
   // React wrapper for Scene (using state)
 

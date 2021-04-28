@@ -1,6 +1,5 @@
-import { toRawLineArray, toRawTriangleArray } from './shapes'
+import { toRawLineArray, toRawTriangleArray, Vector} from './OurUtilities'
 import { Matrix, MatrixLibrary } from './OurMatrix'
-import { Vector } from './vector'
 
 const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false) => {
   let isWireframe = wireframe

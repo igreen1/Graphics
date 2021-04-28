@@ -10,7 +10,7 @@ import { BrowserRouter as Router, NavLink, Route, Switch } from 'react-router-do
 
 import './App.css'
 
-import {OurWebGL} from './OurWebGL'
+import {ExampleWebGL} from './scenes/OurScene'
 import BareBonesWebGL from './BareBonesWebGL'
 import LessBareBonesWebGL from './LessBareBonesWebGL'
 
@@ -45,7 +45,7 @@ const App = () => {
           <Switch>
             <Route path="/bare-bones-webgl" component={BareBonesWebGL} />
             <Route path="/less-bare-bones-webgl" component={LessBareBonesWebGL} />
-            <Route path="/our-webgl" component={OurWebGL} />
+            <Route path="/our-webgl" component={ExampleWebGL} />
             <Route component={Greeting} />
           </Switch>
         </main>

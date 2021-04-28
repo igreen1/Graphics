@@ -1,7 +1,7 @@
 import { Our3DObject, OurMesh, Our3DGroup } from './Our3DObject'
 import { Cone, Cylinder, Extrude, RegularPolygon, Sphere, Tube, Torus } from './GeometryLibrary'
 import { MatrixLibrary } from './OurMatrix'
-import { BigBang } from './Universe'
+import { BigBang } from './OurUniverse'
 
 /*
 Imports a scene from a JSON file
