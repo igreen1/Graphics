@@ -1,5 +1,5 @@
 // Import our cast
-import { sphinx } from '../objects/sphinx'
+import { SphinxFactory } from '../objects/sphinx'
 import { camel, CamelFactory } from '../objects/camel'
 
 // Import our library
@@ -158,6 +158,7 @@ const ExampleUniverse = () => {
   universe.addToUniverse(sky)
 
   // From our cast
+  const sphinx = SphinxFactory()
   universe.addToUniverse(sphinx)
   const camel1 = CamelFactory().scale(0.25, 0.25, 0.25).transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
   const camel2 = CamelFactory()
