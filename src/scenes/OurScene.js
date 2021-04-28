@@ -1,5 +1,5 @@
 // Import our cast
-import { sphinx } from '../objects/sphinx'
+import { SphinxFactory } from '../objects/sphinx'
 import { camel, CamelFactory } from '../objects/camel'
 
 // Import our library
