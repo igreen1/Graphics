@@ -1,5 +1,6 @@
 // Import our cast
 import { sphinx } from '../objects/sphinx'
+import { camel, CamelFactory } from '../objects/camel'
 
 // Import our library
 import {
@@ -12,7 +13,9 @@ import {
   OurLight,
   OurCamera,
   MatrixLibrary,
-  Animations
+  Animations,
+  Matrix,
+  Transformations
 } from '../OurLibrary/OurLibrary'
 
 // Alternatively can import as
@@ -113,7 +116,7 @@ const IceCreamFactory = () => {
   const IceCream = Our3DGroup()
   IceCream.add(cone)
   IceCream.add(sphere)
-  
+
   return IceCream
 }
 
@@ -126,7 +129,7 @@ const PyramidFactory = (position) => {
 
 const ExampleUniverse = () => {
   let universe = BigBang()
-  
+
   // Yummy :)
   const IceCream = IceCreamFactory()
   universe.addToUniverse(IceCream) // Demonstrating animations can be added after addToUniverse call
@@ -164,6 +167,15 @@ const ExampleUniverse = () => {
 
   // From our cast
   universe.addToUniverse(sphinx)
+  const camel1 = CamelFactory()
+  camel1.transform(MatrixLibrary.scaleMatrix(0.25, 0.25, 0.25))
+  camel1.transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
+  const camel2 = CamelFactory()
+  camel2.transform(MatrixLibrary.scaleMatrix(0.25, 0.25, 0.25))
+  camel2.transform(MatrixLibrary.translationMatrix(-1, -1.5, -1))
+  camel2.transform(Transformations.RotateAboutPoint([-1, -1.5, -1], [0, Math.PI, 0]))
+  const camelHerd = Our3DGroup([camel1, camel2])
+  universe.addToUniverse(camelHerd)
 
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
