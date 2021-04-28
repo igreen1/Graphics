@@ -11,6 +11,8 @@ const Scene = (cast) => {
   let light = OurLight([1, 1, 1], [1, 1, 1]); // Default light
   let camera = OurCamera([0, 0, -5], [0, 0, 0], [.6, -.5, .5, -.5, 1, 10]); // Default camera
 
+  const animations = []
+
   // Recursion requires functions to be declared outside object
   const add = (object) => {
     if (object.type === Our3DObject) {
@@ -45,9 +47,24 @@ const Scene = (cast) => {
     transform: objectsToDraw.transform,
     get light() { return light },
     get camera() { return camera },
+    get animation() { return animations; },
+    addAnimation: (newAnimation) => {
+      animations.push(newAnimation);
+    },
+    tick: (timeElapsed) => {
+      animations.forEach((anim) => anim.tick(timeElapsed))
+    }
+    
   }
 }
 
+const MatrixAnimation = (objectToAffect, animationMatri) => {
+  return {
+    tick: () => {
+      objectToAffect.transform(animationMatri);
+    }
+  }
+}
 
 const BigBang = (cast) => {
   // React wrapper for Scene (using state)
@@ -62,24 +79,21 @@ const BigBang = (cast) => {
   }
 
   const addAnimation = anim => {
-    if (!universe.animation) {
-      setUniverse({
-        ...universe,
-        animation: { anim }
-      })
-    } else {
-      universe.animation = {
-        ...universe.animation,
-        anim
-      }
-    }
+    universe.scene.addAnimation(anim)
   }
+
+  universe.tick = universe.scene.tick;
+
+  // universe.tick = (progress) => {
+  //   console.log("They're horrible bugs");
+  // }
 
   return {
     universe,
     setUniverse,
     addToUniverse,
-    removeFromUniverse
+    removeFromUniverse,
+    addAnimation
   }
 
 }

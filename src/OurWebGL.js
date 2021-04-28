@@ -68,6 +68,8 @@ const FRAGMENT_SHADER = `
 const InitWebGL = universe => {
   const canvasRef = useRef()
 
+  const [animationWrapper, setanimationWrapper] = useState(null);
+
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) {
@@ -183,7 +185,7 @@ const InitWebGL = universe => {
       gl.uniformMatrix4fv(
         projectionMatrix,
         gl.FALSE,
-        MatrixLibrary.orthographicProjectionMatrix(-1,1,-1,1,-1,1).toArray()
+        MatrixLibrary.orthographicProjectionMatrix(-1, 1, -1, 1, -1, 1).toArray()
       )
       gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, universe.scene.camera.matrix)
       gl.uniform3fv(lightDirection, new Float32Array(universe.scene.light.direction))
@@ -208,9 +210,6 @@ const InitWebGL = universe => {
 
     const advanceScene = timestamp => {
       // Check if the user has turned things off.
-      if (!universe.animation || !universe?.animation?.active) {
-        return
-      }
 
       // Initialize the timestamp.
       if (!previousTimestamp) {
@@ -228,7 +227,7 @@ const InitWebGL = universe => {
       }
 
       // All clear.
-      universe?.animation?.tick() //not required :)
+      universe?.tick(progress)
       drawScene()
 
       // Request the next frame.
@@ -238,9 +237,17 @@ const InitWebGL = universe => {
 
     // Draw the initial scene.
     drawScene()
+
+    setanimationWrapper({
+      startAnimation: () => {
+        previousTimestamp = null
+        window.requestAnimationFrame(advanceScene)
+      }
+    })
+
   }, [canvasRef])
 
-  return canvasRef
+  return { canvasRef, animationWrapper }
 }
 
 const ExampleUniverse = () => {
@@ -314,8 +321,10 @@ const ExampleUniverse = () => {
   star2.transform(MatrixLibrary.translationMatrix(0.79, 0.4, 1.9))
 
   let stars = Our3DGroup()
+  const starsSub = Our3DGroup()
+  starsSub.add(star2);
   stars.add(star)
-  stars.add(star2)
+  stars.add(starsSub);
   console.log(stars)
   universe.addToUniverse(stars)
 
@@ -327,7 +336,7 @@ const ExampleUniverse = () => {
   universe.addToUniverse(sphere)
 
   let cone = Our3DObject(OurMesh(Cone(0.5, 1, 8, 8), false), [0.7, 0, 0.8])
-  cone.setRandomColors(5,false)
+  cone.setRandomColors(5, false)
   cone.transform(MatrixLibrary.rotationMatrix(0, -0.3, 3.14))
   cone.transform(MatrixLibrary.translationMatrix(3, -1, 0.5))
   universe.addToUniverse(cone)
@@ -348,15 +357,15 @@ const ExampleUniverse = () => {
   universe.addToUniverse(pyramid3)
 
 
-  let ground = Our3DObject(OurMesh(RegularPolygon(4), false),[.5,.4,.2])
-  ground.transform(MatrixLibrary.scaleMatrix(15,15,1))
-  ground.transform(MatrixLibrary.rotationMatrix(-Math.PI/2, 0, Math.PI/4))
+  let ground = Our3DObject(OurMesh(RegularPolygon(4), false), [.5, .4, .2])
+  ground.transform(MatrixLibrary.scaleMatrix(15, 15, 1))
+  ground.transform(MatrixLibrary.rotationMatrix(-Math.PI / 2, 0, Math.PI / 4))
   ground.transform(MatrixLibrary.translationMatrix(0, -2.5, 0))
   universe.addToUniverse(ground)
 
-  let sky = Our3DObject(OurMesh(RegularPolygon(4), false),[2.5,5,20.5])
-  sky.transform(MatrixLibrary.scaleMatrix(15,15,1))
-  sky.transform(MatrixLibrary.rotationMatrix(0, 0, Math.PI/4))
+  let sky = Our3DObject(OurMesh(RegularPolygon(4), false), [2.5, 5, 20.5])
+  sky.transform(MatrixLibrary.scaleMatrix(15, 15, 1))
+  sky.transform(MatrixLibrary.rotationMatrix(0, 0, Math.PI / 4))
   sky.transform(MatrixLibrary.translationMatrix(0, 0, -3))
   universe.addToUniverse(sky)
 
@@ -366,17 +375,27 @@ const ExampleUniverse = () => {
   const light = OurLight([-2, 0, 10], [11, 9.2, 9])
   universe.addToUniverse(light)
 
+  universe.addAnimation(
+    {
+      tick: () => {
+        star.transform(MatrixLibrary.rotationMatrix(1,1,1))
+      }
+    }
+  )
+
   return universe
 }
 
 const OurWebGL = props => {
   const { universe } = ExampleUniverse()
-  const canvasRef = InitWebGL(universe)
+  const { canvasRef, animationWrapper } = InitWebGL(universe)
+
+  const handleClick = event => { animationWrapper.startAnimation() }
 
   return (
     <article>
       {/* Yes, still square. */}
-      <canvas width="1024" height="512" ref={canvasRef}>
+      <canvas width="1024" height="512" ref={canvasRef} onClick={animationWrapper && handleClick}>
         Your favorite update-your-browser message here.
       </canvas>
     </article>
