@@ -167,16 +167,13 @@ const ExampleUniverse = () => {
 
   // From our cast
   universe.addToUniverse(sphinx)
-  const camel1 = CamelFactory()
-  camel1.scale(0.25, 0.25, 0.25)
+  const camel1 = (CamelFactory())
+    .scale(0.25, 0.25, 0.25)
     .transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
   const camel2 = (CamelFactory())
     .scale(0.25, 0.25, 0.25)
     .translate(-1, -1.5, -1)
     .rotateAboutPoint([-1, -1.5, -1], [0, Math.PI, 0])
-  // camel2.transform(MatrixLibrary.scaleMatrix(0.25, 0.25, 0.25))
-  //   .transform(MatrixLibrary.translationMatrix(-1, -1.5, -1))
-  //   .transform(Transformations.RotateAboutPoint([-1, -1.5, -1], [0, Math.PI, 0]))
   const camelHerd = (Our3DGroup())
     .add(camel1)
     .add(camel2)
