@@ -10,15 +10,17 @@ import { BrowserRouter as Router, NavLink, Route, Switch } from 'react-router-do
 
 import './App.css'
 
-import {ExampleWebGL} from './scenes/OurScene'
-import BareBonesWebGL from './BareBonesWebGL'
-import LessBareBonesWebGL from './LessBareBonesWebGL'
+import { ExampleWebGL } from './scenes/OurScene'
+import { OurSandbox } from './scenes/OurSandbox'
+// import BareBonesWebGL from './BareBonesWebGL'
+// import LessBareBonesWebGL from './LessBareBonesWebGL'
 
 const Greeting = () => (
   <article>
-    <h1>This is starter code only!</h1>
+    <h1>Choose which to look at above</h1>
     <p>
-      Make sure to take this apart and put it back with a better design once you’ve gotten the hang of WebGL and GLSL.
+      `Our Scene` contains a fun Egyptian scene.
+      `Our Sandbox` has a bunch of random objects
     </p>
   </article>
 )
@@ -28,24 +30,28 @@ const App = () => {
     <article className="App">
       <Router>
         <nav>
-          <NavLink activeClassName="current" to="/bare-bones-webgl">
+          {/* <NavLink activeClassName="current" to="/bare-bones-webgl">
             Bare Bones WebGL
           </NavLink>
 
           <NavLink activeClassName="current" to="/less-bare-bones-webgl">
             Less Bare Bones WebGL
-          </NavLink>
+          </NavLink> */}
 
           <NavLink activeClassName="current" to="/our-webgl">
-            Our WebGL
+            Our Scene
+          </NavLink>
+          <NavLink activeClassName="current" to="/our-sandbox">
+            Our Sandbox
           </NavLink>
         </nav>
 
         <main>
           <Switch>
-            <Route path="/bare-bones-webgl" component={BareBonesWebGL} />
-            <Route path="/less-bare-bones-webgl" component={LessBareBonesWebGL} />
+            {/* <Route path="/bare-bones-webgl" component={BareBonesWebGL} />
+            <Route path="/less-bare-bones-webgl" component={LessBareBonesWebGL} /> */}
             <Route path="/our-webgl" component={ExampleWebGL} />
+            <Route path='/our-sandbox' component={OurSandbox} />
             <Route component={Greeting} />
           </Switch>
         </main>
