@@ -66,7 +66,7 @@ const FRAGMENT_SHADER = `
     gl_FragColor = vec4((1.0 - gl_FragCoord.z) * finalVertexColor.rgb, 1.0);
   }
 `
-const InitWebGL = universe => {
+const useInitWebGL = universe => {
   const canvasRef = useRef()
 
   const [animationWrapper, setanimationWrapper] = useState(null);
@@ -251,10 +251,17 @@ const InitWebGL = universe => {
   return { canvasRef, animationWrapper }
 }
 
-const ReactWebGL = universe => {
-  const { canvasRef, animationWrapper } = InitWebGL(universe)
+const ReactWebGL = props => {
+  const { canvasRef, animationWrapper } = useInitWebGL(props.universe)
 
   const handleClick = event => { animationWrapper.startAnimation() }
+
+  // Auto-start animations
+  useEffect(() => {
+    if (animationWrapper) {
+      animationWrapper.startAnimation()
+    }
+  }, [animationWrapper])
 
   return (
     <article>
@@ -265,4 +272,4 @@ const ReactWebGL = universe => {
   )
 }
 
-export { InitWebGL, ReactWebGL }
+export { useInitWebGL, ReactWebGL }

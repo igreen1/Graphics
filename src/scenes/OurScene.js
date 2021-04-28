@@ -181,7 +181,7 @@ const ExampleUniverse = () => {
 
 const ExampleWebGL = props => {
   const { universe } = ExampleUniverse()
-  return ReactWebGL(universe)
+  return < ReactWebGL universe={universe} />
 }
 
 export { ExampleWebGL }

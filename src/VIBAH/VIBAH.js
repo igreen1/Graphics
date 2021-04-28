@@ -1,5 +1,5 @@
 import * as Geometries from './OurGeometryLibrary'
-import { InitWebGL, ReactWebGL } from './OurWebGL'
+import { useInitWebGL, ReactWebGL } from './OurWebGL'
 import { Matrix, MatrixLibrary } from './OurMatrix'
 import { BigBang, Scene } from './OurUniverse'
 import * as Animations from './OurAnimations'
@@ -10,7 +10,7 @@ import * as Transformations from './OurTransformations'
 
 export {
   Geometries,
-  InitWebGL, 
+  useInitWebGL, 
   ReactWebGL,
   Matrix,
   BigBang,
