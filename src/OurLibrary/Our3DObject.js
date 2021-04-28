@@ -287,7 +287,8 @@ const Our3DGroup = (objects = []) => {
     type: Our3DGroup,
     add: object => group.push(object),
     remove: object => group = group.filter(sceneObject => sceneObject !== object),
-    transform: transformMatrix => group.forEach(object => object.transform(transformMatrix))
+    transform: transformMatrix => group.forEach(object => object.transform(transformMatrix)),
+    setColors: newColorArray => group.forEach(object => object.setColors(newColorArray))
   }
 }
 

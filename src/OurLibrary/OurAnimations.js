@@ -1,9 +1,10 @@
 import { MatrixLibrary } from './OurMatrix'
+import * as Transformations from './OurTransformations'
 
-const MatrixAnimation = (objectToAffect, animationMatri) => {
+const MatrixAnimation = (objectToAffect, animationMatrix) => {
   return {
     tick: () => {
-      objectToAffect.transform(animationMatri);
+      objectToAffect.transform(animationMatrix);
     }
   }
 }
@@ -17,9 +18,7 @@ const RotateAboutPoint = (objectToAffect, point = [0, 0, 0], rotation = [0, 0, 0
   3. Inverse of before rotation
   */
 
-  const affectMatrix = MatrixLibrary.translationMatrix(...point)
-    .multiply(MatrixLibrary.rotationMatrix(...rotation))
-    .multiply(MatrixLibrary.translationMatrix(...point.map(element => -element)))
+  const affectMatrix = Transformations.RotateAboutPoint(point, rotation)
 
   return {
     tick: () => {
