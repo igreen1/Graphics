@@ -163,7 +163,10 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       }
       return normalsByVertex
     },
-    setWireframe: newIsWireframe => (isWireframe = newIsWireframe)
+    setWireframe: function(newIsWireframe){
+      (isWireframe = newIsWireframe)
+      return this;
+    }
   }
 }
 
@@ -171,7 +174,6 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
 const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
   let matrix = Matrix()
   return {
-    ...TransformableObject(),
     type: Our3DObject,
     mesh,
     get vertices() {
@@ -246,8 +248,11 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
     get normals() {
       return mesh.normals
     },
-    setColors: newColorArray => (colorArray = newColorArray),
-    setRandomColors: (n = 5, byVertex = true) => {
+    setColors: function (newColorArray) {
+      (colorArray = newColorArray)
+      return this;
+    },
+    setRandomColors: function (n = 5, byVertex = true) {
       colorArray = []
       if (byVertex) {
         for (let i = 0; i < mesh.rawVertices.length; i++) {
@@ -258,20 +263,25 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
           colorArray.push([Math.random() * n, Math.random() * n, Math.random() * n])
         }
       }
-
+      return this
     },
-    setWireframe: mesh.setWireframe,
+    setWireframe: function (newIsWireframe) {
+      mesh.setWireframe(newIsWireframe)
+      return this;
+    },
     transform: function (transformMatrix) {
       matrix = transformMatrix.multiply(matrix);
       return this;
     },
-    transformVertices: otherMatrix =>
-    (mesh.vertices = mesh.rawVertices.map(vertex =>
-      otherMatrix
-        .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
-        .toArray()
-        .slice(0, -1)
-    ))
+    transformVertices: function (otherMatrix) {
+      (mesh.vertices = mesh.rawVertices.map(vertex =>
+        otherMatrix
+          .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
+          .toArray()
+          .slice(0, -1)
+      ))
+      return this
+    }
   }
 }
 
@@ -280,7 +290,7 @@ const Our3DGroup = (objects = []) => {
   let matrix = Matrix()
   return {
     ...TransformableObject(),
-    get self() {return this},
+    get self() { return this },
     get group() {
       return group
     },
@@ -288,13 +298,22 @@ const Our3DGroup = (objects = []) => {
       return matrix
     },
     type: Our3DGroup,
-    add: object => group.push(object),
-    remove: object => group = group.filter(sceneObject => sceneObject !== object),
+    add: function(object){ 
+      group.push(object)
+      return this;
+    },
+    remove: function(object) {
+      group = group.filter(sceneObject => sceneObject !== object)
+      return this;
+    },
     transform: function (transformMatrix) {
       group.forEach(object => object.transform(transformMatrix))
       return this;
     },
-    setColors: newColorArray => group.forEach(object => object.setColors(newColorArray))
+    setColors: function(newColorArray){
+       group.forEach(object => object.setColors(newColorArray))
+       return this;
+    }
   }
 }
 
