@@ -168,12 +168,12 @@ const ExampleUniverse = () => {
   // From our cast
   universe.addToUniverse(sphinx)
   const camel1 = CamelFactory()
-  camel1.transform(MatrixLibrary.scaleMatrix(0.25, 0.25, 0.25))
-  camel1.transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
+    .transform(MatrixLibrary.scaleMatrix(0.25, 0.25, 0.25))
+    .transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
   const camel2 = CamelFactory()
   camel2.transform(MatrixLibrary.scaleMatrix(0.25, 0.25, 0.25))
-  camel2.transform(MatrixLibrary.translationMatrix(-1, -1.5, -1))
-  camel2.transform(Transformations.RotateAboutPoint([-1, -1.5, -1], [0, Math.PI, 0]))
+    .transform(MatrixLibrary.translationMatrix(-1, -1.5, -1))
+    .transform(Transformations.RotateAboutPoint([-1, -1.5, -1], [0, Math.PI, 0]))
   const camelHerd = Our3DGroup([camel1, camel2])
   universe.addToUniverse(camelHerd)
 
