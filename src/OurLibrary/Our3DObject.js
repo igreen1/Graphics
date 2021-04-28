@@ -263,7 +263,10 @@ const Our3DObject = (mesh, colorArray=[0,0,0]) => {
 
     },
     setWireframe: mesh.setWireframe,
-    transform: otherMatrix => (matrix = otherMatrix.multiply(matrix)),
+    transform: function(transformMatrix){
+      matrix = transformMatrix.multiply(matrix);
+      return this;
+    },
     transformVertices: otherMatrix =>
       (mesh.vertices = mesh.rawVertices.map(vertex =>
         otherMatrix
@@ -287,7 +290,10 @@ const Our3DGroup = (objects = []) => {
     type: Our3DGroup,
     add: object => group.push(object),
     remove: object => group = group.filter(sceneObject => sceneObject !== object),
-    transform: transformMatrix => group.forEach(object => object.transform(transformMatrix)),
+    transform: function (transformMatrix ) {
+      group.forEach(object => object.transform(transformMatrix))
+      return this;
+    },
     setColors: newColorArray => group.forEach(object => object.setColors(newColorArray))
   }
 }
