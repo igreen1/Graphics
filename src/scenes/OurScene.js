@@ -16,7 +16,7 @@ import {
   Animations,
   Matrix,
   Transformations
-} from '../OurLibrary/OurLibrary'
+} from '../VIBAH/VIBAH'
 
 // Alternatively can import as
 // import * as LIBRARY from './OurLibrary/OurLibrary
@@ -24,7 +24,6 @@ import {
 // Placed into factories to make ExampleUniverse easier to read
 //  moderate loss of load efficiency is worth readability!!
 const StarFactory = () => {
-
   const star = Our3DObject(
     OurMesh(
       Geometries.Extrude(
@@ -95,10 +94,9 @@ const StarFactory = () => {
 
   const stars = Our3DGroup()
   stars.add(star)
-  stars.add(star2);
+  stars.add(star2)
 
-  return stars;
-
+  return stars
 }
 
 const IceCreamFactory = () => {
@@ -106,7 +104,7 @@ const IceCreamFactory = () => {
   sphere.setRandomColors(10)
   sphere.transform(MatrixLibrary.scaleMatrix(2, 2, 2))
   sphere.transform(MatrixLibrary.rotationMatrix(0, 0, 0.5))
-  sphere.transform(MatrixLibrary.translationMatrix(3, -.2, .5))
+  sphere.transform(MatrixLibrary.translationMatrix(3, -0.2, 0.5))
 
   const cone = Our3DObject(OurMesh(Geometries.Cone(0.5, 1, 8, 8), false), [0.7, 0, 0.8])
   cone.setRandomColors(5, false)
@@ -120,12 +118,11 @@ const IceCreamFactory = () => {
   return IceCream
 }
 
-const PyramidFactory = (position) => {
-  let pyramid = Our3DObject(OurMesh(Geometries.Cone(2.5, 3, 4, 4), false), [1, 1, .1])
+const PyramidFactory = position => {
+  let pyramid = Our3DObject(OurMesh(Geometries.Cone(2.5, 3, 4, 4), false), [1, 1, 0.1])
   pyramid.transform(MatrixLibrary.translationMatrix(...position))
   return pyramid
 }
-
 
 const ExampleUniverse = () => {
   let universe = BigBang()
@@ -133,27 +130,22 @@ const ExampleUniverse = () => {
   // Yummy :)
   const IceCream = IceCreamFactory()
   universe.addToUniverse(IceCream) // Demonstrating animations can be added after addToUniverse call
-  universe.addAnimation(
-    Animations.RotateAboutPoint(IceCream, [3, -1, 0.5], [0, 0, 0.1])
-  )
+  universe.addAnimation(Animations.RotateAboutPoint(IceCream, [3, -1, 0.5], [0, 0, 0.1]))
 
   // Pyramids
-  const pyramid = PyramidFactory([-.2, -1, -3])
+  const pyramid = PyramidFactory([-0.2, -1, -3])
   const pyramid2 = PyramidFactory([-4, -1, -4])
   const pyramid3 = PyramidFactory([4, -1, -4])
   universe.addToUniverse(pyramid)
   universe.addToUniverse(pyramid2)
   universe.addToUniverse(pyramid3)
 
-
   // Amazing background :)
-  const stars = StarFactory();
-  universe.addAnimation(
-    Animations.RotateAboutPoint(stars, [0.79, 0.4, 1.9], [0.01, 0.01, 0.01])
-  )
+  const stars = StarFactory()
+  universe.addAnimation(Animations.RotateAboutPoint(stars, [0.79, 0.4, 1.9], [0.01, 0.01, 0.01]))
   universe.addToUniverse(stars)
 
-  let ground = Our3DObject(OurMesh(Geometries.RegularPolygon(4), false), [.5, .4, .2])
+  let ground = Our3DObject(OurMesh(Geometries.RegularPolygon(4), false), [0.5, 0.4, 0.2])
   ground.transform(MatrixLibrary.scaleMatrix(15, 15, 1))
   ground.transform(MatrixLibrary.rotationMatrix(-Math.PI / 2, 0, Math.PI / 4))
   ground.transform(MatrixLibrary.translationMatrix(0, -2.5, 0))
@@ -167,16 +159,12 @@ const ExampleUniverse = () => {
 
   // From our cast
   universe.addToUniverse(sphinx)
-  const camel1 = (CamelFactory())
-    .scale(0.25, 0.25, 0.25)
-    .transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
-  const camel2 = (CamelFactory())
+  const camel1 = CamelFactory().scale(0.25, 0.25, 0.25).transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
+  const camel2 = CamelFactory()
     .scale(0.25, 0.25, 0.25)
     .translate(-1, -1.5, -1)
     .rotateAboutPoint([-1, -1.5, -1], [0, Math.PI, 0])
-  const camelHerd = (Our3DGroup())
-    .add(camel1)
-    .add(camel2)
+  const camelHerd = Our3DGroup().add(camel1).add(camel2)
   universe.addToUniverse(camelHerd)
 
   // We have to see something!
