@@ -276,7 +276,7 @@ const Our3DObject = (mesh, colorArray=[0,0,0]) => {
 }
 
 const Our3DGroup = (objects = []) => {
-  const group = objects
+  let group = objects
   let matrix = Matrix()
   return {
     get group() {
@@ -287,7 +287,7 @@ const Our3DGroup = (objects = []) => {
     },
     type: Our3DGroup,
     add: object => group.push(object),
-    remove: object => group.filter(sceneObject => sceneObject !== object),
+    remove: object => group = group.filter(sceneObject => sceneObject !== object),
     transform: transformMatrix => group.forEach(object => object.transform(transformMatrix))
   }
 }

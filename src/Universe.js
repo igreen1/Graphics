@@ -19,8 +19,7 @@ const Scene = (cast) => {
       objectsToDraw.add(object)
     } else if (object.type === Our3DGroup) {
       object.group.forEach(add)
-    }
-    else if (object.type === OurLight) {
+    } else if (object.type === OurLight) {
       light = object
     } else if (object.type === OurCamera) {
       camera = object
@@ -34,7 +33,6 @@ const Scene = (cast) => {
       object.group.forEach(remove)
     } else if (object.type === OurCamera && object === light) {
       light = OurLight([0, 0, 0], [0, 0, 0]); //easier to make a black light than a null object
-
     } else if (object.type === OurCamera && object === camera) {
       camera = OurCamera([0, 0, 0], [0, 0, 0], [0, 0, 0, 0, 0, 0]); // should show nothing without breaking the app
     }
@@ -54,7 +52,7 @@ const Scene = (cast) => {
     tick: (timeElapsed) => {
       animations.forEach((anim) => anim.tick(timeElapsed))
     }
-    
+
   }
 }
 
