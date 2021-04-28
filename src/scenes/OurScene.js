@@ -12,7 +12,7 @@ import {
   OurLight,
   OurCamera,
   MatrixLibrary,
-  MatrixAnimation
+  Animations
 } from '../OurLibrary/OurLibrary'
 
 // Alternatively can import as
@@ -112,13 +112,17 @@ const ExampleUniverse = () => {
   universe.addToUniverse(IceCream)
 
   universe.addAnimation(
-    MatrixAnimation(IceCream, MatrixLibrary.rotationMatrix(0, 0, 0.1))
+    Animations.RotateAboutPoint(IceCream, [-3, 1, 0.5], [0, 0, 0.1])
   )
 
   let pyramid = Our3DObject(OurMesh(Geometries.Cone(2.5, 3, 4, 4), false), [1, 1, .1])
   pyramid.transform(MatrixLibrary.rotationMatrix(0, 0, 0))
   pyramid.transform(MatrixLibrary.translationMatrix(-.2, -1, -3))
   universe.addToUniverse(pyramid)
+
+  // universe.addAnimation(
+  //   Animations.RotateAboutPoint(pyramid, [-0.2, -1, -3], [0, 0, 0.1])
+  // )
 
   let pyramid2 = Our3DObject(OurMesh(Geometries.Cone(2.5, 3, 4, 4), false), [1, 1, .1])
   pyramid2.transform(MatrixLibrary.rotationMatrix(0, 0, 0))
