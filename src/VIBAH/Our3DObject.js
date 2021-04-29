@@ -2,14 +2,22 @@ import { toRawLineArray, toRawTriangleArray, Vector } from './OurUtilities'
 import { Matrix, MatrixLibrary } from './OurMatrix'
 import { TransformableObject } from './OurTransformations'
 
+
+// TODO Caching for normals / vertices
 const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false) => {
   let isWireframe = wireframe
   let isFaceted = faceted
 
+  let cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
+  let cachedNormals;
+
   return {
     facesByIndex,
     get vertices() {
-      return isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
+      return cachedVertices
+    },
+    set vertices(newCachedVertices) {
+      cachedVertices = newCachedVertices
     },
     set vertices(newVertices) {
       vertices = newVertices
@@ -20,14 +28,35 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     get isWireframe() {
       return isWireframe
     },
+    set isWireframe(newIsWireframe) {
+      isWireframe = newIsWireframe
+      this.updateCachedVertices()
+    },
+    setWireframe: function (newIsWireframe) {
+      // Kept for backwards compatibility post-refactor
+      (isWireframe = newIsWireframe)
+      this.updateCachedVertices()
+      return this;
+    },
     set isFaceted(newFaceted) {
       isFaceted = newFaceted
+      this.updateCachedNormals()
     },
     get isFaceted() {
       return isFaceted
     },
     get normals() {
-      return isFaceted ? this.facetedNormals : this.smoothNormals
+      if (!cachedNormals) {
+        cachedNormals = this.isFaceted ? this.facetedNormals : this.smoothNormals
+      }
+      return cachedNormals
+    },
+
+    updateCachedVertices: function () {
+      cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
+    },
+    updateCachedNormals: function () {
+      cachedNormals = isFaceted ? this.facetedNormals : this.smoothNormals
     },
 
     get normalsByFace() {
@@ -162,10 +191,6 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       }
       return normalsByVertex
     },
-    setWireframe: function (newIsWireframe) {
-      (isWireframe = newIsWireframe)
-      return this;
-    }
   }
 }
 
