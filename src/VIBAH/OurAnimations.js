@@ -1,5 +1,4 @@
 import { MatrixLibrary } from './OurMatrix'
-import * as Transformations from './OurTransformations'
 
 const MatrixAnimation = (objectToAffect, animationMatrix) => {
   return {

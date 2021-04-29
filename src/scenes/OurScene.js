@@ -1,6 +1,6 @@
 // Import our cast
 import { SphinxFactory } from '../objects/sphinx'
-import { camel, CamelFactory } from '../objects/camel'
+import { CamelFactory } from '../objects/camel'
 
 // Import our library
 import {
@@ -14,8 +14,6 @@ import {
   OurCamera,
   MatrixLibrary,
   Animations,
-  Matrix,
-  Transformations
 } from '../VIBAH/VIBAH'
 
 // Alternatively can import as

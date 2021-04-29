@@ -352,10 +352,6 @@ const Our3DGroup = (objects = []) => {
       group.forEach(object => object.setWireframe(newIsWireframe))
       return this
     },
-    setColors: function (newColorArray) {
-      group.forEach(object => object.setColors(newColorArray))
-      return this
-    },
     setRandomColors: function (n = 5, byVertex = true) {
       group.forEach(object => object.setRandomColors(n, byVertex))
       return this

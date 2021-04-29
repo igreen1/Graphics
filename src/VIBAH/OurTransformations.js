@@ -1,4 +1,4 @@
-import { Matrix, MatrixLibrary } from './OurMatrix'
+import { MatrixLibrary } from './OurMatrix'
 
 
 // Just an 'apply' for our Transform
@@ -38,7 +38,7 @@ const TransformableObject = () => {
       Scale(this, width, height, depth)
       return this
     },
-    rotateAboutPoint: function(point, rotation){
+    rotateAboutPoint: function (point, rotation) {
       RotateAboutPoint(this, point, rotation)
       return this;
     }
