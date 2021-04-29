@@ -1,6 +1,7 @@
 // Import our cast
 import { SphinxFactory } from '../objects/sphinx'
 import { CamelFactory } from '../objects/camel'
+import { ShepherdFactory } from '../objects/shepherd'
 
 // Import our library
 import {
@@ -167,6 +168,9 @@ const ExampleUniverse = () => {
     .setWireframe(true)
   const camelHerd = Our3DGroup().add(camel1).add(camel2)
   universe.addToUniverse(camelHerd)
+
+  const shepherd = ShepherdFactory()
+  universe.addToUniverse(shepherd)
 
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
