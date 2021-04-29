@@ -30,7 +30,7 @@ const VERTEX_SHADER = `
 
   void main(void) {
     vec4 transformedVertex = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
-    vec4 transformedNormal = cameraMatrix * matrix * vec4(vertexPosition, 0.0);
+    vec4 transformedNormal = cameraMatrix * matrix * vec4(normals, 0.0);
 
     vec3 lightVector = normalize(lightDirection - transformedVertex.xyz);
     vec3 finalFakeNormal = normalize(transformedVertex.xyz);
@@ -69,7 +69,7 @@ const FRAGMENT_SHADER = `
 const useInitWebGL = universe => {
   const canvasRef = useRef()
 
-  const [animationWrapper, setanimationWrapper] = useState(null);
+  const [animationWrapper, setanimationWrapper] = useState(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -153,8 +153,7 @@ const useInitWebGL = universe => {
     /*
      * Displays an individual object.
      */
-    const drawObject = (object) => {
-
+    const drawObject = object => {
       // Set up the rotation matrix.
       object.transform(Matrix())
       //object.transform(parentMatrix)
@@ -245,7 +244,6 @@ const useInitWebGL = universe => {
         window.requestAnimationFrame(advanceScene)
       }
     })
-
   }, [canvasRef, universe])
 
   return { canvasRef, animationWrapper }
@@ -254,7 +252,9 @@ const useInitWebGL = universe => {
 const ReactWebGL = props => {
   const { canvasRef, animationWrapper } = useInitWebGL(props.universe)
 
-  const handleClick = event => { animationWrapper.startAnimation() }
+  const handleClick = event => {
+    animationWrapper.startAnimation()
+  }
 
   // Auto-start animations
   useEffect(() => {
