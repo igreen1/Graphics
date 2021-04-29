@@ -5,7 +5,7 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
   const SphinxFactory = () => {
   
     // Define our body parts
-    const body = Our3DObject(OurMesh(Cylinder(.5, 2, 8, 8), false), [1, 1, .1])
+    const body = Our3DObject(OurMesh(Cylinder(.5, 2, 8, 8), false), [1.1, 1, .1])
 
     const EyeFactory = () => {
       const socket = Our3DObject(OurMesh(Sphere(1, 2, 8, 8), false), [0,0,0])
@@ -22,7 +22,7 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
       return eye
     }
 
-    const face = Our3DObject(OurMesh(Sphere(0.5, 5), false), [1, 1, .1])
+    const face = Our3DObject(OurMesh(Sphere(0.5, 5), false), [1.1, 1, .1])
     const mouth = Our3DObject(OurMesh(Sphere(.1, 5), false), [.3,.3,0])
     mouth.transform(MatrixLibrary.scaleMatrix(1,.5,1))
     const lefteye = EyeFactory()
@@ -31,9 +31,9 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
     const head = Our3DGroup([face, mouth, eyes])
 
     const ToeFactory = () => {
-      const toe1 = Our3DObject(OurMesh(Cylinder(.2, 2, 8, 8), false), [1, 1, .1])
-      const toe2 = Our3DObject(OurMesh(Cylinder(.2, 2, 8, 8), false), [1, 1, .1])
-      const toe3 = Our3DObject(OurMesh(Cylinder(.2, 2, 8, 8), false), [1, 1, .1])
+      const toe1 = Our3DObject(OurMesh(Cylinder(.2, 2, 8, 8), false), [1.1, 1, .1])
+      const toe2 = Our3DObject(OurMesh(Cylinder(.2, 2, 8, 8), false), [1.1, 1, .1])
+      const toe3 = Our3DObject(OurMesh(Cylinder(.2, 2, 8, 8), false), [1.1, 1, .1])
       toe1.transform(MatrixLibrary.translationMatrix(.35,0,0))
       toe3.transform(MatrixLibrary.translationMatrix(-.35,0,0))
       return Our3DGroup([toe1, toe2, toe3])
@@ -45,8 +45,8 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
     rightToes.transform(MatrixLibrary.scaleMatrix(.3,1,.3))
     const toes = Our3DGroup([leftToes, rightToes])
 
-    const leg1 = Our3DObject(OurMesh(Cylinder(.2, 3, 8, 8), false), [1, 1, .1])
-    const leg2 = Our3DObject(OurMesh(Cylinder(.2, 3, 8, 8), false), [1, 1, .1])
+    const leg1 = Our3DObject(OurMesh(Cylinder(.2, 3, 8, 8), false), [1.1, 1, .1])
+    const leg2 = Our3DObject(OurMesh(Cylinder(.2, 3, 8, 8), false), [1.1, 1, .1])
     const legs = Our3DGroup([leg1, leg2])
 
   
@@ -70,10 +70,9 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
     mouth.transform(MatrixLibrary.translationMatrix(.3, -.1, .4))
 
     const Sphinx = Our3DGroup([legs,body,head,toes])
-    //Sphinx.add(EyeFactory())
 
-    // Sphinx.transform(MatrixLibrary.scaleMatrix(.6,.6,.6))
-    // Sphinx.transform(MatrixLibrary.translationMatrix(-2,-1,0))
+    Sphinx.transform(MatrixLibrary.scaleMatrix(.6,.6,.6))
+    Sphinx.transform(MatrixLibrary.translationMatrix(-2,-1,0))
   
     return Sphinx;
   }

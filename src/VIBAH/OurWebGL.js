@@ -24,30 +24,29 @@ const VERTEX_SHADER = `
   varying vec4 finalVertexColor;
   uniform vec3 lightDirection;
   uniform vec3 lightColor;
+  uniform vec3 ambientLight;
   uniform mat4 matrix;
   uniform mat4 cameraMatrix;
   uniform mat4 projectionMatrix;
 
   void main(void) {
-    vec4 transformedVertex = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
-    vec4 transformedNormal = cameraMatrix * matrix * vec4(normals, 0.0);
-
-    vec3 lightVector = normalize(lightDirection - transformedVertex.xyz);
-    vec3 finalFakeNormal = normalize(transformedVertex.xyz);
-
-    float cosineBetween = dot(lightVector, finalFakeNormal);
-    float lightContribution = max(dot(lightVector, normalize(normals)),0.0);
-
-    vec3 reflection = 2.0 * cosineBetween * finalFakeNormal - lightVector;
-    vec3 specularBaseColor = vec3(1.0, 1.0, 1.0);
-    float shininess = 5.0;
-    float specularContribution = pow(max(dot(reflection, transformedVertex.xyz), 0.0), shininess);
-    if (cosineBetween < 0.0) {
-      specularBaseColor = vec3(0.0, 0.0, 0.0);
-    }
-
-    gl_Position = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
+    
+    // vec4 transformedNormal = cameraMatrix * matrix * vec4(normals, 0.0);
+    // vec3 finalFakeNormal = normalize(transformedVertex.xyz);
+    // float cosineBetween = dot(lightVector, finalFakeNormal);
+    // vec3 reflection = 2.0 * cosineBetween * finalFakeNormal - lightVector;
+    // vec3 specularBaseColor = vec3(1.0, 1.0, 1.0);
+    // float shininess = 5.0;
+    // float specularContribution = pow(max(dot(reflection, transformedVertex.xyz), 0.0), shininess);
+    // if (cosineBetween < 0.0) {
+    //   specularBaseColor = vec3(0.0, 0.0, 0.0);
+    // }
     //finalVertexColor = vec4(lightContribution * lightColor * vertexColor + specularContribution * specularBaseColor, 1.0);
+    
+    vec4 transformedVertex = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
+    vec3 lightVector = normalize(lightDirection - transformedVertex.xyz);
+    float lightContribution = max(dot(lightVector, normalize(normals)),0.0) + 0.5;
+    gl_Position = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
     finalVertexColor = vec4(lightContribution * lightColor * vertexColor, 1.0);
   }
 `

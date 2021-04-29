@@ -171,7 +171,7 @@ const ExampleUniverse = () => {
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
   universe.addToUniverse(camera)
 
-  const light = OurLight([-2, 0, 10], [11, 9.2, 9])
+  const light = OurLight([-2, 0, 10], [5, 5, 5])
   universe.addToUniverse(light)
 
   return universe
