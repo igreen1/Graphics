@@ -195,6 +195,8 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
 
 const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
   let matrix = Matrix()
+  let cachedColors;
+
   return {
     type: Our3DObject,
     mesh,
@@ -209,8 +211,15 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
     },
     set colors(newColorArray) {
       colorArray = newColorArray
+      cachedColors = this.calcColors()
     },
-    get colors() {
+    get colors(){
+      if(!cachedColors){
+        cachedColors = this.calcColors()
+      }
+      return cachedColors
+    },
+    calcColors: function() {
       let colors = []
       if (Array.isArray(colorArray[0]) && colorArray.length === this.mesh.facesByIndex.length) {
         if (!this.mesh.isWireframe) {
@@ -272,6 +281,7 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
     },
     setColors: function (newColorArray) {
       (colorArray = newColorArray)
+      cachedColors = this.calcColors()
       return this;
     },
     setRandomColors: function (n = 5, byVertex = true) {
@@ -285,6 +295,7 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
           colorArray.push([Math.random() * n, Math.random() * n, Math.random() * n])
         }
       }
+      cachedColors = this.calcColors()
       return this
     },
     setWireframe: function (newIsWireframe) {
