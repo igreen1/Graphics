@@ -47,6 +47,11 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     get isFaceted() {
       return isFaceted
     },
+    setIsFaceted: function(newVal){
+      isFaceted = newVal
+      this.updateCachedNormals()
+      return this;
+    },
     get normals() {
       if (!cachedNormals) {
         return this.updateCachedNormals() //cachedVertices takes too long to update??
@@ -286,7 +291,7 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
       cachedColors = this.calcColors()
       return this;
     },
-    setRandomColors: function (n = 5, byVertex = true) {
+    setRandomColors: function (n = 4, byVertex = true) {
       colorArray = []
       if (byVertex) {
         for (let i = 0; i < mesh.rawVertices.length; i++) {
@@ -299,6 +304,26 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
       }
       cachedColors = this.calcColors()
       return this
+    },
+    setIsFaceted: function(newVal){
+      mesh.setIsFaceted(newVal);
+      return this;
+    },
+    get isFaceted(){
+      return mesh.isFaceted
+    },
+    set isFaceted(newValue){
+      mesh.isFaceted = newValue
+    },
+    set isWireframe(newVal){
+      mesh.isWireframe = newVal;
+      cachedColors = this.calcColors()
+    },
+    get isWireframe(){
+      return mesh.isWireframe
+    },
+    toggleWireframe: function(){
+      this.setWireframe(this.isWireframe)
     },
     setWireframe: function (newIsWireframe) {
       mesh.setWireframe(newIsWireframe)
@@ -351,6 +376,9 @@ const Our3DGroup = (objects = []) => {
       group.forEach(object => object.setColors(newColorArray))
       return this;
     },
+    toggleWireframe: function(){
+      this.setWireframe(!this.isWireframe)
+    },
     setWireframe: function (newIsWireframe) {
       group.forEach(object => object.setWireframe(newIsWireframe))
       return this
@@ -362,6 +390,13 @@ const Our3DGroup = (objects = []) => {
     transformVertices: function (transformMatrix) {
       group.forEach(object => object.transformVertices(transformMatrix))
       return this
+    },
+    set isFaceted(newVal){
+      group.forEach(object => object.isFaceted = newVal)
+    },
+    setIsFaceted: function(newVal){
+      group.forEach(object => object.setIsFaceted(newVal))
+      return this;
     }
   }
 }
@@ -389,6 +424,7 @@ const OurCamera = (center, direction, projectionOptions, projectionType = Matrix
   const projectionMatrix = projectionType(...projectionOptions)
 
   return {
+    ...TransformableObject(),
     type: OurCamera,
     get matrix() {
       return projectionMatrix.multiply(matrix).toArray()
