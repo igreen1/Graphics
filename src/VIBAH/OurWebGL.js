@@ -36,7 +36,7 @@ const VERTEX_SHADER = `
     vec3 finalFakeNormal = normalize(transformedVertex.xyz);
 
     float cosineBetween = dot(lightVector, finalFakeNormal);
-    float lightContribution = max(dot(lightVector, finalFakeNormal),0.0);
+    float lightContribution = max(dot(lightVector, normalize(normals)),0.0);
 
     vec3 reflection = 2.0 * cosineBetween * finalFakeNormal - lightVector;
     vec3 specularBaseColor = vec3(1.0, 1.0, 1.0);
