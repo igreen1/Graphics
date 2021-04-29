@@ -267,7 +267,7 @@ const ReactWebGL = props => {
   const { canvasRef, animationWrapper } = useInitWebGL(props.universe)
 
   const handleClick = event => {
-    animationWrapper.startAnimation()
+    props.universe.click()
   }
 
   // Auto-start animations

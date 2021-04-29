@@ -139,6 +139,18 @@ const ExampleUniverse = () => {
   universe.addToUniverse(pyramid2)
   universe.addToUniverse(pyramid3)
 
+  universe.addAnimation({
+    isActive: false,
+    tick: function(progress) {
+      if(this.isActive){
+        pyramid.translate(0.01, 0.01, 0.01)
+      }
+    },
+    click: function() {
+      this.isActive = !this.isActive
+    }
+  })
+
   // Amazing background :)
   const stars = StarFactory()
   universe.addAnimation(Animations.RotateAboutPoint(stars, [0.79, 0.4, 1.9], [0.01, 0.01, 0.01]))
@@ -168,6 +180,16 @@ const ExampleUniverse = () => {
   const camelHerd = Our3DGroup().add(camel1).add(camel2)
   universe.addToUniverse(camelHerd)
 
+  let starrySky = Our3DGroup()
+
+  for (let i = 0; i < 8; i++) {
+    starrySky.add((StarFactory())
+      .scale(0.25, 0.25, 0.25)
+      .translate(Math.random() * 6 - 3, Math.random() * 2 - 1, Math.random() * 2 - 1)
+    )
+  }
+  universe.addToUniverse(starrySky)
+
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
   universe.addToUniverse(camera)
@@ -175,7 +197,7 @@ const ExampleUniverse = () => {
   const light = OurLight([-2, 0, 10], [5, 5, 5])
   universe.addToUniverse(light)
 
-  const AmbientLight = OurAmbientLight([1, 1, 1])
+  const AmbientLight = OurAmbientLight([2, 2, 1])
   universe.addToUniverse(AmbientLight)
 
   return universe

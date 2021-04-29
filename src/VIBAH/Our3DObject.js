@@ -199,6 +199,7 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
   let cachedColors;
 
   return {
+    ...TransformableObject(),
     type: Our3DObject,
     mesh,
     get vertices() {
