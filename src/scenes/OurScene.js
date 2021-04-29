@@ -54,9 +54,9 @@ const StarFactory = () => {
     ),
     [0, 1.5, 1]
   )
-  star.transformVertices(MatrixLibrary.scaleMatrix(0.7, 0.7, 0.7))
-  star.transformVertices(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  star.transformVertices(MatrixLibrary.translationMatrix(0.8, 0.4, 1.9))
+  star.transform(MatrixLibrary.scaleMatrix(0.7, 0.7, 0.7))
+  star.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
+  star.transform(MatrixLibrary.translationMatrix(0.8, 0.4, 1.9))
 
   const star2 = Our3DObject(
     OurMesh(

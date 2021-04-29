@@ -89,7 +89,7 @@ const Sandbox = () => {
 
 const OurSandbox = props => {
   const { universe } = Sandbox()
-  return ReactWebGL(universe)
+  return <ReactWebGL universe={universe} />
 }
 
 export { OurSandbox }
