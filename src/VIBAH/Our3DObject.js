@@ -16,10 +16,10 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     get vertices() {
       return cachedVertices
     },
-    set vertices(newCachedVertices){
+    set vertices(newCachedVertices) {
       cachedVertices = newCachedVertices
     },
-    updateCachedVertices: function(){
+    updateCachedVertices: function () {
       cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
     },
     get rawVertices() {
@@ -28,7 +28,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     get isWireframe() {
       return isWireframe
     },
-    set isWireframe(newIsWireframe){
+    set isWireframe(newIsWireframe) {
       isWireframe = newIsWireframe
       this.updateCachedVertices()
     },
@@ -48,12 +48,12 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       return isFaceted
     },
     get normals() {
-      if(!cachedNormals){
+      if (!cachedNormals) {
         return this.updateCachedNormals() //cachedVertices takes too long to update??
       }
       return cachedNormals
     },
-    updateCachedNormals: function(){
+    updateCachedNormals: function () {
       cachedVertices = isFaceted ? this.facetedNormals : this.smoothNormals
       return cachedVertices
     },
@@ -214,13 +214,13 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
       colorArray = newColorArray
       cachedColors = this.calcColors()
     },
-    get colors(){
-      if(!cachedColors){
+    get colors() {
+      if (!cachedColors) {
         cachedColors = this.calcColors()
       }
       return cachedColors
     },
-    calcColors: function() {
+    calcColors: function () {
       let colors = []
       if (Array.isArray(colorArray[0]) && colorArray.length === this.mesh.facesByIndex.length) {
         if (!this.mesh.isWireframe) {
@@ -373,6 +373,13 @@ const OurLight = (direction = [0, 0, 0], color = [1, 1, 1]) => {
   }
 }
 
+const OurAmbientLight = (color = [1, 1, 1]) => {
+  return {
+    type: OurAmbientLight,
+    color
+  }
+}
+
 const OurCamera = (center, direction, projectionOptions, projectionType = MatrixLibrary.perspectiveMatrix) => {
   let matrix = Matrix()
     .multiply(MatrixLibrary.translationMatrix(center[0], center[1], center[2]))
@@ -400,4 +407,4 @@ const OurCamera = (center, direction, projectionOptions, projectionType = Matrix
   }
 }
 
-export { OurMesh, Our3DGroup, Our3DObject, OurLight, OurCamera }
+export { OurAmbientLight, OurMesh, Our3DGroup, Our3DObject, OurLight, OurCamera }

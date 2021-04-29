@@ -12,6 +12,7 @@ import {
   Our3DObject,
   OurLight,
   OurCamera,
+  OurAmbientLight,
   MatrixLibrary,
   Animations,
 } from '../VIBAH/VIBAH'
@@ -173,6 +174,9 @@ const ExampleUniverse = () => {
 
   const light = OurLight([-2, 0, 10], [5, 5, 5])
   universe.addToUniverse(light)
+
+  const AmbientLight = OurAmbientLight([1, 1, 1])
+  universe.addToUniverse(AmbientLight)
 
   return universe
 }

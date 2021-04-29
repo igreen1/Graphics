@@ -25,8 +25,8 @@ const VERTEX_SHADER = `
   uniform vec3 lightDirection;
   uniform vec3 lightColor;
 
-  uniform vec3 lightsDirections[3];
-  uniform vec3 lightsColor[3];
+  // uniform vec3 lightsDirections[3];
+  // uniform vec3 lightsColor[3];
   uniform vec3 ambientLight;
 
   uniform mat4 matrix;
@@ -49,8 +49,9 @@ const VERTEX_SHADER = `
     
 
     // Directional lights
+    // vec3 reflectedLightColor;
     // for(int i = 0; i < 3; i++){
-
+    //   reflectedLightColor += max(dot(lightVector, normalize(normals)),0.0);
     // }
 
     vec4 transformedVertex = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
@@ -201,7 +202,7 @@ const useInitWebGL = universe => {
       gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, universe.scene.camera.matrix)
       gl.uniform3fv(lightDirection, new Float32Array(universe.scene.light.direction))
       gl.uniform3fv(lightColor, new Float32Array(universe.scene.light.color))
-      gl.uniform3fv(ambientLight, new Float32Array(universe.scene.ambientLight ? universe.scene.ambientLight : [10,10,10]))
+      gl.uniform3fv(ambientLight, new Float32Array(universe.scene.ambientLight ? universe.scene.ambientLight.color : [0,0,0]))
 
 
       // Display the objects.
