@@ -5,7 +5,7 @@ import { TransformableObject } from './OurTransformations'
 
 // TODO Caching for normals / vertices
 const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false) => {
-  let isWireframe = wireframe
+  let isWireframe = false
   let isFaceted = faceted
 
   let cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
@@ -34,7 +34,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     },
     setWireframe: function (newIsWireframe) {
       //backwards compatibility
-      (isWireframe = newIsWireframe)
+      isWireframe = newIsWireframe
       this.updateCachedVertices()
       return this;
     },
@@ -300,6 +300,7 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
     },
     setWireframe: function (newIsWireframe) {
       mesh.setWireframe(newIsWireframe)
+      cachedColors = this.calcColors()
       return this;
     },
     transform: function (transformMatrix) {
