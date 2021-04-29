@@ -171,6 +171,15 @@ const ExampleUniverse = () => {
   // From our cast
   const sphinx = SphinxFactory()
   universe.addToUniverse(sphinx)
+
+  universe.addAnimation({
+    tick: function(progress) {
+      //console.log(progress)
+      sphinx.translate(0.01,0,0)
+    }
+  })
+
+
   const camel1 = CamelFactory().scale(0.25, 0.25, 0.25).transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
   const camel2 = CamelFactory()
     .scale(0.25, 0.25, 0.25)
@@ -202,22 +211,26 @@ const ExampleUniverse = () => {
   const AmbientLight = OurAmbientLight([2, 2, 1])
   universe.addToUniverse(AmbientLight)
 
-  universe.addAnimation({
-    tick: function(){
-      camera.rotate(0, 0.01, 0)
-    }
-  })
+  const unleashCurse = () => {
+
+  }
+
+  // universe.addAnimation({
+  //   tick: function(){
+  //     camera.rotate(0, 0.01, 0)
+  //   }
+  // })
 
   // put the things we want to connect directly to react
   const thingsWeWant = {
     addAnimation: (universe.addAnimation)
   }
 
-  return {universe, thingsWeWant} 
+  return {universe, unleashCurse, thingsWeWant} 
 }
 
 const ExampleWebGL = props => {
-  const { universe, thingsWeWant} = ExampleUniverse()
+  const { universe, unleashCurse, thingsWeWant} = ExampleUniverse()
 //  return < ReactWebGL universe={universe} />
 
   thingsWeWant.addAnimation({
@@ -226,18 +239,26 @@ const ExampleWebGL = props => {
     }
   })
 
-  const dosomething = () => {
-    thingsWeWant.addAnimation({
-      tick: ()=>{
-        // this is an example of how to access inner stuff
-        console.log("Dynamically adding animation")
-      }
-    })
-  }
+  // unleashCurse.addAnimation({
+  //   tick:() => {
+
+  //   }
+  // })
+
+
+
+  // const dosomething = () => {
+  //   thingsWeWant.addAnimation({
+  //     tick: ()=>{
+  //       // this is an example of how to access inner stuff
+  //       console.log("Dynamically adding animation")
+  //     }
+  //   })
+  // }
   return <article>
     <ReactWebGL universe={universe.universe} />
     <section>
-      <button onClick={dosomething}>Do Something</button>
+      <button onClick={thingsWeWant}>Unleash Ancient Curse</button>
     </section>
   </article>
 }

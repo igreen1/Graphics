@@ -9,7 +9,7 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
 
     const EyeFactory = () => {
       const socket = Our3DObject(OurMesh(Sphere(1, 2, 8, 8), false), [0,0,0])
-      const sclera = Our3DObject(OurMesh(Sphere(1, 2, 8, 8), false), [1,1,1])
+      const sclera = Our3DObject(OurMesh(Sphere(1, 2, 8, 8), false), [10,10,10])
       const iris = Our3DObject(OurMesh(Sphere(1, 2, 8, 8), false), [.3,.8,.8])
       socket.transform(MatrixLibrary.scaleMatrix(1.5,1,1))
       sclera.transform(MatrixLibrary.scaleMatrix(1,.7,.7))
@@ -17,8 +17,8 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
       iris.transform(MatrixLibrary.scaleMatrix(.8,.5,.5))
       iris.transform(MatrixLibrary.translationMatrix(-.2,0,0))
       const eye = Our3DGroup([socket, sclera, iris])
-      eye.transform(MatrixLibrary.rotationMatrix(0,Math.PI/3,0))
-      eye.transform(MatrixLibrary.scaleMatrix(.1,.05,.1))
+      eye.transform(MatrixLibrary.rotationMatrix(0,Math.PI/2,0))
+      eye.transform(MatrixLibrary.scaleMatrix(.14,.07,.14))
       return eye
     }
 
@@ -51,28 +51,32 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
 
   
     // Orientate everything
-    legs.transform(MatrixLibrary.rotationMatrix(0,Math.PI/4,0))
-    head.transform(MatrixLibrary.rotationMatrix(0, Math.PI/4, 0))
-    body.transform(MatrixLibrary.rotationMatrix(0,Math.PI/4,0))
-    leftToes.transform(MatrixLibrary.rotationMatrix(0,Math.PI/4,0))
-    rightToes.transform(MatrixLibrary.rotationMatrix(0,Math.PI/4,0))
+    legs.rotate(0,Math.PI/4,0)
+    head.rotate(0, Math.PI/4, 0)
+    body.rotate(0,Math.PI/4,0)
+    leftToes.rotate(0,Math.PI/4,0)
+    rightToes.rotate(0,Math.PI/4,0)
+    lefteye.rotate(0,.3,0)
 
     // Put everything in position
-    leg1.transform(MatrixLibrary.translationMatrix(-4,-2,-1))
-    leg2.transform(MatrixLibrary.translationMatrix(-5,-2,-1))
-    lefteye.transform(MatrixLibrary.translationMatrix(.6,1.1,-.5))
-    righteye.transform(MatrixLibrary.translationMatrix(.1,1.1,-.5))
-    leftToes.transform(MatrixLibrary.translationMatrix(-2,-2,1))
-    rightToes.transform(MatrixLibrary.translationMatrix(-3,-2,1))
-    body.transform(MatrixLibrary.translationMatrix(-4.5,-1.5,-1))
-    head.transform(MatrixLibrary.translationMatrix(-3.2, -1, .3))
-    eyes.transform(MatrixLibrary.translationMatrix(0, -1, 1))
-    mouth.transform(MatrixLibrary.translationMatrix(.3, -.1, .4))
+    leg1.translate(-4,-2,-1)
+    leg2.translate(-5,-2,-1)
+    lefteye.translate(.42,1.1,-.78)
+    righteye.translate(.2,1.1,-.55)
+    leftToes.translate(-2,-2,1)
+    rightToes.translate(-3,-2,1)
+    body.translate(-4.5,-1.5,-1)
+    head.translate(-3.2, -1, .3)
+    eyes.translate(0, -1, 1)
+    mouth.translate(.4, -.1, .4)
 
     const Sphinx = Our3DGroup([legs,body,head,toes])
 
-    Sphinx.transform(MatrixLibrary.scaleMatrix(.6,.6,.6))
-    Sphinx.transform(MatrixLibrary.translationMatrix(-2,-1,0))
+    Sphinx.scale(.8,.8,.8)
+    Sphinx.translate(-2,-.9,-1)
+
+    //Sphinx.rotate(0,-.5,0)
+    //Sphinx.translate(0,0,1)
   
     return Sphinx;
   }
