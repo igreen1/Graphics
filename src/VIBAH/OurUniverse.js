@@ -56,8 +56,20 @@ const Scene = (cast) => {
       animations.push(newAnimation);
     },
     tick: (timeElapsed) => {
-      animations.forEach((anim) => anim.tick(timeElapsed))
+      animations.forEach((anim) => {
+        if (anim.tick) {
+          anim.tick(timeElapsed)
+        }
+      })
     },
+    click: (event) => {
+      animations.forEach((anim) => {
+        if (anim.click) {
+          anim.click(event)
+        }
+      })
+    }
+
 
   }
 }
@@ -79,6 +91,7 @@ const BigBang = (cast) => {
   }
 
   universe.tick = universe.scene.tick;
+  universe.click = universe.scene.click;
 
   return {
     universe,

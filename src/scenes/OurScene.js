@@ -171,6 +171,15 @@ const ExampleUniverse = () => {
 
   const shepherd = ShepherdFactory()
   universe.addToUniverse(shepherd)
+  let starrySky = Our3DGroup()
+
+  for (let i = 0; i < 8; i++) {
+    starrySky.add((StarFactory())
+      .scale(0.25, 0.25, 0.25)
+      .translate(Math.random() * 6 - 3, Math.random() * 2 - 1, Math.random() * 2 - 1)
+    )
+  }
+  universe.addToUniverse(starrySky)
 
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
@@ -179,7 +188,7 @@ const ExampleUniverse = () => {
   const light = OurLight([-2, 0, 10], [5, 5, 5])
   universe.addToUniverse(light)
 
-  const AmbientLight = OurAmbientLight([1, 1, 1])
+  const AmbientLight = OurAmbientLight([2, 2, 1])
   universe.addToUniverse(AmbientLight)
 
   return universe
