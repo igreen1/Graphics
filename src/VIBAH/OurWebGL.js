@@ -24,7 +24,11 @@ const VERTEX_SHADER = `
   varying vec4 finalVertexColor;
   uniform vec3 lightDirection;
   uniform vec3 lightColor;
+
+  uniform vec3 lightsDirections[3];
+  uniform vec3 lightsColor[3];
   uniform vec3 ambientLight;
+
   uniform mat4 matrix;
   uniform mat4 cameraMatrix;
   uniform mat4 projectionMatrix;
@@ -43,11 +47,17 @@ const VERTEX_SHADER = `
     // }
     //finalVertexColor = vec4(lightContribution * lightColor * vertexColor + specularContribution * specularBaseColor, 1.0);
     
+
+    // Directional lights
+    // for(int i = 0; i < 3; i++){
+
+    // }
+
     vec4 transformedVertex = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
     vec3 lightVector = normalize(lightDirection - transformedVertex.xyz);
-    float lightContribution = max(dot(lightVector, normalize(normals)),0.0) + 0.5;
+    float directionalLightContribution = max(dot(lightVector, normalize(normals)),0.0);
     gl_Position = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
-    finalVertexColor = vec4(lightContribution * lightColor * vertexColor, 1.0);
+    finalVertexColor = vec4((directionalLightContribution * lightColor + ambientLight) * vertexColor, 1.0);
   }
 `
 
@@ -149,6 +159,8 @@ const useInitWebGL = universe => {
     const lightDirection = gl.getUniformLocation(shaderProgram, 'lightDirection')
     const lightColor = gl.getUniformLocation(shaderProgram, 'lightColor')
 
+    const ambientLight = gl.getUniformLocation(shaderProgram, 'ambientLight')
+
     /*
      * Displays an individual object.
      */
@@ -189,6 +201,8 @@ const useInitWebGL = universe => {
       gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, universe.scene.camera.matrix)
       gl.uniform3fv(lightDirection, new Float32Array(universe.scene.light.direction))
       gl.uniform3fv(lightColor, new Float32Array(universe.scene.light.color))
+      gl.uniform3fv(ambientLight, new Float32Array(universe.scene.ambientLight ? universe.scene.ambientLight : [10,10,10]))
+
 
       // Display the objects.
       objectsToDraw.forEach(drawObject)
