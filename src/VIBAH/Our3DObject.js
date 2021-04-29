@@ -1,17 +1,26 @@
-import { toRawLineArray, toRawTriangleArray, Vector} from './OurUtilities'
+import { toRawLineArray, toRawTriangleArray, Vector } from './OurUtilities'
 import { Matrix, MatrixLibrary } from './OurMatrix'
+import { TransformableObject } from './OurTransformations'
 
+
+// TODO Caching for normals / vertices
 const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false) => {
-  let isWireframe = wireframe
+  let isWireframe = false
   let isFaceted = faceted
+
+  let cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
+  let cachedNormals = false;
 
   return {
     facesByIndex,
     get vertices() {
-      return isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
+      return cachedVertices
     },
-    set vertices(newVertices) {
-      vertices = newVertices
+    set vertices(newCachedVertices) {
+      cachedVertices = newCachedVertices
+    },
+    updateCachedVertices: function () {
+      cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
     },
     get rawVertices() {
       return vertices
@@ -19,14 +28,34 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     get isWireframe() {
       return isWireframe
     },
+    set isWireframe(newIsWireframe) {
+      isWireframe = newIsWireframe
+      this.updateCachedVertices()
+    },
+    setWireframe: function (newIsWireframe) {
+      //backwards compatibility
+      isWireframe = newIsWireframe
+      this.updateCachedVertices()
+      return this;
+    },
+
+
     set isFaceted(newFaceted) {
       isFaceted = newFaceted
+      this.updateCachedNormals()
     },
     get isFaceted() {
       return isFaceted
     },
     get normals() {
-      return isFaceted ? this.facetedNormals : this.smoothNormals
+      if (!cachedNormals) {
+        return this.updateCachedNormals() //cachedVertices takes too long to update??
+      }
+      return cachedNormals
+    },
+    updateCachedNormals: function () {
+      cachedVertices = isFaceted ? this.facetedNormals : this.smoothNormals
+      return cachedVertices
     },
 
     get normalsByFace() {
@@ -158,21 +187,17 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
             normalsByVertex.push(...this.normalsByRawVertex[i].elements)
           }
         })
-        console.log(normalsByVertex)
       }
       return normalsByVertex
     },
-    setWireframe: newIsWireframe => (isWireframe = newIsWireframe)
   }
-
-  // normals by face
-  // then if faceted, apply face per each vertex in parallel ds
-  // if smooth, apply normal to vertex by adding
-  // for lines, faces harder to reconstruct
 }
 
-const Our3DObject = (mesh, colorArray=[0,0,0]) => {
+
+const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
   let matrix = Matrix()
+  let cachedColors;
+
   return {
     type: Our3DObject,
     mesh,
@@ -187,8 +212,15 @@ const Our3DObject = (mesh, colorArray=[0,0,0]) => {
     },
     set colors(newColorArray) {
       colorArray = newColorArray
+      cachedColors = this.calcColors()
     },
     get colors() {
+      if (!cachedColors) {
+        cachedColors = this.calcColors()
+      }
+      return cachedColors
+    },
+    calcColors: function () {
       let colors = []
       if (Array.isArray(colorArray[0]) && colorArray.length === this.mesh.facesByIndex.length) {
         if (!this.mesh.isWireframe) {
@@ -248,8 +280,12 @@ const Our3DObject = (mesh, colorArray=[0,0,0]) => {
     get normals() {
       return mesh.normals
     },
-    setColors: newColorArray => (colorArray = newColorArray),
-    setRandomColors: (n=5, byVertex=true) => {
+    setColors: function (newColorArray) {
+      (colorArray = newColorArray)
+      cachedColors = this.calcColors()
+      return this;
+    },
+    setRandomColors: function (n = 5, byVertex = true) {
       colorArray = []
       if (byVertex) {
         for (let i = 0; i < mesh.rawVertices.length; i++) {
@@ -260,17 +296,27 @@ const Our3DObject = (mesh, colorArray=[0,0,0]) => {
           colorArray.push([Math.random() * n, Math.random() * n, Math.random() * n])
         }
       }
-
+      cachedColors = this.calcColors()
+      return this
     },
-    setWireframe: mesh.setWireframe,
-    transform: otherMatrix => (matrix = otherMatrix.multiply(matrix)),
-    transformVertices: otherMatrix =>
+    setWireframe: function (newIsWireframe) {
+      mesh.setWireframe(newIsWireframe)
+      cachedColors = this.calcColors()
+      return this;
+    },
+    transform: function (transformMatrix) {
+      matrix = transformMatrix.multiply(matrix);
+      return this;
+    },
+    transformVertices: function (otherMatrix) {
       (mesh.vertices = mesh.rawVertices.map(vertex =>
         otherMatrix
           .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
           .toArray()
           .slice(0, -1)
       ))
+      return this
+    }
   }
 }
 
@@ -278,6 +324,8 @@ const Our3DGroup = (objects = []) => {
   let group = objects
   let matrix = Matrix()
   return {
+    ...TransformableObject(),
+    get self() { return this },
     get group() {
       return group
     },
@@ -285,9 +333,35 @@ const Our3DGroup = (objects = []) => {
       return matrix
     },
     type: Our3DGroup,
-    add: object => group.push(object),
-    remove: object => group = group.filter(sceneObject => sceneObject !== object),
-    transform: transformMatrix => group.forEach(object => object.transform(transformMatrix))
+    add: function (object) {
+      group.push(object)
+      return this;
+    },
+    remove: function (object) {
+      group = group.filter(object => object.type !== Our3DGroup).filter(sceneObject => sceneObject !== object)
+      group = group.filter(object => object.type === Our3DGroup).forEach(nestedGroup => nestedGroup.remove(object))
+      return this;
+    },
+    transform: function (transformMatrix) {
+      group.forEach(object => object.transform(transformMatrix))
+      return this;
+    },
+    setColors: function (newColorArray) {
+      group.forEach(object => object.setColors(newColorArray))
+      return this;
+    },
+    setWireframe: function (newIsWireframe) {
+      group.forEach(object => object.setWireframe(newIsWireframe))
+      return this
+    },
+    setRandomColors: function (n = 5, byVertex = true) {
+      group.forEach(object => object.setRandomColors(n, byVertex))
+      return this
+    },
+    transformVertices: function (transformMatrix) {
+      group.forEach(object => object.transformVertices(transformMatrix))
+      return this
+    }
   }
 }
 
@@ -296,6 +370,13 @@ const OurLight = (direction = [0, 0, 0], color = [1, 1, 1]) => {
     type: OurLight,
     direction: direction,
     color: color
+  }
+}
+
+const OurAmbientLight = (color = [1, 1, 1]) => {
+  return {
+    type: OurAmbientLight,
+    color
   }
 }
 
@@ -314,10 +395,16 @@ const OurCamera = (center, direction, projectionOptions, projectionType = Matrix
     set matrix(newMatrix) {
       matrix = newMatrix
     },
-    translate: (x, y, z) => (matrix = matrix.multiply(MatrixLibrary.translationMatrix(x, y, z))),
-    rotate: (x, y, z) => (matrix = matrix.multiply(MatrixLibrary.rotationMatrix(x, y, z))),
+    translate: function (x, y, z) {
+      (matrix = matrix.multiply(MatrixLibrary.translationMatrix(x, y, z)))
+      return this
+    },
+    rotate: function (x, y, z) {
+      (matrix = matrix.multiply(MatrixLibrary.rotationMatrix(x, y, z)))
+      return this
+    },
     projectionMatrix
   }
 }
 
-export { OurMesh, Our3DGroup, Our3DObject, OurLight, OurCamera }
+export { OurAmbientLight, OurMesh, Our3DGroup, Our3DObject, OurLight, OurCamera }

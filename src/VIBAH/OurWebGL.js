@@ -24,31 +24,41 @@ const VERTEX_SHADER = `
   varying vec4 finalVertexColor;
   uniform vec3 lightDirection;
   uniform vec3 lightColor;
+
+  // uniform vec3 lightsDirections[3];
+  // uniform vec3 lightsColor[3];
+  uniform vec3 ambientLight;
+
   uniform mat4 matrix;
   uniform mat4 cameraMatrix;
   uniform mat4 projectionMatrix;
 
   void main(void) {
-    vec4 transformedVertex = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
-    vec4 transformedNormal = cameraMatrix * matrix * vec4(vertexPosition, 0.0);
-
-    vec3 lightVector = normalize(lightDirection - transformedVertex.xyz);
-    vec3 finalFakeNormal = normalize(transformedVertex.xyz);
-
-    float cosineBetween = dot(lightVector, finalFakeNormal);
-    float lightContribution = max(dot(lightVector, finalFakeNormal),0.0);
-
-    vec3 reflection = 2.0 * cosineBetween * finalFakeNormal - lightVector;
-    vec3 specularBaseColor = vec3(1.0, 1.0, 1.0);
-    float shininess = 5.0;
-    float specularContribution = pow(max(dot(reflection, transformedVertex.xyz), 0.0), shininess);
-    if (cosineBetween < 0.0) {
-      specularBaseColor = vec3(0.0, 0.0, 0.0);
-    }
-
-    gl_Position = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
+    
+    // vec4 transformedNormal = cameraMatrix * matrix * vec4(normals, 0.0);
+    // vec3 finalFakeNormal = normalize(transformedVertex.xyz);
+    // float cosineBetween = dot(lightVector, finalFakeNormal);
+    // vec3 reflection = 2.0 * cosineBetween * finalFakeNormal - lightVector;
+    // vec3 specularBaseColor = vec3(1.0, 1.0, 1.0);
+    // float shininess = 5.0;
+    // float specularContribution = pow(max(dot(reflection, transformedVertex.xyz), 0.0), shininess);
+    // if (cosineBetween < 0.0) {
+    //   specularBaseColor = vec3(0.0, 0.0, 0.0);
+    // }
     //finalVertexColor = vec4(lightContribution * lightColor * vertexColor + specularContribution * specularBaseColor, 1.0);
-    finalVertexColor = vec4(lightContribution * lightColor * vertexColor, 1.0);
+    
+
+    // Directional lights
+    // vec3 reflectedLightColor;
+    // for(int i = 0; i < 3; i++){
+    //   reflectedLightColor += max(dot(lightVector, normalize(normals)),0.0);
+    // }
+
+    vec4 transformedVertex = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
+    vec3 lightVector = normalize(lightDirection - transformedVertex.xyz);
+    float directionalLightContribution = max(dot(lightVector, normalize(normals)),0.0);
+    gl_Position = cameraMatrix * matrix * vec4(vertexPosition, 1.0);
+    finalVertexColor = vec4((directionalLightContribution * lightColor + ambientLight) * vertexColor, 1.0);
   }
 `
 
@@ -66,10 +76,10 @@ const FRAGMENT_SHADER = `
     gl_FragColor = vec4((1.0 - gl_FragCoord.z) * finalVertexColor.rgb, 1.0);
   }
 `
-const InitWebGL = universe => {
+const useInitWebGL = universe => {
   const canvasRef = useRef()
 
-  const [animationWrapper, setanimationWrapper] = useState(null);
+  const [animationWrapper, setanimationWrapper] = useState(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -150,11 +160,12 @@ const InitWebGL = universe => {
     const lightDirection = gl.getUniformLocation(shaderProgram, 'lightDirection')
     const lightColor = gl.getUniformLocation(shaderProgram, 'lightColor')
 
+    const ambientLight = gl.getUniformLocation(shaderProgram, 'ambientLight')
+
     /*
      * Displays an individual object.
      */
-    const drawObject = (object) => {
-
+    const drawObject = object => {
       // Set up the rotation matrix.
       object.transform(Matrix())
       //object.transform(parentMatrix)
@@ -191,6 +202,8 @@ const InitWebGL = universe => {
       gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, universe.scene.camera.matrix)
       gl.uniform3fv(lightDirection, new Float32Array(universe.scene.light.direction))
       gl.uniform3fv(lightColor, new Float32Array(universe.scene.light.color))
+      gl.uniform3fv(ambientLight, new Float32Array(universe.scene.ambientLight ? universe.scene.ambientLight.color : [0,0,0]))
+
 
       // Display the objects.
       objectsToDraw.forEach(drawObject)
@@ -245,16 +258,24 @@ const InitWebGL = universe => {
         window.requestAnimationFrame(advanceScene)
       }
     })
-
   }, [canvasRef, universe])
 
   return { canvasRef, animationWrapper }
 }
 
-const ReactWebGL = universe => {
-  const { canvasRef, animationWrapper } = InitWebGL(universe)
+const ReactWebGL = props => {
+  const { canvasRef, animationWrapper } = useInitWebGL(props.universe)
 
-  const handleClick = event => { animationWrapper.startAnimation() }
+  const handleClick = event => {
+    animationWrapper.startAnimation()
+  }
+
+  // Auto-start animations
+  useEffect(() => {
+    if (animationWrapper) {
+      animationWrapper.startAnimation()
+    }
+  }, [animationWrapper])
 
   return (
     <article>
@@ -265,4 +286,4 @@ const ReactWebGL = universe => {
   )
 }
 
-export { InitWebGL, ReactWebGL }
+export { useInitWebGL, ReactWebGL }

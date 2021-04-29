@@ -1,27 +1,4 @@
-// Import our library
-import {
-  Geometries,
-  ReactWebGL,
-  BigBang,
-  OurMesh,
-  Our3DGroup,
-  Our3DObject,
-  OurLight,
-  OurCamera,
-  MatrixLibrary,
-  Animations
-} from '../VIBAH/VIBAH'
-
-// const SphereFactory = (isColoredByVertex = true) => {
-//   const sphere = Our3DObject(OurMesh(Geometries.Sphere(0.3, 5), false), [0, 0, 0]);
-//   sphere.setRandomColors(10);
-//   sphere.transform(MatrixLibrary.scaleMatrix(2, 2, 2))
-//   sphere.transform(MatrixLibrary.rotationMatrix(0, 0, 0.5))
-//   sphere.transform(MatrixLibrary.translationMatrix(0, -.2, .5))
-
-//   return sphere;
-
-// }
+import { Geometries, OurMesh, Our3DGroup, Our3DObject, MatrixLibrary } from '../VIBAH/VIBAH'
 
 const CamelFactory = (fidelity = 1) => {
   // Define our body parts
@@ -60,7 +37,7 @@ const CamelFactory = (fidelity = 1) => {
   // Apply a camel brown colour
   const Camel = Our3DGroup(
     [head, neck, body, legs, humps].map(shape => {
-      shape.setColors([193, 154, 107].map(rgb => rgb / 50))
+      shape.setColors([193, 154, 107].map(rgb => rgb / 200))
       return shape
     })
   )
@@ -68,28 +45,4 @@ const CamelFactory = (fidelity = 1) => {
   return Camel
 }
 
-const Sandbox = () => {
-  const universe = BigBang()
-
-  // quick test for setup
-  const camel = CamelFactory()
-  universe.addToUniverse(camel)
-
-  // We have to see something!
-  const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
-  universe.addToUniverse(camera)
-
-  const light = OurLight([-2, 0, 10], [1, 1, 1])
-  universe.addToUniverse(light)
-
-  universe.addAnimation(Animations.RotateAboutPoint(camel, [0, 0, 0], [0.01, 0.01, 0.01]))
-
-  return universe
-}
-
-const OurSandbox = props => {
-  const { universe } = Sandbox()
-  return <ReactWebGL universe={universe} />
-}
-
-export { OurSandbox }
+export { CamelFactory }

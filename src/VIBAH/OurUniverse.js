@@ -1,4 +1,4 @@
-import { Our3DGroup, Our3DObject, OurLight, OurCamera } from './Our3DObject'
+import { Our3DGroup, Our3DObject, OurLight, OurCamera, OurAmbientLight } from './Our3DObject'
 import { useState } from 'react'
 
 const Scene = (cast) => {
@@ -10,6 +10,7 @@ const Scene = (cast) => {
 
   let light = OurLight([1, 1, 1], [1, 1, 1]); // Default light
   let camera = OurCamera([0, 0, -5], [0, 0, 0], [.6, -.5, .5, -.5, 1, 10]); // Default camera
+  let ambientLight = OurAmbientLight([0, 0, 0]);
 
   const animations = []
 
@@ -23,6 +24,8 @@ const Scene = (cast) => {
       light = object
     } else if (object.type === OurCamera) {
       camera = object
+    } else if (object.type === OurAmbientLight) {
+      ambientLight = object;
     }
   }
 
@@ -35,6 +38,8 @@ const Scene = (cast) => {
       light = OurLight([0, 0, 0], [0, 0, 0]); //easier to make a black light than a null object
     } else if (object.type === OurCamera && object === camera) {
       camera = OurCamera([0, 0, 0], [0, 0, 0], [0, 0, 0, 0, 0, 0]); // should show nothing without breaking the app
+    } else if (object.type === OurAmbientLight) {
+      ambientLight = OurAmbientLight([0, 0, 0]);
     }
   }
 
@@ -46,12 +51,13 @@ const Scene = (cast) => {
     get light() { return light },
     get camera() { return camera },
     get animation() { return animations; },
+    get ambientLight() { return ambientLight },
     addAnimation: (newAnimation) => {
       animations.push(newAnimation);
     },
     tick: (timeElapsed) => {
       animations.forEach((anim) => anim.tick(timeElapsed))
-    }
+    },
 
   }
 }
@@ -73,10 +79,6 @@ const BigBang = (cast) => {
   }
 
   universe.tick = universe.scene.tick;
-
-  // universe.tick = (progress) => {
-  //   console.log("They're horrible bugs");
-  // }
 
   return {
     universe,

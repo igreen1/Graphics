@@ -85,6 +85,11 @@ const MatrixLibrary = {
       [                    0,                     0,    -((far+near)/(far-near)), -((2*far*near)/(far-near))],
       [                    0,                     0,                        -1,                        0]
     ])
+  },
+  rotateAboutPoint : (point = [0, 0, 0], rotation = [0, 0, 0]) => {
+    return MatrixLibrary.translationMatrix(...point)
+      .multiply(MatrixLibrary.rotationMatrix(...rotation))
+      .multiply(MatrixLibrary.translationMatrix(...point.map(element => -element)))
   }
 }
 
@@ -144,7 +149,6 @@ const Matrix = initialValue => {
     ) {
       throw new Error('Cannot multiply matrices ')
     } else if (otherMatrix.elements.length !== elements[0].length) {
-      console.log('Matrix of size', rows, 'x', columns, 'is incompatible for multiplication with a matrix of size', otherMatrix.getRows(), 'x', otherMatrix.getColumns())
       throw new Error('Matrix is incompatible for multiplication')
     }
 
