@@ -16,11 +16,11 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     get vertices() {
       return cachedVertices
     },
-    set vertices(newCachedVertices) {
+    set vertices(newCachedVertices){
       cachedVertices = newCachedVertices
     },
-    set vertices(newVertices) {
-      vertices = newVertices
+    updateCachedVertices: function(){
+      cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
     },
     get rawVertices() {
       return vertices
@@ -28,16 +28,18 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     get isWireframe() {
       return isWireframe
     },
-    set isWireframe(newIsWireframe) {
+    set isWireframe(newIsWireframe){
       isWireframe = newIsWireframe
       this.updateCachedVertices()
     },
     setWireframe: function (newIsWireframe) {
-      // Kept for backwards compatibility post-refactor
+      //backwards compatibility
       (isWireframe = newIsWireframe)
       this.updateCachedVertices()
       return this;
     },
+
+
     set isFaceted(newFaceted) {
       isFaceted = newFaceted
       this.updateCachedNormals()
@@ -46,17 +48,13 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       return isFaceted
     },
     get normals() {
-      if (!cachedNormals) {
-        cachedNormals = this.isFaceted ? this.facetedNormals : this.smoothNormals
+      if(!cachedNormals){
+        this.updateCachedNormals()
       }
       return cachedNormals
     },
-
-    updateCachedVertices: function () {
-      cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
-    },
-    updateCachedNormals: function () {
-      cachedNormals = isFaceted ? this.facetedNormals : this.smoothNormals
+    updateCachedNormals: function(){
+      cachedVertices = isFaceted ? this.facetedNormals : this.smoothNormals
     },
 
     get normalsByFace() {
