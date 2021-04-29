@@ -9,7 +9,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
   let isFaceted = faceted
 
   let cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
-  let cachedNormals;
+  let cachedNormals = false;
 
   return {
     facesByIndex,
@@ -49,12 +49,13 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     },
     get normals() {
       if(!cachedNormals){
-        this.updateCachedNormals()
+        return this.updateCachedNormals() //cachedVertices takes too long to update??
       }
       return cachedNormals
     },
     updateCachedNormals: function(){
       cachedVertices = isFaceted ? this.facetedNormals : this.smoothNormals
+      return cachedVertices
     },
 
     get normalsByFace() {
