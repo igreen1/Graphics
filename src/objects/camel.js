@@ -34,8 +34,12 @@ const CamelFactory = (fidelity = 1) => {
   hump1.transform(MatrixLibrary.translationMatrix(0, -1.3, 0))
   hump2.transform(MatrixLibrary.translationMatrix(1.3, -1.3, 0))
 
+  // Apply a camel brown colour
   const Camel = Our3DGroup(
-    [head, neck, body, legs, humps]
+    [head, neck, body, legs, humps].map(shape => {
+      shape.setColors([193, 154, 107].map(rgb => rgb / 50))
+      return shape
+    })
   )
   return Camel
 }
