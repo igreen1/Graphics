@@ -37,7 +37,7 @@ const CamelFactory = (fidelity = 1) => {
   // Apply a camel brown colour
   const Camel = Our3DGroup(
     [head, neck, body, legs, humps].map(shape => {
-      shape.setColors([193, 154, 107].map(rgb => rgb / 50))
+      shape.setColors([193, 154, 107].map(rgb => rgb / 100))
       return shape
     })
   )
