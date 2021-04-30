@@ -172,16 +172,29 @@ const ExampleUniverse = () => {
   const sphinx = SphinxFactory()
   universe.addToUniverse(sphinx)
 
-  console.log(sphinx)
-  console.log(sphinx.getObjectByName('body'))
-  console.log(sphinx.getObjectByName('head').getObjectByName('eyes'))
-
-  // universe.addAnimation({
-  //   tick: function (progress) {
-  //     //console.log(progress)
-  //     sphinx.getObjectByName('eyes').translate(0.01, 0, 0)
-  //   }
-  // })
+  universe.addAnimation({
+    displacement:0,
+    movingLeft: false,
+    tick: function (progress) {
+      
+      if (!this.movingLeft) {
+        sphinx.getObjectByName('head').getObjectByName('eyes').translate(0.001, 0, 0)
+        this.displacement++
+        if (this.displacement === 100) {
+          this.displacement = 0
+          this.movingLeft = true
+        }
+      } else {
+        sphinx.getObjectByName('head').getObjectByName('eyes').translate(-0.001, 0, 0)
+        this.displacement++
+        if (this.displacement === 100) {
+          this.displacement = 0
+          this.movingLeft = false
+        }
+      }
+      
+    }
+  })
 
 
   const camel1 = CamelFactory()
