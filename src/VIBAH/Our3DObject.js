@@ -47,7 +47,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     get isFaceted() {
       return isFaceted
     },
-    setIsFaceted: function(newVal){
+    setIsFaceted: function (newVal) {
       isFaceted = newVal
       this.updateCachedNormals()
       return this;
@@ -199,13 +199,14 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
 }
 
 
-const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
+const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
   let matrix = Matrix()
   let cachedColors;
 
   return {
     ...TransformableObject(),
     type: Our3DObject,
+    name,
     mesh,
     get vertices() {
       return mesh.vertices
@@ -305,24 +306,24 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
       cachedColors = this.calcColors()
       return this
     },
-    setIsFaceted: function(newVal){
+    setIsFaceted: function (newVal) {
       mesh.setIsFaceted(newVal);
       return this;
     },
-    get isFaceted(){
+    get isFaceted() {
       return mesh.isFaceted
     },
-    set isFaceted(newValue){
+    set isFaceted(newValue) {
       mesh.isFaceted = newValue
     },
-    set isWireframe(newVal){
+    set isWireframe(newVal) {
       mesh.isWireframe = newVal;
       cachedColors = this.calcColors()
     },
-    get isWireframe(){
+    get isWireframe() {
       return mesh.isWireframe
     },
-    toggleWireframe: function(){
+    toggleWireframe: function () {
       this.setWireframe(this.isWireframe)
     },
     setWireframe: function (newIsWireframe) {
@@ -346,7 +347,7 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0]) => {
   }
 }
 
-const Our3DGroup = (objects = []) => {
+const Our3DGroup = (objects = [], name = 'A 3D Group') => {
   let group = objects
   let matrix = Matrix()
   return {
@@ -376,7 +377,7 @@ const Our3DGroup = (objects = []) => {
       group.forEach(object => object.setColors(newColorArray))
       return this;
     },
-    toggleWireframe: function(){
+    toggleWireframe: function () {
       this.setWireframe(!this.isWireframe)
     },
     setWireframe: function (newIsWireframe) {
@@ -391,12 +392,19 @@ const Our3DGroup = (objects = []) => {
       group.forEach(object => object.transformVertices(transformMatrix))
       return this
     },
-    set isFaceted(newVal){
+    set isFaceted(newVal) {
       group.forEach(object => object.isFaceted = newVal)
     },
-    setIsFaceted: function(newVal){
+    setIsFaceted: function (newVal) {
       group.forEach(object => object.setIsFaceted(newVal))
       return this;
+    },
+    getObjectByName: function (searchName) {
+      const results = []
+      results.push(group.filter(object => object.type === Our3DObject).filter(object => object.name === searchName))
+      results.push(group.filter(object => object.type === Our3DGroup).map(object => object.getObjectByName(searchName)))
+      
+      return results.length === 1 ? results[0] : results
     }
   }
 }
