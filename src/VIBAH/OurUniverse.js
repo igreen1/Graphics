@@ -16,10 +16,8 @@ const Scene = (cast) => {
 
   // Recursion requires functions to be declared outside object
   const add = (object) => {
-    if (object.type === Our3DObject) {
+    if (object.type === Our3DObject || object.type === Our3DGroup) {
       objectsToDraw.add(object)
-    } else if (object.type === Our3DGroup) {
-      object.group.forEach(add)
     } else if (object.type === OurLight) {
       light = object
     } else if (object.type === OurCamera) {
@@ -30,10 +28,8 @@ const Scene = (cast) => {
   }
 
   const remove = (object) => {
-    if (object.type === Our3DObject) {
+    if (object.type === Our3DObject || object.type === Our3DGroup) {
       objectsToDraw.remove(object)
-    } else if (object.type === Our3DGroup) {
-      object.group.forEach(remove)
     } else if (object.type === OurCamera && object === light) {
       light = OurLight([0, 0, 0], [0, 0, 0]); //easier to make a black light than a null object
     } else if (object.type === OurCamera && object === camera) {
@@ -44,7 +40,9 @@ const Scene = (cast) => {
   }
 
   return {
-    get objectsToDraw() { return objectsToDraw.group },
+    get objectsToDraw() { 
+      return objectsToDraw.flatGroup
+    },
     add,
     remove,
     transform: objectsToDraw.transform,
