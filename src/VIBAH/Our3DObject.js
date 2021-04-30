@@ -368,6 +368,7 @@ const Our3DGroup = (objects = [], name = 'A 3D Group') => {
     get group() {
       return group
     },
+    name,
     set change(newVal){
       this.group.forEach(object => object.change = newVal)
     },
@@ -424,7 +425,7 @@ const Our3DGroup = (objects = [], name = 'A 3D Group') => {
     },
     getObjectByName: function (searchName) {
       if (group.find(element => element.name === searchName))
-        return group.filter(element => element.type === Our3DObject).find(element => element.name === searchName)
+        return group.filter(element => element.type === Our3DObject || element.type === Our3DGroup).find(element => element.name === searchName)
       else {
         return group.filter(element => element.type === Our3DGroup).map(element => element.getObjectByName(searchName))
           .filter(element => element !== undefined).flatMap(element => element)[0]

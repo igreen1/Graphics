@@ -172,12 +172,16 @@ const ExampleUniverse = () => {
   const sphinx = SphinxFactory()
   universe.addToUniverse(sphinx)
 
-  universe.addAnimation({
-    tick: function (progress) {
-      //console.log(progress)
-      sphinx.translate(0.01, 0, 0)
-    }
-  })
+  console.log(sphinx)
+  console.log(sphinx.getObjectByName('body'))
+  console.log(sphinx.getObjectByName('head').getObjectByName('eyes'))
+
+  // universe.addAnimation({
+  //   tick: function (progress) {
+  //     //console.log(progress)
+  //     sphinx.getObjectByName('eyes').translate(0.01, 0, 0)
+  //   }
+  // })
 
 
   const camel1 = CamelFactory()

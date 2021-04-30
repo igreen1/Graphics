@@ -5,7 +5,7 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
   const SphinxFactory = () => {
   
     // Define our body parts
-    const body = Our3DObject(OurMesh(Cylinder(.5, 2, 8, 8), false), [1.1, 1, .1])
+    const body = Our3DObject(OurMesh(Cylinder(.5, 2, 8, 8), false), [1.1, 1, .1], 'body')
 
     const EyeFactory = () => {
       const socket = Our3DObject(OurMesh(Sphere(1, 2, 8, 8), false), [0,0,0])
@@ -24,11 +24,12 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
 
     const face = Our3DObject(OurMesh(Sphere(0.5, 5), false), [1.1, 1, .1])
     const mouth = Our3DObject(OurMesh(Sphere(.1, 5), false), [.3,.3,0])
-    mouth.transform(MatrixLibrary.scaleMatrix(1,.5,1))
+    mouth.scale(1,.5,.5)
+  
     const lefteye = EyeFactory()
     const righteye = EyeFactory()
-    const eyes = Our3DGroup([lefteye, righteye])
-    const head = Our3DGroup([face, mouth, eyes])
+    const eyes = Our3DGroup([lefteye, righteye], 'eyes')
+    const head = Our3DGroup([face, mouth, eyes], 'head')
 
     const ToeFactory = () => {
       const toe1 = Our3DObject(OurMesh(Cylinder(.2, 2, 8, 8), false), [1.1, 1, .1])
@@ -68,7 +69,7 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
     body.translate(-4.5,-1.5,-1)
     head.translate(-3.2, -1, .3)
     eyes.translate(0, -1, 1)
-    mouth.translate(.4, -.1, .4)
+    mouth.translate(.35, -.1, .3)
 
     const Sphinx = Our3DGroup([legs,body,head,toes])
 
