@@ -8,20 +8,51 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
   let isWireframe = false
   let isFaceted = faceted
 
-  let cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
-  let cachedNormals = false;
+  let cachedVertices = false; // the vertices to return
+  let cachedNormals = false; // the normals to return
+
+  let cachedFacetedWireframeNormals = false; // the normals when faceted and isWireframe
+  let cachedSmoothWireframeNormals = false; // normals when smooth and isWireframe
+  let cachedFacetedFacesNormals = false; // normals when faceted and not is wireframe
+  let cachedSmoothFacesNormals = false // normals when smooth and not is wireframe
+
+  let cachedWireframeVertices = false; // vertices when wireframe
+  let cachedNotWireframeVertices = false; // vertices when not is wireframe
 
   return {
     change: true,
     facesByIndex,
+    facesChanged: false,
     get vertices() {
+      if (!cachedVertices) {
+        this.updateCachedVertices()
+      }
       return cachedVertices
     },
     set vertices(newCachedVertices) {
       cachedVertices = newCachedVertices
     },
     updateCachedVertices: function () {
-      cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
+      // We assume that those who change between wireframe and not
+      // are going to do so multiple times
+      // this is a bold assumption but,,, memory is cheaper than these vertex calculations
+      // however, this is a moderately more efficient calculation than normals
+      // so only two caches
+      if (isWireframe) {
+        if (!cachedWireframeVertices || this.facesChanged) {
+          cachedWireframeVertices = toRawLineArray({ vertices, facesByIndex })
+          this.facesChanged = false
+        }
+        cachedVertices = cachedWireframeVertices
+      } else {
+        if (!cachedNotWireframeVertices || this.facesChanged) {
+          cachedNotWireframeVertices = toRawTriangleArray({ vertices, facesByIndex })
+          this.facesChanged = false
+        }
+        cachedVertices = cachedNotWireframeVertices
+      }
+      // this.vertices = cachedVertices
+      // cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
       this.change = true
     },
     get rawVertices() {
@@ -33,16 +64,19 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     set isWireframe(newIsWireframe) {
       isWireframe = newIsWireframe
       this.updateCachedVertices()
+      this.updateCachedNormals()
     },
     setWireframe: function (newIsWireframe) {
       //backwards compatibility
       isWireframe = newIsWireframe
       this.updateCachedVertices()
+      this.updateCachedNormals()
       return this;
     },
 
 
     set isFaceted(newFaceted) {
+      this.facesChanged = true
       isFaceted = newFaceted
       this.updateCachedNormals()
     },
@@ -50,21 +84,53 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       return isFaceted
     },
     setIsFaceted: function (newVal) {
+      this.facesChanged = true
       isFaceted = newVal
       this.updateCachedNormals()
       return this;
     },
     get normals() {
       if (!cachedNormals) {
-        return this.updateCachedNormals() //cachedVertices takes too long to update??
+        this.updateCachedNormals()
       }
       return cachedNormals
     },
     updateCachedNormals: function () {
-      cachedVertices = isFaceted ? this.facetedNormals : this.smoothNormals
+      // If user switches, higher likelihood they will switch multiple times
+      // normals calculations are SLOW
+      // so just keep the cache, memory is cheaper than normal calculations
+      // caches ALL normals if they are requested once
+
+      if (this.ifFaceted) {
+        if (this.isWireframe) {
+          if (!cachedFacetedWireframeNormals) {
+            cachedFacetedWireframeNormals = this.facetedNormals
+          }
+          cachedNormals = cachedFacetedWireframeNormals
+        } else {
+          if (!cachedFacetedFacesNormals) {
+            cachedFacetedFacesNormals = this.facetedNormals
+          }
+          cachedNormals = cachedFacetedFacesNormals;
+        }
+      } else {
+        if (this.isWireframe) {
+          if (!cachedSmoothWireframeNormals) {
+            cachedSmoothWireframeNormals = this.smoothNormals
+          }
+          cachedNormals = cachedSmoothWireframeNormals
+
+        } else {
+          if (!cachedSmoothFacesNormals) {
+            cachedSmoothFacesNormals = this.smoothNormals
+          }
+          cachedNormals = cachedSmoothFacesNormals;
+        }
+      }
       this.change = true
-      return cachedVertices
+      // cachedNormals = isFaceted ? this.facetedNormals : this.smoothNormals
     },
+
 
     get normalsByFace() {
       // Kept purely for its educational value!
@@ -211,11 +277,11 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
     ...TransformableObject(),
     type: Our3DObject,
     // change: true,
-    set change(newVal){
+    set change(newVal) {
       change = newVal
       this.mesh.change = newVal
     },
-    get change(){
+    get change() {
       return change
     },
     name,
@@ -318,6 +384,9 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
       cachedColors = this.calcColors()
       return this
     },
+    toggleFaceted: function () {
+      this.setIsFaceted(!this.isFaceted)
+    },
     setIsFaceted: function (newVal) {
       mesh.setIsFaceted(newVal);
       return this;
@@ -368,12 +437,20 @@ const Our3DGroup = (objects = [], name = 'A 3D Group') => {
     get group() {
       return group
     },
-    set change(newVal){
+    get flatGroup() {
+      const results = [].concat(this.group.filter(element => element.type === Our3DObject).flatMap(element => element))
+        .concat(this.group.filter(element => element.type === Our3DGroup).map(element => element.flatGroup).flatMap(element => element))
+      return results;
+    },
+    set group(newVal) {
+      group = newVal
+    },
+    set change(newVal) {
       this.group.forEach(object => object.change = newVal)
     },
-    get change(){
-      for(let object of group){
-        if (object.change){
+    get change() {
+      for (let object of group) {
+        if (object.change) {
           return true
         }
       }
@@ -388,8 +465,8 @@ const Our3DGroup = (objects = [], name = 'A 3D Group') => {
       return this;
     },
     remove: function (object) {
-      group = group.filter(object => object.type !== Our3DGroup).filter(sceneObject => sceneObject !== object)
-      group = group.filter(object => object.type === Our3DGroup).forEach(nestedGroup => nestedGroup.remove(object))
+      this.group = this.group.filter(groupObject => groupObject !== object)
+      this.group.filter(element => element.type === Our3DGroup).forEach(nestedGroup => nestedGroup.remove(object))
       return this;
     },
     transform: function (transformMatrix) {
@@ -420,6 +497,10 @@ const Our3DGroup = (objects = [], name = 'A 3D Group') => {
     },
     setIsFaceted: function (newVal) {
       group.forEach(object => object.setIsFaceted(newVal))
+      return this;
+    },
+    toggleFaceted: function () {
+      group.forEach(object => object.toggleFaceted())
       return this;
     },
     getObjectByName: function (searchName) {
