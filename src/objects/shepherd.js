@@ -26,7 +26,7 @@ const ShepherdFactory = () => {
   arm.transform(MatrixLibrary.rotationMatrix(0,Math.PI/2,0))
 
 
-  let staff = Our3DGroup()
+  let staff = Our3DGroup([],"Staff")
 
   let staffBase = Our3DObject(OurMesh(Cylinder(.1, 3.5, 8, 32), false), [1.21, .63, .13])
   staffBase.transform(MatrixLibrary.rotationMatrix(Math.PI/2,0,0))

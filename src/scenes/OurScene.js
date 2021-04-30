@@ -220,6 +220,43 @@ const ExampleUniverse = () => {
 
   }
 
+  const earthquake = {
+    timeElapsed: 3000,
+    toggleEarthquake: function () {
+      this.timeElapsed = 0
+    },
+    tick: function(progress) {
+      console.log(this.timeElapsed)
+      if (this.timeElapsed < 3000) {
+        this.timeElapsed = this.timeElapsed + progress
+        universe.universe.scene.objectsToDraw.forEach((object) =>
+          object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005))
+      }
+    }
+  }
+
+  universe.addAnimation(earthquake)
+
+  const shepherdAbilities = {
+    handRaised: false,
+    timeElapsed: 0,
+    toggleFlying: function () {
+      this.handRaised = !this.handRaised
+    },
+    objectsToAffect: [shepherd.getObjectByName('hook1')],
+    tick: function(progress) {
+      console.log(this.objectsToAffect[0])
+      console.log("JI")
+      if (this.timeElapsed < 3000) {
+        this.timeElapsed = this.timeElapsed + progress
+        universe.universe.scene.objectsToDraw.forEach((object) =>
+          object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005))
+      }
+    }
+  }
+
+  universe.addAnimation(shepherdAbilities)
+
   const camelInternalAnimation = {
     camelHeadBob: false,
     timeElapsed: 0,
@@ -267,9 +304,11 @@ const ExampleUniverse = () => {
   // put the things we want to connect directly to react
   const thingsWeWant = {
     addAnimation: (universe.addAnimation),
-    unleashCurse,
+    // unleashCurse,
     toggleCamelAnimation: () => { camelInternalAnimation.toggleAnimation() },
-    toggleBreakItAll: () => { breakEverything.toggleBreakItAll() }
+    toggleBreakItAll: () => { breakEverything.toggleBreakItAll() },
+    toggleEarthquake: () => { earthquake.toggleEarthquake() },
+    toggleFlying: () => { shepherdAbilities.toggleFlying() },
   }
 
   return { universe, thingsWeWant }
@@ -288,9 +327,10 @@ const ExampleWebGL = props => {
   return <article>
     <ReactWebGL universe={universe.universe} />
     <section>
-      <button onClick={thingsWeWant}>Unleash Ancient Curse</button>
       <button onClick={thingsWeWant.toggleCamelAnimation}>Straight vibing</button>
       <button onClick={thingsWeWant.toggleBreakItAll}>Break it all (computationally intensive!)</button>
+      <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
+      <button onClick={thingsWeWant.toggleFlying}>👋</button>
     </section>
   </article>
 }
