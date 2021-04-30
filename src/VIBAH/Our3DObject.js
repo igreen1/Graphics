@@ -400,11 +400,12 @@ const Our3DGroup = (objects = [], name = 'A 3D Group') => {
       return this;
     },
     getObjectByName: function (searchName) {
-      const results = []
-      results.push(group.filter(object => object.type === Our3DObject).filter(object => object.name === searchName))
-      results.push(group.filter(object => object.type === Our3DGroup).map(object => object.getObjectByName(searchName)))
-      
-      return results.length === 1 ? results[0] : results
+      if (group.find(element => element.name === searchName))
+        return group.filter(element => element.type === Our3DObject).find(element => element.name === searchName)
+      else {
+        return group.filter(element => element.type === Our3DGroup).map(element => element.getObjectByName(searchName))
+          .filter(element => element !== undefined).flatMap(element => element)[0]
+      }
     }
   }
 }
