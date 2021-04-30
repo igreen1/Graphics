@@ -429,7 +429,10 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
 }
 
 const Our3DGroup = (objects = [], name = 'A 3D Group') => {
-  let group = objects
+  let group = []
+  if (objects) {
+    group.concat(objects)
+  }
   let matrix = Matrix()
   return {
     ...TransformableObject(),
@@ -446,7 +449,7 @@ const Our3DGroup = (objects = [], name = 'A 3D Group') => {
       group = newVal
     },
     name,
-    set change(newVal){
+    set change(newVal) {
       this.group.forEach(object => object.change = newVal)
     },
     get change() {
