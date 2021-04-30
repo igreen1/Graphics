@@ -178,7 +178,6 @@ const ExampleUniverse = () => {
     }
   })
 
-
   const camel1 = CamelFactory()
     .scale(0.25, 0.25, 0.25)
     .transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
