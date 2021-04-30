@@ -229,11 +229,7 @@ const ExampleUniverse = () => {
     addAnimation: (universe.addAnimation)
   }
 
-<<<<<<< HEAD
-  return {universe, thingsWeWant}
-=======
-  return {universe, unleashCurse, thingsWeWant} 
->>>>>>> main
+  return {universe, unleashCurse, thingsWeWant}
 }
 
 const ExampleWebGL = props => {
