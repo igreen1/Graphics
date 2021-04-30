@@ -12,6 +12,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
   let cachedNormals = false;
 
   return {
+    change: true,
     facesByIndex,
     get vertices() {
       return cachedVertices
@@ -21,6 +22,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     },
     updateCachedVertices: function () {
       cachedVertices = isWireframe ? toRawLineArray({ vertices, facesByIndex }) : toRawTriangleArray({ vertices, facesByIndex })
+      this.change = true
     },
     get rawVertices() {
       return vertices
@@ -60,6 +62,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
     },
     updateCachedNormals: function () {
       cachedVertices = isFaceted ? this.facetedNormals : this.smoothNormals
+      this.change = true
       return cachedVertices
     },
 
@@ -202,10 +205,19 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
 const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
   let matrix = Matrix()
   let cachedColors;
+  let change = true;
 
   return {
     ...TransformableObject(),
     type: Our3DObject,
+    // change: true,
+    set change(newVal){
+      change = newVal
+      this.mesh.change = newVal
+    },
+    get change(){
+      return change
+    },
     name,
     mesh,
     get vertices() {
@@ -281,7 +293,7 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
           colors = colors.concat(colorArray[0], colorArray[1], colorArray[2])
         }
       }
-
+      this.change = true
       return colors
     },
     get normals() {
@@ -324,7 +336,7 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
       return mesh.isWireframe
     },
     toggleWireframe: function () {
-      this.setWireframe(this.isWireframe)
+      this.setWireframe(!this.isWireframe)
     },
     setWireframe: function (newIsWireframe) {
       mesh.setWireframe(newIsWireframe)
@@ -356,6 +368,17 @@ const Our3DGroup = (objects = [], name = 'A 3D Group') => {
     get group() {
       return group
     },
+    set change(newVal){
+      this.group.forEach(object => object.change = newVal)
+    },
+    get change(){
+      for(let object of group){
+        if (object.change){
+          return true
+        }
+      }
+      return false
+    },
     get matrix() {
       return matrix
     },
@@ -378,7 +401,7 @@ const Our3DGroup = (objects = [], name = 'A 3D Group') => {
       return this;
     },
     toggleWireframe: function () {
-      this.setWireframe(!this.isWireframe)
+      group.forEach(object => object.toggleWireframe())
     },
     setWireframe: function (newIsWireframe) {
       group.forEach(object => object.setWireframe(newIsWireframe))
