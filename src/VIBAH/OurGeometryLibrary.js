@@ -125,7 +125,7 @@ const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegment
     vertices.push([0, 0, deltaHeight * heightSegments])
     for (let i = 0; i < radialSegments; i++) {
       //add top circle for cylinder
-      facesByIndex.push([vertexOffset + i, vertexOffset + ((i + 1) % radialSegments), vertices.length - 1])
+      facesByIndex.push([vertices.length - 1, vertexOffset + ((i + 1) % radialSegments), vertexOffset + i])
     }
   }
 
