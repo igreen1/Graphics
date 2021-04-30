@@ -2,6 +2,7 @@
 import { SphinxFactory } from '../objects/sphinx'
 import { CamelFactory } from '../objects/camel'
 import { StarFactory, PyramidFactory } from '../objects/Detroit'
+import { UFOFactory } from '../objects/UFO'
 
 // Import our library
 import {
@@ -15,7 +16,7 @@ import {
   OurCamera,
   OurAmbientLight,
   MatrixLibrary,
-  Animations,
+  Animations
 } from '../VIBAH/VIBAH'
 
 // Alternatively can import as
@@ -33,7 +34,6 @@ const ExampleUniverse = () => {
   universe.addToUniverse(pyramid3)
 
   universe.addAnimation({
-
     tick: function (progress) {
       if (this.isActive) {
         pyramid.translate(0.01, 0.01, 0.01)
@@ -69,7 +69,6 @@ const ExampleUniverse = () => {
     displacement: 0,
     movingLeft: false,
     tick: function (progress) {
-
       if (!this.movingLeft) {
         sphinx.getObjectByName('head').getObjectByName('eyes').translate(0.001, 0, 0)
         this.displacement++
@@ -85,13 +84,10 @@ const ExampleUniverse = () => {
           this.movingLeft = false
         }
       }
-
     }
   })
 
-  const camel1 = CamelFactory()
-    .scale(0.25, 0.25, 0.25)
-    .transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
+  const camel1 = CamelFactory().scale(0.25, 0.25, 0.25).transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
   const camel2 = CamelFactory()
     .scale(0.25, 0.25, 0.25)
     .translate(-1, -1.5, -1)
@@ -103,12 +99,16 @@ const ExampleUniverse = () => {
   let starrySky = Our3DGroup()
 
   for (let i = 0; i < 8; i++) {
-    starrySky.add((StarFactory())
-      .scale(0.25, 0.25, 0.25)
-      .translate(Math.random() * 6 - 3, Math.random() * 2 - 1, Math.random() * 2 - 1)
+    starrySky.add(
+      StarFactory()
+        .scale(0.25, 0.25, 0.25)
+        .translate(Math.random() * 6 - 3, Math.random() * 2 - 1, Math.random() * 2 - 1)
     )
   }
   universe.addToUniverse(starrySky)
+
+  const UFO = UFOFactory().translate(0, -2, 1.5)
+  universe.addToUniverse(UFO)
 
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
@@ -132,7 +132,7 @@ const ExampleUniverse = () => {
     tick: function () {
       if (this.curseUnleahsed) {
         if (this.displacement < 100) {
-          sphinx.translate(.05, .008, .05)
+          sphinx.translate(0.05, 0.008, 0.05)
           sphinx.rotate(0, -0.006, 0)
           //sphinx.scale(1.01,1.01,1.01)
           this.displacement++
@@ -140,7 +140,7 @@ const ExampleUniverse = () => {
           if (this.brighten) {
             AmbientLight.newLight = [10, 10, 10]
           } else {
-            AmbientLight.newLight = [.1, .1, .1]
+            AmbientLight.newLight = [0.1, 0.1, 0.1]
           }
           this.brighten = !this.brighten
           this.displacement++
@@ -148,7 +148,6 @@ const ExampleUniverse = () => {
           AmbientLight.newLight = [3, 3, 3]
           universe.removeFromUniverse(sphinx)
         }
-
       }
     }
   }
@@ -161,7 +160,7 @@ const ExampleUniverse = () => {
     objectsToAffect: [camel1.getObjectByName('head'), camel1.getObjectByName('neck')],
     tick: function (progress) {
       if (this.camelHeadBob) {
-        this.timeElapsed = this.timeElapsed > 1000 ? this.timeElapsed = 0 : this.timeElapsed + progress
+        this.timeElapsed = this.timeElapsed > 1000 ? (this.timeElapsed = 0) : this.timeElapsed + progress
         if (this.timeElapsed < 500) {
           this.objectsToAffect.forEach(object => {
             object.rotateAboutPoint([1, -1.5, -1], [0, 0, 0.01])
@@ -187,8 +186,9 @@ const ExampleUniverse = () => {
     },
     tick: function () {
       if (this.breakItAll) {
-        universe.universe.scene.objectsToDraw.forEach((object) =>
-          object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005))
+        universe.universe.scene.objectsToDraw.forEach(object =>
+          object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005)
+        )
       }
     }
   }
@@ -206,7 +206,7 @@ const ExampleUniverse = () => {
       }
     }
   }
-  universe.addAnimation(moveCamera);
+  universe.addAnimation(moveCamera)
 
   universe.addAnimation({
     // Demonstrate "Ability to add and remove objects to/from the scene"
@@ -214,7 +214,7 @@ const ExampleUniverse = () => {
     camelInScene: true,
     timeBetween: 3000,
     tick: function (progress) {
-      this.timeElapsed = this.timeElapsed > this.timeBetween ? this.timeElapsed = 0 : this.timeElapsed + progress
+      this.timeElapsed = this.timeElapsed > this.timeBetween ? (this.timeElapsed = 0) : this.timeElapsed + progress
       if (this.timeElapsed > this.timeBetween) {
         this.timeElapsed = 0
         if (this.camelInScene) {
@@ -223,7 +223,6 @@ const ExampleUniverse = () => {
         } else {
           universe.addToUniverse(camel2)
           this.camelInScene = true
-
         }
       }
     }
@@ -246,15 +245,23 @@ const ExampleUniverse = () => {
 
   // put the things we want to connect directly to react
   const thingsWeWant = {
-    addAnimation: (universe.addAnimation),
-    toggleUnleshCurse: () => { unleashCurse.toggleCurse() },
-    toggleCamelAnimation: () => { camelInternalAnimation.toggleAnimation() },
-    toggleBreakItAll: () => { breakEverything.toggleBreakItAll() },
+    addAnimation: universe.addAnimation,
+    toggleUnleshCurse: () => {
+      unleashCurse.toggleCurse()
+    },
+    toggleCamelAnimation: () => {
+      camelInternalAnimation.toggleAnimation()
+    },
+    toggleBreakItAll: () => {
+      breakEverything.toggleBreakItAll()
+    },
     makeWireframe: () => {
       // Demonstrate "Ability to toggle between wireframe and solid rendering"
       universe.universe.scene.objectsToDraw.forEach(object => object.toggleWireframe())
     },
-    toggleMoveCamera: () => { moveCamera.toggleMoving() }
+    toggleMoveCamera: () => {
+      moveCamera.toggleMoving()
+    }
   }
   return { universe, thingsWeWant }
 }
@@ -268,17 +275,18 @@ const ExampleWebGL = props => {
   //   thingsWeWant.toggleCamelAnimation()
   // }
 
-
-  return <article>
-    <ReactWebGL universe={universe.universe} />
-    <section>
-      <button onClick={thingsWeWant.toggleUnleshCurse}>Unleash Ancient Curse</button>
-      <button onClick={thingsWeWant.toggleCamelAnimation}>Straight vibing</button>
-      <button onClick={thingsWeWant.toggleBreakItAll}>Break it all </button>
-      <button onClick={thingsWeWant.makeWireframe}>Toggle wireframe</button>
-      <button onClick={thingsWeWant.togglem}>Toggle camera move</button>
-    </section>
-  </article>
+  return (
+    <article>
+      <ReactWebGL universe={universe.universe} />
+      <section>
+        <button onClick={thingsWeWant.toggleUnleshCurse}>Unleash Ancient Curse</button>
+        <button onClick={thingsWeWant.toggleCamelAnimation}>Straight vibing</button>
+        <button onClick={thingsWeWant.toggleBreakItAll}>Break it all </button>
+        <button onClick={thingsWeWant.makeWireframe}>Toggle wireframe</button>
+        <button onClick={thingsWeWant.togglem}>Toggle camera move</button>
+      </section>
+    </article>
+  )
 }
 
 export { ExampleWebGL }

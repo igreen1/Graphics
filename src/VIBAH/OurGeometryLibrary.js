@@ -10,7 +10,7 @@
  * Let’s call the resulting data structure a “proto-geometry” because it has
  * the beginnings of a geometry but nothing close to what three.js has (yet).
  */
- const icosahedron = () => {
+const icosahedron = () => {
   // The core icosahedron coordinates.
   const X = 0.525731112119133606
   const Z = 0.850650808352039932
@@ -96,7 +96,7 @@ Cylinder - Extra (based on lathe)
 
 const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegments = 32, closed = true) => {
   const deltaRotation = (2 * Math.PI) / radialSegments
-  const deltaHeight = 1.0 * height / heightSegments
+  const deltaHeight = (1.0 * height) / heightSegments
 
   const vertices = []
   for (let i = 0; i <= heightSegments; i++) {
@@ -122,10 +122,10 @@ const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegment
     }
 
     //Add center of top circle
-    vertices.push([0, 0, deltaHeight*heightSegments]) 
+    vertices.push([0, 0, deltaHeight * heightSegments])
     for (let i = 0; i < radialSegments; i++) {
       //add top circle for cylinder
-      facesByIndex.push([vertexOffset + i , vertexOffset + ((i + 1) % radialSegments), vertices.length-1])
+      facesByIndex.push([vertexOffset + i, vertexOffset + ((i + 1) % radialSegments), vertices.length - 1])
     }
   }
 
@@ -243,23 +243,23 @@ const Sphere = (radius = 0.5, radialSegments = 32) => {
   let currentRadius = radius
 
   const vertices = []
-  for (let i = 0; i <= radialSegments; i++) {
+  for (let i = 0; i <= radialSegments + 1; i++) {
     currentRadius = Math.sqrt(radius ** 2 - (i * deltaRadius) ** 2)
     for (let j = 0; j <= radialSegments; j++) {
       vertices.push([
-        currentRadius * Math.sin(j * deltaRotation),
         currentRadius * Math.cos(j * deltaRotation),
+        currentRadius * Math.sin(j * deltaRotation),
         i * deltaRadius
       ])
     }
   }
 
-  for (let i = 0; i <= radialSegments; i++) {
+  for (let i = 0; i <= radialSegments + 1; i++) {
     currentRadius = Math.sqrt(radius ** 2 - (i * deltaRadius) ** 2)
     for (let j = 0; j <= radialSegments; j++) {
       vertices.push([
-        currentRadius * Math.sin(j * deltaRotation),
         currentRadius * Math.cos(j * deltaRotation),
+        currentRadius * Math.sin(j * deltaRotation),
         -i * deltaRadius
       ])
     }
