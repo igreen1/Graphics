@@ -2,22 +2,21 @@ import { toRawLineArray, toRawTriangleArray, Vector } from './OurUtilities'
 import { Matrix, MatrixLibrary } from './OurMatrix'
 import { TransformableObject } from './OurTransformations'
 
-
 // TODO Caching for normals / vertices
 const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false) => {
-  let isWireframe = false
+  let isWireframe = wireframe
   let isFaceted = faceted
 
-  let cachedVertices = false; // the vertices to return
-  let cachedNormals = false; // the normals to return
+  let cachedVertices = false // the vertices to return
+  let cachedNormals = false // the normals to return
 
-  let cachedFacetedWireframeNormals = false; // the normals when faceted and isWireframe
-  let cachedSmoothWireframeNormals = false; // normals when smooth and isWireframe
-  let cachedFacetedFacesNormals = false; // normals when faceted and not is wireframe
+  let cachedFacetedWireframeNormals = false // the normals when faceted and isWireframe
+  let cachedSmoothWireframeNormals = false // normals when smooth and isWireframe
+  let cachedFacetedFacesNormals = false // normals when faceted and not is wireframe
   let cachedSmoothFacesNormals = false // normals when smooth and not is wireframe
 
-  let cachedWireframeVertices = false; // vertices when wireframe
-  let cachedNotWireframeVertices = false; // vertices when not is wireframe
+  let cachedWireframeVertices = false // vertices when wireframe
+  let cachedNotWireframeVertices = false // vertices when not is wireframe
 
   return {
     change: true,
@@ -71,9 +70,8 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       isWireframe = newIsWireframe
       this.updateCachedVertices()
       this.updateCachedNormals()
-      return this;
+      return this
     },
-
 
     set isFaceted(newFaceted) {
       this.facesChanged = true
@@ -87,7 +85,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       this.facesChanged = true
       isFaceted = newVal
       this.updateCachedNormals()
-      return this;
+      return this
     },
     get normals() {
       if (!cachedNormals) {
@@ -111,7 +109,7 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
           if (!cachedFacetedFacesNormals) {
             cachedFacetedFacesNormals = this.facetedNormals
           }
-          cachedNormals = cachedFacetedFacesNormals;
+          cachedNormals = cachedFacetedFacesNormals
         }
       } else {
         if (this.isWireframe) {
@@ -119,18 +117,16 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
             cachedSmoothWireframeNormals = this.smoothNormals
           }
           cachedNormals = cachedSmoothWireframeNormals
-
         } else {
           if (!cachedSmoothFacesNormals) {
             cachedSmoothFacesNormals = this.smoothNormals
           }
-          cachedNormals = cachedSmoothFacesNormals;
+          cachedNormals = cachedSmoothFacesNormals
         }
       }
       this.change = true
       // cachedNormals = isFaceted ? this.facetedNormals : this.smoothNormals
     },
-
 
     get normalsByFace() {
       // Kept purely for its educational value!
@@ -263,15 +259,14 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
         })
       }
       return normalsByVertex
-    },
+    }
   }
 }
 
-
 const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
   let matrix = Matrix()
-  let cachedColors;
-  let change = true;
+  let cachedColors
+  let change = true
 
   return {
     ...TransformableObject(),
@@ -366,9 +361,9 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
       return mesh.normals
     },
     setColors: function (newColorArray) {
-      (colorArray = newColorArray)
+      colorArray = newColorArray
       cachedColors = this.calcColors()
-      return this;
+      return this
     },
     setRandomColors: function (n = 4, byVertex = true) {
       colorArray = []
@@ -388,8 +383,8 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
       this.setIsFaceted(!this.isFaceted)
     },
     setIsFaceted: function (newVal) {
-      mesh.setIsFaceted(newVal);
-      return this;
+      mesh.setIsFaceted(newVal)
+      return this
     },
     get isFaceted() {
       return mesh.isFaceted
@@ -398,7 +393,7 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
       mesh.isFaceted = newValue
     },
     set isWireframe(newVal) {
-      mesh.isWireframe = newVal;
+      mesh.isWireframe = newVal
       cachedColors = this.calcColors()
     },
     get isWireframe() {
@@ -410,19 +405,19 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
     setWireframe: function (newIsWireframe) {
       mesh.setWireframe(newIsWireframe)
       cachedColors = this.calcColors()
-      return this;
+      return this
     },
     transform: function (transformMatrix) {
-      matrix = transformMatrix.multiply(matrix);
-      return this;
+      matrix = transformMatrix.multiply(matrix)
+      return this
     },
     transformVertices: function (otherMatrix) {
-      (mesh.vertices = mesh.rawVertices.map(vertex =>
+      mesh.vertices = mesh.rawVertices.map(vertex =>
         otherMatrix
           .multiply(Matrix([[vertex[0]], [vertex[1]], [vertex[2]], [1]]))
           .toArray()
           .slice(0, -1)
-      ))
+      )
       return this
     }
   }
@@ -431,26 +426,34 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
 const Our3DGroup = (objects = [], name = 'A 3D Group') => {
   let group = []
   if (objects) {
-    group.concat(objects)
+    group = group.concat(objects)
   }
   let matrix = Matrix()
   return {
     ...TransformableObject(),
-    get self() { return this },
+    get self() {
+      return this
+    },
     get group() {
       return group
     },
     get flatGroup() {
-      const results = [].concat(this.group.filter(element => element.type === Our3DObject).flatMap(element => element))
-        .concat(this.group.filter(element => element.type === Our3DGroup).map(element => element.flatGroup).flatMap(element => element))
-      return results;
+      const results = []
+        .concat(this.group.filter(element => element.type === Our3DObject).flatMap(element => element))
+        .concat(
+          this.group
+            .filter(element => element.type === Our3DGroup)
+            .map(element => element.flatGroup)
+            .flatMap(element => element)
+        )
+      return results
     },
     set group(newVal) {
       group = newVal
     },
     name,
     set change(newVal) {
-      this.group.forEach(object => object.change = newVal)
+      this.group.forEach(object => (object.change = newVal))
     },
     get change() {
       for (let object of group) {
@@ -466,20 +469,20 @@ const Our3DGroup = (objects = [], name = 'A 3D Group') => {
     type: Our3DGroup,
     add: function (object) {
       group.push(object)
-      return this;
+      return this
     },
     remove: function (object) {
       this.group = this.group.filter(groupObject => groupObject !== object)
       this.group.filter(element => element.type === Our3DGroup).forEach(nestedGroup => nestedGroup.remove(object))
-      return this;
+      return this
     },
     transform: function (transformMatrix) {
       group.forEach(object => object.transform(transformMatrix))
-      return this;
+      return this
     },
     setColors: function (newColorArray) {
       group.forEach(object => object.setColors(newColorArray))
-      return this;
+      return this
     },
     toggleWireframe: function () {
       group.forEach(object => object.toggleWireframe())
@@ -497,22 +500,27 @@ const Our3DGroup = (objects = [], name = 'A 3D Group') => {
       return this
     },
     set isFaceted(newVal) {
-      group.forEach(object => object.isFaceted = newVal)
+      group.forEach(object => (object.isFaceted = newVal))
     },
     setIsFaceted: function (newVal) {
       group.forEach(object => object.setIsFaceted(newVal))
-      return this;
+      return this
     },
     toggleFaceted: function () {
       group.forEach(object => object.toggleFaceted())
-      return this;
+      return this
     },
     getObjectByName: function (searchName) {
       if (group.find(element => element.name === searchName))
-        return group.filter(element => element.type === Our3DObject || element.type === Our3DGroup).find(element => element.name === searchName)
+        return group
+          .filter(element => element.type === Our3DObject || element.type === Our3DGroup)
+          .find(element => element.name === searchName)
       else {
-        return group.filter(element => element.type === Our3DGroup).map(element => element.getObjectByName(searchName))
-          .filter(element => element !== undefined).flatMap(element => element)[0]
+        return group
+          .filter(element => element.type === Our3DGroup)
+          .map(element => element.getObjectByName(searchName))
+          .filter(element => element !== undefined)
+          .flatMap(element => element)[0]
       }
     }
   }
@@ -529,7 +537,10 @@ const OurLight = (direction = [0, 0, 0], color = [1, 1, 1]) => {
 const OurAmbientLight = (color = [1, 1, 1]) => {
   return {
     type: OurAmbientLight,
-    color
+    color,
+    set newLight(newColor = [1, 1, 1]) {
+      this.color = newColor
+    }
   }
 }
 
@@ -550,11 +561,11 @@ const OurCamera = (center, direction, projectionOptions, projectionType = Matrix
       matrix = newMatrix
     },
     translate: function (x, y, z) {
-      (matrix = matrix.multiply(MatrixLibrary.translationMatrix(x, y, z)))
+      matrix = matrix.multiply(MatrixLibrary.translationMatrix(x, y, z))
       return this
     },
     rotate: function (x, y, z) {
-      (matrix = matrix.multiply(MatrixLibrary.rotationMatrix(x, y, z)))
+      matrix = matrix.multiply(MatrixLibrary.rotationMatrix(x, y, z))
       return this
     },
     projectionMatrix

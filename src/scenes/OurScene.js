@@ -1,9 +1,9 @@
 // Import our cast
 import { SphinxFactory } from '../objects/sphinx'
 import { CamelFactory } from '../objects/camel'
+import { StarFactory, PyramidFactory } from '../objects/Detroit'
 import { ShepherdFactory } from '../objects/shepherd'
-import { useState, useCallback } from 'react'
-
+import { UFOFactory } from '../objects/UFO'
 
 // Import our library
 import {
@@ -17,122 +17,14 @@ import {
   OurCamera,
   OurAmbientLight,
   MatrixLibrary,
-  Animations,
+  Animations
 } from '../VIBAH/VIBAH'
 
 // Alternatively can import as
 // import * as LIBRARY from './OurLibrary/OurLibrary
 
-// Placed into factories to make ExampleUniverse easier to read
-//  moderate loss of load efficiency is worth readability!!
-const StarFactory = () => {
-  const star = Our3DObject(
-    OurMesh(
-      Geometries.Extrude(
-        [
-          [0, 1],
-          [0.25, 0.3],
-          [1, 0.3],
-          [0.4, -0.1],
-          [0.6, -0.8],
-          [0, -0.35],
-          [-0.6, -0.8],
-          [-0.4, -0.1],
-          [-1, 0.3],
-          [-0.25, 0.3]
-        ],
-        [
-          [0, 9, 1],
-          [2, 1, 3],
-          [4, 3, 5],
-          [6, 5, 7],
-          [8, 7, 9],
-          [1, 9, 5],
-          [3, 1, 5],
-          [7, 5, 9]
-        ]
-      ),
-      false
-    ),
-    [0, 1.5, 1]
-  )
-  star.transform(MatrixLibrary.scaleMatrix(0.7, 0.7, 0.7))
-  star.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  star.transform(MatrixLibrary.translationMatrix(0.8, 0.4, 1.9))
-
-  const star2 = Our3DObject(
-    OurMesh(
-      Geometries.Extrude(
-        [
-          [0, 1],
-          [0.25, 0.3],
-          [1, 0.3],
-          [0.4, -0.1],
-          [0.6, -0.8],
-          [0, -0.35],
-          [-0.6, -0.8],
-          [-0.4, -0.1],
-          [-1, 0.3],
-          [-0.25, 0.3]
-        ],
-        [
-          [0, 9, 1],
-          [2, 1, 3],
-          [4, 3, 5],
-          [6, 5, 7],
-          [8, 7, 9],
-          [1, 9, 5],
-          [3, 1, 5],
-          [7, 5, 9]
-        ]
-      ),
-      false
-    ),
-    [1, 0, 0]
-  )
-  star2.transform(MatrixLibrary.scaleMatrix(0.7, 0.7, 0.7))
-  star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  star2.transform(MatrixLibrary.translationMatrix(0.79, 0.4, 1.9))
-
-  const stars = Our3DGroup()
-  stars.add(star)
-  stars.add(star2)
-
-  return stars
-}
-
-const IceCreamFactory = () => {
-  const sphere = Our3DObject(OurMesh(Geometries.Sphere(0.3, 5), false), [0, 0, 0])
-  sphere.setRandomColors(10)
-  sphere.transform(MatrixLibrary.scaleMatrix(2, 2, 2))
-  sphere.transform(MatrixLibrary.rotationMatrix(0, 0, 0.5))
-  sphere.transform(MatrixLibrary.translationMatrix(3, -0.2, 0.5))
-
-  const cone = Our3DObject(OurMesh(Geometries.Cone(0.5, 1, 8, 8), false), [0.7, 0, 0.8])
-  cone.setRandomColors(5, false)
-  cone.transform(MatrixLibrary.rotationMatrix(0, -0.3, 3.14))
-  cone.transform(MatrixLibrary.translationMatrix(3, -1, 0.5))
-
-  const IceCream = Our3DGroup()
-  IceCream.add(cone)
-  IceCream.add(sphere)
-
-  return IceCream
-}
-
-const PyramidFactory = position => {
-  let pyramid = Our3DObject(OurMesh(Geometries.Cone(2.5, 3, 4, 4), false), [1, 1, 0.1])
-  pyramid.transform(MatrixLibrary.translationMatrix(...position))
-  return pyramid
-}
-
 const ExampleUniverse = () => {
   let universe = BigBang()
-
-  // Yummy :)
-  const IceCream = IceCreamFactory()
-  universe.addToUniverse(IceCream) // Demonstrating animations can be added after addToUniverse call
-  universe.addAnimation(Animations.RotateAboutPoint(IceCream, [3, -1, 0.5], [0, 0, 0.1]))
 
   // Pyramids
   const pyramid = PyramidFactory([-0.2, -1, -3])
@@ -143,7 +35,6 @@ const ExampleUniverse = () => {
   universe.addToUniverse(pyramid3)
 
   universe.addAnimation({
-
     tick: function (progress) {
       if (this.isActive) {
         pyramid.translate(0.01, 0.01, 0.01)
@@ -176,14 +67,28 @@ const ExampleUniverse = () => {
   universe.addToUniverse(sphinx)
 
   universe.addAnimation({
+    displacement: 0,
+    movingLeft: false,
     tick: function (progress) {
-      sphinx.translate(0.01, 0, 0)
+      if (!this.movingLeft) {
+        sphinx.getObjectByName('head').getObjectByName('eyes').translate(0.001, 0, 0)
+        this.displacement++
+        if (this.displacement === 100) {
+          this.displacement = 0
+          this.movingLeft = true
+        }
+      } else {
+        sphinx.getObjectByName('head').getObjectByName('eyes').translate(-0.001, 0, 0)
+        this.displacement++
+        if (this.displacement === 100) {
+          this.displacement = 0
+          this.movingLeft = false
+        }
+      }
     }
   })
 
-  const camel1 = CamelFactory()
-    .scale(0.25, 0.25, 0.25)
-    .transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
+  const camel1 = CamelFactory().scale(0.25, 0.25, 0.25).transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
   const camel2 = CamelFactory()
     .scale(0.25, 0.25, 0.25)
     .translate(-1, -1.5, -1)
@@ -197,12 +102,16 @@ const ExampleUniverse = () => {
   let starrySky = Our3DGroup()
 
   for (let i = 0; i < 8; i++) {
-    starrySky.add((StarFactory())
-      .scale(0.25, 0.25, 0.25)
-      .translate(Math.random() * 6 - 3, Math.random() * 2 - 1, Math.random() * 2 - 1)
+    starrySky.add(
+      StarFactory()
+        .scale(0.25, 0.25, 0.25)
+        .translate(Math.random() * 6 - 3, Math.random() * 2 - 1, Math.random() * 2 - 1)
     )
   }
   universe.addToUniverse(starrySky)
+
+  const UFO = UFOFactory().translate(0, -2, 1.5)
+  universe.addToUniverse(UFO)
 
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
@@ -216,9 +125,36 @@ const ExampleUniverse = () => {
   const AmbientLight = OurAmbientLight([3, 3, 3])
   universe.addToUniverse(AmbientLight)
 
-  const unleashCurse = () => {
-
+  const unleashCurse = {
+    curseUnleahsed: false,
+    brighten: false,
+    displacement: 0,
+    toggleCurse: function () {
+      this.curseUnleahsed = !this.curseUnleahsed
+    },
+    tick: function () {
+      if (this.curseUnleahsed) {
+        if (this.displacement < 100) {
+          sphinx.translate(0.05, 0.008, 0.05)
+          sphinx.rotate(0, -0.006, 0)
+          //sphinx.scale(1.01,1.01,1.01)
+          this.displacement++
+        } else if (this.displacement < 150) {
+          if (this.brighten) {
+            AmbientLight.newLight = [10, 10, 10]
+          } else {
+            AmbientLight.newLight = [0.1, 0.1, 0.1]
+          }
+          this.brighten = !this.brighten
+          this.displacement++
+        } else {
+          AmbientLight.newLight = [3, 3, 3]
+          universe.removeFromUniverse(sphinx)
+        }
+      }
+    }
   }
+  universe.addAnimation(unleashCurse)
 
   const earthquake = {
     timeElapsed: 3000,
@@ -277,7 +213,7 @@ const ExampleUniverse = () => {
     objectsToAffect: [camel1.getObjectByName('head'), camel1.getObjectByName('neck')],
     tick: function (progress) {
       if (this.camelHeadBob) {
-        this.timeElapsed = this.timeElapsed > 1000 ? this.timeElapsed = 0 : this.timeElapsed + progress
+        this.timeElapsed = this.timeElapsed > 1000 ? (this.timeElapsed = 0) : this.timeElapsed + progress
         if (this.timeElapsed < 500) {
           this.objectsToAffect.forEach(object => {
             object.rotateAboutPoint([1, -1.5, -1], [0, 0, 0.01])
@@ -303,8 +239,9 @@ const ExampleUniverse = () => {
     },
     tick: function () {
       if (this.breakItAll) {
-        universe.universe.scene.objectsToDraw.forEach((object) =>
-          object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005))
+        universe.universe.scene.objectsToDraw.forEach(object =>
+          object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005)
+        )
       }
     }
   }
@@ -322,7 +259,7 @@ const ExampleUniverse = () => {
       }
     }
   }
-  universe.addAnimation(moveCamera);
+  universe.addAnimation(moveCamera)
 
   universe.addAnimation({
     // Demonstrate "Ability to add and remove objects to/from the scene"
@@ -330,16 +267,15 @@ const ExampleUniverse = () => {
     camelInScene: true,
     timeBetween: 3000,
     tick: function (progress) {
-      this.timeElapsed = this.timeElapsed > this.timeBetween ? this.timeElapsed = 0 : this.timeElapsed + progress
-      if(this.timeElapsed > this.timeBetween){
+      this.timeElapsed = this.timeElapsed > this.timeBetween ? (this.timeElapsed = 0) : this.timeElapsed + progress
+      if (this.timeElapsed > this.timeBetween) {
         this.timeElapsed = 0
-        if(this.camelInScene){
+        if (this.camelInScene) {
           universe.removeFromUniverse(camel2)
           this.camelInScene = false
         } else {
           universe.addToUniverse(camel2)
           this.camelInScene = true
-
         }
       }
     }
@@ -350,8 +286,8 @@ const ExampleUniverse = () => {
     timeBetween: 3000,
 
     // Demonstrate "Ability to compute lighting in both faceted/flat and smooth styles"
-    tick: function(progress){
-      if(this.timeElapsed > this.timeBetween){
+    tick: function (progress) {
+      if (this.timeElapsed > this.timeBetween) {
         this.timeElapsed = 0
         pyramid.toggleFaceted()
       } else {
@@ -362,21 +298,35 @@ const ExampleUniverse = () => {
 
   // put the things we want to connect directly to react
   const thingsWeWant = {
-    addAnimation: (universe.addAnimation),
-    // unleashCurse,
-    toggleCamelAnimation: () => { camelInternalAnimation.toggleAnimation() },
-    toggleBreakItAll: () => { breakEverything.toggleBreakItAll() },
-    toggleEarthquake: () => { earthquake.toggleEarthquake() },
-    toggleFlying: () => { shepherdAbilities.toggleFlying() },
-    toggleRight: () => { shepherdAbilities.toggleLeft() },
-    toggleLeft: () => { shepherdAbilities.toggleRight() },
-
-
+    addAnimation: universe.addAnimation,
+    toggleUnleshCurse: () => {
+      unleashCurse.toggleCurse()
+    },
+    toggleCamelAnimation: () => {
+      camelInternalAnimation.toggleAnimation()
+    },
+    toggleBreakItAll: () => {
+      breakEverything.toggleBreakItAll()
+    },
+    toggleEarthquake: () => {
+      earthquake.toggleEarthquake()
+    },
+    toggleFlying: () => {
+      shepherdAbilities.toggleFlying()
+    },
+    toggleRight: () => {
+      shepherdAbilities.toggleLeft()
+    },
+    toggleLeft: () => {
+      shepherdAbilities.toggleRight()
+    },
     makeWireframe: () => {
       // Demonstrate "Ability to toggle between wireframe and solid rendering"
       universe.universe.scene.objectsToDraw.forEach(object => object.toggleWireframe())
     },
-    toggleMoveCamera: () => { moveCamera.toggleMoving() }
+    toggleMoveCamera: () => {
+      moveCamera.toggleMoving()
+    }
   }
   return { universe, thingsWeWant }
 }
@@ -393,7 +343,7 @@ const ExampleWebGL = props => {
   return <article>
     <ReactWebGL universe={universe.universe} />
     <section>
-      <button >Unleash Ancient Curse</button>
+      <button onClick={thingsWeWant.toggleUnleshCurse}>Unleash Ancient Curse</button>
       <button onClick={thingsWeWant.toggleCamelAnimation}>Straight vibing</button>
       <button onClick={thingsWeWant.toggleBreakItAll}>Break it all </button>
       <button onClick={thingsWeWant.makeWireframe}>Toggle wireframe</button>
