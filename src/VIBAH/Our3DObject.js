@@ -431,7 +431,7 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
 const Our3DGroup = (objects = [], name = 'A 3D Group') => {
   let group = []
   if (objects) {
-    group.concat(objects)
+    group = group.concat(objects)
   }
   let matrix = Matrix()
   return {
