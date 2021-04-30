@@ -2,6 +2,8 @@
 import { SphinxFactory } from '../objects/sphinx'
 import { CamelFactory } from '../objects/camel'
 import { ShepherdFactory } from '../objects/shepherd'
+import { useState, useCallback } from 'react'
+
 
 // Import our library
 import {
@@ -224,7 +226,6 @@ const ExampleUniverse = () => {
       this.timeElapsed = 0
     },
     tick: function(progress) {
-      console.log(this.timeElapsed)
       if (this.timeElapsed < 3000) {
         this.timeElapsed = this.timeElapsed + progress
         universe.universe.scene.objectsToDraw.forEach((object) =>
@@ -236,19 +237,33 @@ const ExampleUniverse = () => {
   universe.addAnimation(earthquake)
 
   const shepherdAbilities = {
-    handRaised: false,
-    timeElapsed: 0,
+    center: [-.2, -2, 1],
+    angle: Math.PI / 2,
     toggleFlying: function () {
-      this.handRaised = !this.handRaised
+      this.flying = !this.flying
     },
-    objectsToAffect: [shepherd.getObjectByName('hook1')],
+    toggleLeft: function () {
+      this.flying = true
+      this.rightTurn = false
+      this.leftTurn = !this.leftTurn
+    },
+    toggleRight: function () {
+      this.flying = true
+      this.rightTurn = !this.rightTurn
+      this.leftTurn = false
+    },
     tick: function(progress) {
-      console.log(this.objectsToAffect[0])
-      console.log("JI")
-      if (this.timeElapsed < 3000) {
-        this.timeElapsed = this.timeElapsed + progress
-        universe.universe.scene.objectsToDraw.forEach((object) =>
-          object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005))
+      if (this.flying) {
+        shepherd.translate(Math.cos(this.angle)*.02, Math.sin(this.angle)*.02, 0)
+        this.center[0] += Math.cos(this.angle)*.02
+        this.center[1] += Math.sin(this.angle)*.02
+      }
+      if (this.leftTurn) {
+        this.angle -= .075
+        shepherd.rotateAboutPoint([this.center[0], this.center[1], this.center[2]], [0, 0, -.075])
+      } if (this.rightTurn) {
+        shepherd.rotateAboutPoint([this.center[0], this.center[1], this.center[2]], [0, 0, .075])
+        this.angle += .075
       }
     }
   }
@@ -353,6 +368,10 @@ const ExampleUniverse = () => {
     toggleBreakItAll: () => { breakEverything.toggleBreakItAll() },
     toggleEarthquake: () => { earthquake.toggleEarthquake() },
     toggleFlying: () => { shepherdAbilities.toggleFlying() },
+    toggleRight: () => { shepherdAbilities.toggleLeft() },
+    toggleLeft: () => { shepherdAbilities.toggleRight() },
+
+
     makeWireframe: () => {
       // Demonstrate "Ability to toggle between wireframe and solid rendering"
       universe.universe.scene.objectsToDraw.forEach(object => object.toggleWireframe())
@@ -371,7 +390,6 @@ const ExampleWebGL = props => {
   //   thingsWeWant.toggleCamelAnimation()
   // }
 
-
   return <article>
     <ReactWebGL universe={universe.universe} />
     <section>
@@ -381,7 +399,13 @@ const ExampleWebGL = props => {
       <button onClick={thingsWeWant.makeWireframe}>Toggle wireframe</button>
       <button onClick={thingsWeWant.togglem}>Toggle camera move</button>
       <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
-      <button onClick={thingsWeWant.toggleFlying}>👋</button>
+      <br />
+      <button onClick={thingsWeWant.toggleLeft}>⏪</button>
+      <button onClick={thingsWeWant.toggleFlying}>Fly!</button>
+      <button onClick={thingsWeWant.toggleRight}>⏩</button>
+
+
+
     </section>
   </article>
 }
