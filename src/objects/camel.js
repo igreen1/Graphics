@@ -2,19 +2,19 @@ import { Geometries, OurMesh, Our3DGroup, Our3DObject, MatrixLibrary } from '../
 
 const CamelFactory = (fidelity = 1) => {
   // Define our body parts
-  const head = Our3DObject(OurMesh(Geometries.Sphere(0.5, 5 * fidelity), false), [0, 0, 0])
-  const neck = Our3DObject(OurMesh(Geometries.Cylinder(0.2, 1.5, 5 * fidelity, 10 * fidelity), false), [0, 0, 0])
-  const body = Our3DObject(OurMesh(Geometries.Cylinder(1, 3.3, 5 * fidelity, 10 * fidelity), false), [0, 0, 0])
+  const head = Our3DObject(OurMesh(Geometries.Sphere(0.5, 5 * fidelity), false), [0, 0, 0], "head")
+  const neck = Our3DObject(OurMesh(Geometries.Cylinder(0.2, 1.5, 5 * fidelity, 10 * fidelity), false), [0, 0, 0], 'neck')
+  const body = Our3DObject(OurMesh(Geometries.Cylinder(1, 3.3, 5 * fidelity, 10 * fidelity), false), [0, 0, 0], 'body')
 
-  const legFL = Our3DObject(OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false), [0, 0, 0])
-  const legFR = Our3DObject(OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false), [0, 0, 0])
-  const legBL = Our3DObject(OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false), [0, 0, 0])
-  const legBR = Our3DObject(OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false), [0, 0, 0])
-  const legs = Our3DGroup([legFL, legFR, legBL, legBR])
+  const legFL = Our3DObject(OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false), [0, 0, 0], 'legFL')
+  const legFR = Our3DObject(OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false), [0, 0, 0], 'legFL')
+  const legBL = Our3DObject(OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false), [0, 0, 0], 'legFL')
+  const legBR = Our3DObject(OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false), [0, 0, 0], 'legFL')
+  const legs = Our3DGroup([legFL, legFR, legBL, legBR], 'legs')
 
-  const hump1 = Our3DObject(OurMesh(Geometries.Sphere(0.8, 5 * fidelity), false), [0, 0, 0])
-  const hump2 = Our3DObject(OurMesh(Geometries.Sphere(0.8, 5 * fidelity), false), [0, 0, 0])
-  const humps = Our3DGroup([hump1, hump2])
+  const hump1 = Our3DObject(OurMesh(Geometries.Sphere(0.8, 5 * fidelity), false), [0, 0, 0], 'hump')
+  const hump2 = Our3DObject(OurMesh(Geometries.Sphere(0.8, 5 * fidelity), false), [0, 0, 0], 'hump')
+  const humps = Our3DGroup([hump1, hump2], 'humps')
 
   // Orientate everything
   legs.transform(MatrixLibrary.rotationMatrix((3 * Math.PI) / 2, 0, 0))
@@ -34,14 +34,9 @@ const CamelFactory = (fidelity = 1) => {
   hump1.transform(MatrixLibrary.translationMatrix(0, -1.3, 0))
   hump2.transform(MatrixLibrary.translationMatrix(1.3, -1.3, 0))
 
-  // Apply a camel brown colour
   const Camel = Our3DGroup(
-    [head, neck, body, legs, humps].map(shape => {
-      shape.setColors([193, 154, 107].map(rgb => rgb / 200))
-      return shape
-    })
+    [head, neck, body, legs, humps]
   )
-
   return Camel
 }
 

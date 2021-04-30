@@ -196,7 +196,6 @@ const ExampleUniverse = () => {
     }
   })
 
-
   const camel1 = CamelFactory()
     .scale(0.25, 0.25, 0.25)
     .transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
@@ -227,14 +226,43 @@ const ExampleUniverse = () => {
   const light = OurLight([-2, 0, 10], [5, 5, 5])
   universe.addToUniverse(light)
 
-  const AmbientLight = OurAmbientLight([2, 2, 1])
+  const AmbientLight = OurAmbientLight([3, 3, 3])
   universe.addToUniverse(AmbientLight)
 
-  const unleashCurse = () => {
+  const unleashCurse = {
+    curseUnleahsed: false,
+    brighten: false,
+    displacement: 0,
+    toggleCurse: function () {
+      this.curseUnleahsed = !this.curseUnleahsed
+    },
+    tick: function () {
+      if (this.curseUnleahsed) {
+        if (this.displacement < 100) {
+          sphinx.translate(.05,.008,.05)
+          sphinx.rotate(0,-0.006,0)
+          //sphinx.scale(1.01,1.01,1.01)
+          this.displacement++
+        } else if (this.displacement < 150) {
+          if (this.brighten) {
+            AmbientLight.newLight = [10,10,10]
+          } else {
+            AmbientLight.newLight = [.1,.1,.1]
+          }
+          this.brighten = !this.brighten
+          this.displacement++
+        } else {
+          AmbientLight.newLight = [3,3,3]
+          universe.removeFromUniverse(sphinx)
+        }
 
+      }
+    }
   }
+  universe.addAnimation(unleashCurse)
 
   const camelInternalAnimation = {
+    // Internal movement
     camelHeadBob: false,
     timeElapsed: 0,
     objectsToAffect: [camel1.getObjectByName('head'), camel1.getObjectByName('neck')],
@@ -259,6 +287,7 @@ const ExampleUniverse = () => {
   universe.addAnimation(camelInternalAnimation)
 
   const breakEverything = {
+    // Just for fun
     breakItAll: false,
     toggleBreakItAll: function () {
       this.breakItAll = !this.breakItAll
@@ -272,20 +301,68 @@ const ExampleUniverse = () => {
   }
   universe.addAnimation(breakEverything)
 
-  // universe.addAnimation({
-  //   tick: function(){
-  //     camera.rotate(0, 0.01, 0)
-  //   }
-  // })
+  const moveCamera = {
+    // Demonstrate "Ability to change camera position and viewpoint"
+    moving: false,
+    toggleMoving: function () {
+      this.moving = !this.moving
+    },
+    tick: function () {
+      if (this.moving) {
+        camera.rotate(0, 0.01, 0.001)
+      }
+    }
+  }
+  universe.addAnimation(moveCamera);
+
+  universe.addAnimation({
+    // Demonstrate "Ability to add and remove objects to/from the scene"
+    timeElapsed: 0,
+    camelInScene: true,
+    timeBetween: 3000,
+    tick: function (progress) {
+      this.timeElapsed = this.timeElapsed > this.timeBetween ? this.timeElapsed = 0 : this.timeElapsed + progress
+      if(this.timeElapsed > this.timeBetween){
+        this.timeElapsed = 0
+        if(this.camelInScene){
+          universe.removeFromUniverse(camel2)
+          this.camelInScene = false
+        } else {
+          universe.addToUniverse(camel2)
+          this.camelInScene = true
+
+        }
+      }
+    }
+  })
+
+  universe.addAnimation({
+    timeElapsed: 0,
+    timeBetween: 3000,
+
+    // Demonstrate "Ability to compute lighting in both faceted/flat and smooth styles"
+    tick: function(progress){
+      if(this.timeElapsed > this.timeBetween){
+        this.timeElapsed = 0
+        pyramid.toggleFaceted()
+      } else {
+        this.timeElapsed += progress
+      }
+    }
+  })
 
   // put the things we want to connect directly to react
   const thingsWeWant = {
     addAnimation: (universe.addAnimation),
-    unleashCurse,
+    toggleUnleshCurse: () => { unleashCurse.toggleCurse() },
     toggleCamelAnimation: () => { camelInternalAnimation.toggleAnimation() },
-    toggleBreakItAll: () => { breakEverything.toggleBreakItAll() }
+    toggleBreakItAll: () => { breakEverything.toggleBreakItAll() },
+    makeWireframe: () => {
+      // Demonstrate "Ability to toggle between wireframe and solid rendering"
+      universe.universe.scene.objectsToDraw.forEach(object => object.toggleWireframe())
+    },
+    toggleMoveCamera: () => { moveCamera.toggleMoving() }
   }
-
   return { universe, thingsWeWant }
 }
 
@@ -302,9 +379,11 @@ const ExampleWebGL = props => {
   return <article>
     <ReactWebGL universe={universe.universe} />
     <section>
-      <button onClick={thingsWeWant}>Unleash Ancient Curse</button>
+      <button onClick={thingsWeWant.toggleUnleshCurse}>Unleash Ancient Curse</button>
       <button onClick={thingsWeWant.toggleCamelAnimation}>Straight vibing</button>
-      <button onClick={thingsWeWant.toggleBreakItAll}>Break it all (computationally intensive!)</button>
+      <button onClick={thingsWeWant.toggleBreakItAll}>Break it all </button>
+      <button onClick={thingsWeWant.makeWireframe}>Toggle wireframe</button>
+      <button onClick={thingsWeWant.togglem}>Toggle camera move</button>
     </section>
   </article>
 }

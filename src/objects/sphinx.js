@@ -68,8 +68,8 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
     rightToes.translate(-3,-2,1)
     body.translate(-4.5,-1.5,-1)
     head.translate(-3.2, -1, .3)
-    eyes.translate(0, -1, 1)
-    mouth.translate(.35, -.1, .3)
+    eyes.translate(-.05, -1, 1.05)
+    mouth.translate(.3, -.1, .3)
 
     const Sphinx = Our3DGroup([legs,body,head,toes])
 

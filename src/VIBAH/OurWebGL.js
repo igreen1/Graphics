@@ -104,7 +104,7 @@ const useInitWebGL = universe => {
     gl.viewport(0, 0, canvas.width, canvas.height)
 
     // Build the objects to display.
-    const objectsToDraw = universe.scene.objectsToDraw
+    // const objectsToDraw = universe.scene.objectsToDraw
 
     // Pass the vertices to WebGL.
     // objectsToDraw.forEach(objectToDraw => {
@@ -213,7 +213,7 @@ const useInitWebGL = universe => {
 
 
       // Display the objects.
-      objectsToDraw.forEach(drawObject)
+      universe.scene.objectsToDraw.forEach(drawObject)
 
       // All done.
       gl.flush()
