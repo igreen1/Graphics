@@ -248,7 +248,8 @@ const ExampleUniverse = () => {
     },
     tick: function () {
       if (this.breakItAll) {
-        universe.universe.scene.objectsToDraw.forEach((object) => object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005))
+        universe.universe.scene.objectsToDraw.forEach((object) =>
+          object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005))
       }
     }
   }
