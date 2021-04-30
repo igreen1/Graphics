@@ -107,11 +107,11 @@ const useInitWebGL = universe => {
     const objectsToDraw = universe.scene.objectsToDraw
 
     // Pass the vertices to WebGL.
-    objectsToDraw.forEach(objectToDraw => {
-      objectToDraw.verticesBuffer = initVertexBuffer(gl, objectToDraw.vertices)
-      objectToDraw.normalsBuffer = initVertexBuffer(gl, objectToDraw.normals)
-      objectToDraw.colorsBuffer = initVertexBuffer(gl, objectToDraw.colors)
-    })
+    // objectsToDraw.forEach(objectToDraw => {
+    //   objectToDraw.verticesBuffer = initVertexBuffer(gl, objectToDraw.vertices)
+    //   objectToDraw.normalsBuffer = initVertexBuffer(gl, objectToDraw.normals)
+    //   objectToDraw.colorsBuffer = initVertexBuffer(gl, objectToDraw.colors)
+    // })
 
     // Initialize the shaders.
     let abort = false
@@ -166,6 +166,13 @@ const useInitWebGL = universe => {
      * Displays an individual object.
      */
     const drawObject = object => {
+      if (object.change) {
+        object.verticesBuffer = initVertexBuffer(gl, object.vertices)
+        object.normalsBuffer = initVertexBuffer(gl, object.normals)
+        object.colorsBuffer = initVertexBuffer(gl, object.colors)
+
+        object.change = false
+      }
       // Set up the rotation matrix.
       object.transform(Matrix())
       //object.transform(parentMatrix)
@@ -202,7 +209,7 @@ const useInitWebGL = universe => {
       gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, universe.scene.camera.matrix)
       gl.uniform3fv(lightDirection, new Float32Array(universe.scene.light.direction))
       gl.uniform3fv(lightColor, new Float32Array(universe.scene.light.color))
-      gl.uniform3fv(ambientLight, new Float32Array(universe.scene.ambientLight ? universe.scene.ambientLight.color : [0,0,0]))
+      gl.uniform3fv(ambientLight, new Float32Array(universe.scene.ambientLight ? universe.scene.ambientLight.color : [0, 0, 0]))
 
 
       // Display the objects.

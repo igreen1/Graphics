@@ -142,12 +142,12 @@ const ExampleUniverse = () => {
 
   universe.addAnimation({
 
-    tick: function(progress) {
-      if(this.isActive){
+    tick: function (progress) {
+      if (this.isActive) {
         pyramid.translate(0.01, 0.01, 0.01)
       }
     },
-    click: function() {
+    click: function () {
       this.isActive = !this.isActive
     }
   })
@@ -174,14 +174,16 @@ const ExampleUniverse = () => {
   universe.addToUniverse(sphinx)
 
   universe.addAnimation({
-    tick: function(progress) {
+    tick: function (progress) {
       //console.log(progress)
-      sphinx.translate(0.01,0,0)
+      sphinx.translate(0.01, 0, 0)
     }
   })
 
 
-  const camel1 = CamelFactory().scale(0.25, 0.25, 0.25).transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
+  const camel1 = CamelFactory()
+    .scale(0.25, 0.25, 0.25)
+    .transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
   const camel2 = CamelFactory()
     .scale(0.25, 0.25, 0.25)
     .translate(-1, -1.5, -1)
@@ -204,7 +206,7 @@ const ExampleUniverse = () => {
 
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
-    // const camera = OurCamera([0, 1, -5], [0, 0, 0], [1, -1, 1, -1, 2, -2], MatrixLibrary.orthographicProjectionMatrix)
+  // const camera = OurCamera([0, 1, -5], [0, 0, 0], [1, -1, 1, -1, 2, -2], MatrixLibrary.orthographicProjectionMatrix)
 
   universe.addToUniverse(camera)
 
@@ -218,6 +220,44 @@ const ExampleUniverse = () => {
 
   }
 
+  const camelInternalAnimation = {
+    camelHeadBob: false,
+    timeElapsed: 0,
+    objectsToAffect: [camel1.getObjectByName('head'), camel1.getObjectByName('neck')],
+    tick: function (progress) {
+      if (this.camelHeadBob) {
+        this.timeElapsed = this.timeElapsed > 1000 ? this.timeElapsed = 0 : this.timeElapsed + progress
+        if (this.timeElapsed < 500) {
+          this.objectsToAffect.forEach(object => {
+            object.rotateAboutPoint([1, -1.5, -1], [0, 0, 0.01])
+          })
+        } else {
+          this.objectsToAffect.forEach(object => {
+            object.rotateAboutPoint([1, -1.5, -1], [0, 0, -0.01])
+          })
+        }
+      }
+    },
+    toggleAnimation: function () {
+      this.camelHeadBob = !this.camelHeadBob
+    }
+  }
+  universe.addAnimation(camelInternalAnimation)
+
+  const breakEverything = {
+    breakItAll: false,
+    toggleBreakItAll: function () {
+      this.breakItAll = !this.breakItAll
+    },
+    tick: function () {
+      if (this.breakItAll) {
+        universe.universe.scene.objectsToDraw.forEach((object) =>
+          object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005))
+      }
+    }
+  }
+  universe.addAnimation(breakEverything)
+
   // universe.addAnimation({
   //   tick: function(){
   //     camera.rotate(0, 0.01, 0)
@@ -226,42 +266,31 @@ const ExampleUniverse = () => {
 
   // put the things we want to connect directly to react
   const thingsWeWant = {
-    addAnimation: (universe.addAnimation)
+    addAnimation: (universe.addAnimation),
+    unleashCurse,
+    toggleCamelAnimation: () => { camelInternalAnimation.toggleAnimation() },
+    toggleBreakItAll: () => { breakEverything.toggleBreakItAll() }
   }
 
-  return {universe, unleashCurse, thingsWeWant}
+  return { universe, thingsWeWant }
 }
 
 const ExampleWebGL = props => {
-  const { universe, unleashCurse, thingsWeWant} = ExampleUniverse()
-//  return < ReactWebGL universe={universe} />
+  const { universe, thingsWeWant } = ExampleUniverse()
+  //  return < ReactWebGL universe={universe} />
 
-  thingsWeWant.addAnimation({
-    tick:() => {
-      console.log("Statically adding animation (but in react not in universe factory)");
-    }
-  })
-
-  // unleashCurse.addAnimation({
-  //   tick:() => {
-
-  //   }
-  // })
-
-
-
-  // const dosomething = () => {
-  //   thingsWeWant.addAnimation({
-  //     tick: ()=>{
-  //       // this is an example of how to access inner stuff
-  //       console.log("Dynamically adding animation")
-  //     }
-  //   })
+  // const camelHeadBob = () => {
+  //   // Make the camels VIBE
+  //   thingsWeWant.toggleCamelAnimation()
   // }
+
+
   return <article>
     <ReactWebGL universe={universe.universe} />
     <section>
       <button onClick={thingsWeWant}>Unleash Ancient Curse</button>
+      <button onClick={thingsWeWant.toggleCamelAnimation}>Straight vibing</button>
+      <button onClick={thingsWeWant.toggleBreakItAll}>Break it all (computationally intensive!)</button>
     </section>
   </article>
 }
