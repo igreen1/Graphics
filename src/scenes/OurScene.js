@@ -140,6 +140,18 @@ const ExampleUniverse = () => {
   universe.addToUniverse(pyramid2)
   universe.addToUniverse(pyramid3)
 
+  universe.addAnimation({
+
+    tick: function(progress) {
+      if(this.isActive){
+        pyramid.translate(0.01, 0.01, 0.01)
+      }
+    },
+    click: function() {
+      this.isActive = !this.isActive
+    }
+  })
+
   // Amazing background :)
   const stars = StarFactory()
   universe.addAnimation(Animations.RotateAboutPoint(stars, [0.79, 0.4, 1.9], [0.01, 0.01, 0.01]))
@@ -183,6 +195,8 @@ const ExampleUniverse = () => {
 
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
+    // const camera = OurCamera([0, 1, -5], [0, 0, 0], [1, -1, 1, -1, 2, -2], MatrixLibrary.orthographicProjectionMatrix)
+
   universe.addToUniverse(camera)
 
   const light = OurLight([-2, 0, 10], [5, 5, 5])
@@ -191,12 +205,44 @@ const ExampleUniverse = () => {
   const AmbientLight = OurAmbientLight([2, 2, 1])
   universe.addToUniverse(AmbientLight)
 
-  return universe
+  universe.addAnimation({
+    tick: function(){
+      camera.rotate(0, 0.01, 0)
+    }
+  })
+
+  // put the things we want to connect directly to react
+  const thingsWeWant = {
+    addAnimation: (universe.addAnimation)
+  }
+
+  return {universe, thingsWeWant}
 }
 
 const ExampleWebGL = props => {
-  const { universe } = ExampleUniverse()
-  return < ReactWebGL universe={universe} />
+  const { universe, thingsWeWant} = ExampleUniverse()
+//  return < ReactWebGL universe={universe} />
+
+  thingsWeWant.addAnimation({
+    tick:() => {
+      console.log("Statically adding animation (but in react not in universe factory)");
+    }
+  })
+
+  const dosomething = () => {
+    thingsWeWant.addAnimation({
+      tick: ()=>{
+        // this is an example of how to access inner stuff
+        console.log("Dynamically adding animation")
+      }
+    })
+  }
+  return <article>
+    <ReactWebGL universe={universe.universe} />
+    <section>
+      <button onClick={dosomething}>Do Something</button>
+    </section>
+  </article>
 }
 
 export { ExampleWebGL }
