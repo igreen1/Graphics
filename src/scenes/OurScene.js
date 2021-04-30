@@ -1,6 +1,7 @@
 // Import our cast
 import { SphinxFactory } from '../objects/sphinx'
 import { CamelFactory } from '../objects/camel'
+import { StarFactory, PyramidFactory } from '../objects/Detroit'
 
 // Import our library
 import {
@@ -20,116 +21,8 @@ import {
 // Alternatively can import as
 // import * as LIBRARY from './OurLibrary/OurLibrary
 
-// Placed into factories to make ExampleUniverse easier to read
-//  moderate loss of load efficiency is worth readability!!
-const StarFactory = () => {
-  const star = Our3DObject(
-    OurMesh(
-      Geometries.Extrude(
-        [
-          [0, 1],
-          [0.25, 0.3],
-          [1, 0.3],
-          [0.4, -0.1],
-          [0.6, -0.8],
-          [0, -0.35],
-          [-0.6, -0.8],
-          [-0.4, -0.1],
-          [-1, 0.3],
-          [-0.25, 0.3]
-        ],
-        [
-          [0, 9, 1],
-          [2, 1, 3],
-          [4, 3, 5],
-          [6, 5, 7],
-          [8, 7, 9],
-          [1, 9, 5],
-          [3, 1, 5],
-          [7, 5, 9]
-        ]
-      ),
-      false
-    ),
-    [0, 1.5, 1]
-  )
-  star.transform(MatrixLibrary.scaleMatrix(0.7, 0.7, 0.7))
-  star.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  star.transform(MatrixLibrary.translationMatrix(0.8, 0.4, 1.9))
-
-  const star2 = Our3DObject(
-    OurMesh(
-      Geometries.Extrude(
-        [
-          [0, 1],
-          [0.25, 0.3],
-          [1, 0.3],
-          [0.4, -0.1],
-          [0.6, -0.8],
-          [0, -0.35],
-          [-0.6, -0.8],
-          [-0.4, -0.1],
-          [-1, 0.3],
-          [-0.25, 0.3]
-        ],
-        [
-          [0, 9, 1],
-          [2, 1, 3],
-          [4, 3, 5],
-          [6, 5, 7],
-          [8, 7, 9],
-          [1, 9, 5],
-          [3, 1, 5],
-          [7, 5, 9]
-        ]
-      ),
-      false
-    ),
-    [1, 0, 0]
-  )
-  star2.transform(MatrixLibrary.scaleMatrix(0.7, 0.7, 0.7))
-  star2.transform(MatrixLibrary.rotationMatrix(0.5, 0.5, 0.5))
-  star2.transform(MatrixLibrary.translationMatrix(0.79, 0.4, 1.9))
-
-  const stars = Our3DGroup()
-  stars.add(star)
-  stars.add(star2)
-
-  return stars
-}
-
-const IceCreamFactory = () => {
-  const sphere = Our3DObject(OurMesh(Geometries.Sphere(0.3, 5), false), [0, 0, 0])
-  sphere.setRandomColors(10)
-  sphere.transform(MatrixLibrary.scaleMatrix(2, 2, 2))
-  sphere.transform(MatrixLibrary.rotationMatrix(0, 0, 0.5))
-  sphere.transform(MatrixLibrary.translationMatrix(3, -0.2, 0.5))
-
-  const cone = Our3DObject(OurMesh(Geometries.Cone(0.5, 1, 8, 8), false), [0.7, 0, 0.8])
-  cone.setRandomColors(5, false)
-  cone.transform(MatrixLibrary.rotationMatrix(0, -0.3, 3.14))
-  cone.transform(MatrixLibrary.translationMatrix(3, -1, 0.5))
-
-  const IceCream = Our3DGroup()
-  IceCream.add(cone)
-  IceCream.add(sphere)
-
-  return IceCream
-}
-
-const PyramidFactory = position => {
-  let pyramid = Our3DObject(OurMesh(Geometries.Cone(2.5, 3, 4, 4), false), [1, 1, 0.1])
-  pyramid.transform(MatrixLibrary.translationMatrix(...position))
-  return pyramid
-}
-
 const ExampleUniverse = () => {
   let universe = BigBang()
-
-  // Yummy :)
-  const IceCream = IceCreamFactory()
-  universe.addToUniverse(IceCream) // Demonstrating animations can be added after addToUniverse call
-  universe.addAnimation(Animations.RotateAboutPoint(IceCream, [3, -1, 0.5], [0, 0, 0.1]))
 
   // Pyramids
   const pyramid = PyramidFactory([-0.2, -1, -3])
@@ -173,10 +66,10 @@ const ExampleUniverse = () => {
   universe.addToUniverse(sphinx)
 
   universe.addAnimation({
-    displacement:0,
+    displacement: 0,
     movingLeft: false,
     tick: function (progress) {
-      
+
       if (!this.movingLeft) {
         sphinx.getObjectByName('head').getObjectByName('eyes').translate(0.001, 0, 0)
         this.displacement++
@@ -192,7 +85,7 @@ const ExampleUniverse = () => {
           this.movingLeft = false
         }
       }
-      
+
     }
   })
 
@@ -239,20 +132,20 @@ const ExampleUniverse = () => {
     tick: function () {
       if (this.curseUnleahsed) {
         if (this.displacement < 100) {
-          sphinx.translate(.05,.008,.05)
-          sphinx.rotate(0,-0.006,0)
+          sphinx.translate(.05, .008, .05)
+          sphinx.rotate(0, -0.006, 0)
           //sphinx.scale(1.01,1.01,1.01)
           this.displacement++
         } else if (this.displacement < 150) {
           if (this.brighten) {
-            AmbientLight.newLight = [10,10,10]
+            AmbientLight.newLight = [10, 10, 10]
           } else {
-            AmbientLight.newLight = [.1,.1,.1]
+            AmbientLight.newLight = [.1, .1, .1]
           }
           this.brighten = !this.brighten
           this.displacement++
         } else {
-          AmbientLight.newLight = [3,3,3]
+          AmbientLight.newLight = [3, 3, 3]
           universe.removeFromUniverse(sphinx)
         }
 
@@ -322,9 +215,9 @@ const ExampleUniverse = () => {
     timeBetween: 3000,
     tick: function (progress) {
       this.timeElapsed = this.timeElapsed > this.timeBetween ? this.timeElapsed = 0 : this.timeElapsed + progress
-      if(this.timeElapsed > this.timeBetween){
+      if (this.timeElapsed > this.timeBetween) {
         this.timeElapsed = 0
-        if(this.camelInScene){
+        if (this.camelInScene) {
           universe.removeFromUniverse(camel2)
           this.camelInScene = false
         } else {
@@ -341,8 +234,8 @@ const ExampleUniverse = () => {
     timeBetween: 3000,
 
     // Demonstrate "Ability to compute lighting in both faceted/flat and smooth styles"
-    tick: function(progress){
-      if(this.timeElapsed > this.timeBetween){
+    tick: function (progress) {
+      if (this.timeElapsed > this.timeBetween) {
         this.timeElapsed = 0
         pyramid.toggleFaceted()
       } else {
