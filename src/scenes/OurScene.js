@@ -46,9 +46,6 @@ const ExampleUniverse = () => {
   })
 
   // Amazing background :)
-  const stars = StarFactory()
-  universe.addAnimation(Animations.RotateAboutPoint(stars, [0.79, 0.4, 1.9], [0.01, 0.01, 0.01]))
-  universe.addToUniverse(stars)
 
   let ground = Our3DObject(OurMesh(Geometries.RegularPolygon(4), false), [0.5, 0.4, 0.2])
   ground.transform(MatrixLibrary.scaleMatrix(15, 15, 1))
@@ -110,9 +107,15 @@ const ExampleUniverse = () => {
   }
   universe.addToUniverse(starrySky)
 
-  const UFO = UFOFactory().translate(0, -1, 1)
+  const UFO = UFOFactory().translate(3, 0, -1)
   universe.addToUniverse(UFO)
-  universe.addAnimation(Animations.RotateAboutPoint(UFO, [0, -1, -1], [0, 0.01, 0]))
+  universe.addAnimation(
+    Animations.RotateAboutPoint(UFO.getObjectByName('beam').getObjectByName('outer'), [3, 0, -1], [0, 0.01, 0])
+  )
+  universe.addAnimation(
+    Animations.RotateAboutPoint(UFO.getObjectByName('beam').getObjectByName('inner'), [3, 0, -1], [0, -0.01, 0])
+  )
+  universe.addAnimation(Animations.RotateAboutPoint(UFO, [3, 0, -1], [0, -0.001, 0]))
 
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
