@@ -117,6 +117,28 @@ const ExampleUniverse = () => {
   )
   universe.addAnimation(Animations.RotateAboutPoint(UFO, [3, 0, -1], [0, -0.001, 0]))
 
+  universe.addAnimation({
+    displacement: 0,
+    movingUp: false,
+    tick: function (progress) {
+      if (!this.movingUp) {
+        UFO.translate(0, -0.001, 0)
+        this.displacement++
+        if (this.displacement === 100) {
+          this.displacement = 0
+          this.movingUp = true
+        }
+      } else {
+        UFO.translate(0, 0.001, 0)
+        this.displacement++
+        if (this.displacement === 100) {
+          this.displacement = 0
+          this.movingUp = false
+        }
+      }
+    }
+  })
+
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
   // const camera = OurCamera([0, 1, -5], [0, 0, 0], [1, -1, 1, -1, 2, -2], MatrixLibrary.orthographicProjectionMatrix)
@@ -295,7 +317,12 @@ const ExampleUniverse = () => {
         universe.addToUniverse(perspectiveCamera)
         this.isPerspective = !this.isPerspective
       } else {
-        const orthagraphicCamera = OurCamera([0, 1, -5], [0, 0, 0], [5, -5, 5, -5, -5, 10], MatrixLibrary.orthographicProjectionMatrix)
+        const orthagraphicCamera = OurCamera(
+          [0, 1, -5],
+          [0, 0, 0],
+          [5, -5, 5, -5, -5, 10],
+          MatrixLibrary.orthographicProjectionMatrix
+        )
         universe.addToUniverse(orthagraphicCamera)
         this.isPerspective = !this.isPerspective
       }
