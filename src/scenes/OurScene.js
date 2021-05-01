@@ -281,6 +281,21 @@ const ExampleUniverse = () => {
     }
   })
 
+  const changeView = {
+    isPerspective: true,
+    toggleView: function () {
+      if (!this.isPerspective) {
+        const perspectiveCamera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
+        universe.addToUniverse(perspectiveCamera)
+        this.isPerspective = !this.isPerspective
+      } else {
+        const orthagraphicCamera = OurCamera([0, 1, -5], [0, 0, 0], [5, -5, 5, -5, -5, 10], MatrixLibrary.orthographicProjectionMatrix)
+        universe.addToUniverse(orthagraphicCamera)
+        this.isPerspective = !this.isPerspective
+      }
+    }
+  }
+
   universe.addAnimation({
     timeElapsed: 0,
     timeBetween: 3000,
@@ -326,6 +341,9 @@ const ExampleUniverse = () => {
     },
     toggleMoveCamera: () => {
       moveCamera.toggleMoving()
+    },
+    changeCamera: () => {
+      changeView.toggleView()
     }
   }
   return { universe, thingsWeWant }
@@ -349,11 +367,11 @@ const ExampleWebGL = props => {
       <button onClick={thingsWeWant.makeWireframe}>Toggle wireframe</button>
       <button onClick={thingsWeWant.togglem}>Toggle camera move</button>
       <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
+      <button onClick={thingsWeWant.changeCamera}>Toggle perspective / orthographic</button>
       <br />
       <button onClick={thingsWeWant.toggleLeft}>⏪</button>
       <button onClick={thingsWeWant.toggleFlying}>Fly!</button>
       <button onClick={thingsWeWant.toggleRight}>⏩</button>
-
 
 
     </section>
