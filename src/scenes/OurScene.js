@@ -180,7 +180,7 @@ const ExampleUniverse = () => {
         } else if (this.displacement < 151) {
           universe.removeFromUniverse(sphinx)
           this.displacement++
-        } else if (this.displacement < 250) {
+        } else if (this.displacement < 200) {
           if (this.brighten) {
             AmbientLight.newLight = [10, 10, 10]
           } else {
@@ -189,7 +189,7 @@ const ExampleUniverse = () => {
           this.brighten = !this.brighten
           pyramid.toggleWireframe()
           this.displacement++
-        } else if (this.displacement < 400) {
+        } else if (this.displacement < 350) {
           if (this.brighten) {
             AmbientLight.newLight = [10, 10, 10]
           } else {
@@ -199,11 +199,14 @@ const ExampleUniverse = () => {
           pyramid.toggleWireframe()
           mummy.getObjectByName('mummy').rotate(0.001,0,0)
           this.displacement++
-        } else if (this.displacement < 401) {
+        } else if (this.displacement < 351) {
           AmbientLight.newLight = [3,3,3]
-          //universe.addToUniverse(sphinx)
-          //sphinx = SphinxFactory()
           pyramid.toggleWireframe()
+          
+          sphinx = SphinxFactory()
+          universe.addToUniverse(sphinx)
+          sphinx.getObjectByName('eyes').translate(.2,0,.1)
+
           this.displacement++
         }
       }
