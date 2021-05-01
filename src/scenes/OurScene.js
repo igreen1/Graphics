@@ -371,6 +371,7 @@ const ExampleWebGL = props => {
         <button onClick={thingsWeWant.makeWireframe}>Toggle wireframe</button>
         <button onClick={thingsWeWant.togglem}>Toggle camera move</button>
         <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
+        <button onClick={thingsWeWant.changeCamera}>Toggle camera</button>
         <br />
         <button onClick={thingsWeWant.toggleLeft}>⏪</button>
         <button onClick={thingsWeWant.toggleFlying}>Fly!</button>
