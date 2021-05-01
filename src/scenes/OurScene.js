@@ -4,6 +4,7 @@ import { CamelFactory } from '../objects/camel'
 import { StarFactory, PyramidFactory } from '../objects/Detroit'
 import { ShepherdFactory } from '../objects/shepherd'
 import { UFOFactory } from '../objects/UFO'
+import { MummyFactory } from '../objects/mummy'
 
 // Import our library
 import {
@@ -60,7 +61,7 @@ const ExampleUniverse = () => {
   universe.addToUniverse(sky)
 
   // From our cast
-  const sphinx = SphinxFactory()
+  let sphinx = SphinxFactory()
   universe.addToUniverse(sphinx)
 
   universe.addAnimation({
@@ -84,6 +85,9 @@ const ExampleUniverse = () => {
       }
     }
   })
+
+  const mummy = MummyFactory()
+  universe.addToUniverse(mummy)
 
   const camel1 = CamelFactory().scale(0.25, 0.25, 0.25).transform(MatrixLibrary.translationMatrix(1, -1.5, -1))
   const camel2 = CamelFactory()
@@ -173,9 +177,34 @@ const ExampleUniverse = () => {
           }
           this.brighten = !this.brighten
           this.displacement++
-        } else {
-          AmbientLight.newLight = [3, 3, 3]
+        } else if (this.displacement < 151) {
           universe.removeFromUniverse(sphinx)
+          this.displacement++
+        } else if (this.displacement < 250) {
+          if (this.brighten) {
+            AmbientLight.newLight = [10, 10, 10]
+          } else {
+            AmbientLight.newLight = [0.1, 0.1, 0.1]
+          }
+          this.brighten = !this.brighten
+          pyramid.toggleWireframe()
+          this.displacement++
+        } else if (this.displacement < 400) {
+          if (this.brighten) {
+            AmbientLight.newLight = [10, 10, 10]
+          } else {
+            AmbientLight.newLight = [0.1, 0.1, 0.1]
+          }
+          this.brighten = !this.brighten
+          pyramid.toggleWireframe()
+          mummy.getObjectByName('mummy').rotate(0.001,0,0)
+          this.displacement++
+        } else if (this.displacement < 401) {
+          AmbientLight.newLight = [3,3,3]
+          //universe.addToUniverse(sphinx)
+          //sphinx = SphinxFactory()
+          pyramid.toggleWireframe()
+          this.displacement++
         }
       }
     }
@@ -399,7 +428,7 @@ const ExampleWebGL = props => {
         <button onClick={thingsWeWant.toggleCamelAnimation}>Straight vibing</button>
         <button onClick={thingsWeWant.toggleBreakItAll}>Break it all </button>
         <button onClick={thingsWeWant.makeWireframe}>Toggle wireframe</button>
-        <button onClick={thingsWeWant.togglem}>Toggle camera move</button>
+        <button onClick={thingsWeWant.toggleMoveCamera}>Toggle camera move</button>
         <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
         <button onClick={thingsWeWant.changeCamera}>Toggle camera</button>
         <br />
