@@ -243,23 +243,23 @@ const Sphere = (radius = 0.5, radialSegments = 32) => {
   let currentRadius = radius
 
   const vertices = []
-  for (let i = 0; i <= radialSegments + 1; i++) {
+  for (let i = 0; i <= radialSegments; i++) {
     currentRadius = Math.sqrt(radius ** 2 - (i * deltaRadius) ** 2)
     for (let j = 0; j <= radialSegments; j++) {
       vertices.push([
-        currentRadius * Math.cos(j * deltaRotation),
         currentRadius * Math.sin(j * deltaRotation),
+        currentRadius * Math.cos(j * deltaRotation),
         i * deltaRadius
       ])
     }
   }
 
-  for (let i = 0; i <= radialSegments + 1; i++) {
+  for (let i = 0; i <= radialSegments; i++) {
     currentRadius = Math.sqrt(radius ** 2 - (i * deltaRadius) ** 2)
     for (let j = 0; j <= radialSegments; j++) {
       vertices.push([
-        currentRadius * Math.cos(j * deltaRotation),
         currentRadius * Math.sin(j * deltaRotation),
+        currentRadius * Math.cos(j * deltaRotation),
         -i * deltaRadius
       ])
     }
@@ -268,7 +268,7 @@ const Sphere = (radius = 0.5, radialSegments = 32) => {
   const facesByIndex = []
 
   for (let i = 0; i < vertices.length - radialSegments - 1; i++) {
-    facesByIndex.push([i, i + 1, i + radialSegments + 1])
+    facesByIndex.push([i + 1, i, i + radialSegments + 1])
     facesByIndex.push([i, i + radialSegments + 1, i + radialSegments])
   }
 

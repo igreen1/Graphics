@@ -110,8 +110,9 @@ const ExampleUniverse = () => {
   }
   universe.addToUniverse(starrySky)
 
-  const UFO = UFOFactory().translate(0, -2, 1.5)
+  const UFO = UFOFactory().translate(0, -1, 1)
   universe.addToUniverse(UFO)
+  universe.addAnimation(Animations.RotateAboutPoint(UFO, [0, -1, -1], [0, 0.01, 0]))
 
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
@@ -161,11 +162,12 @@ const ExampleUniverse = () => {
     toggleEarthquake: function () {
       this.timeElapsed = 0
     },
-    tick: function(progress) {
+    tick: function (progress) {
       if (this.timeElapsed < 3000) {
         this.timeElapsed = this.timeElapsed + progress
-        universe.universe.scene.objectsToDraw.forEach((object) =>
-          object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005))
+        universe.universe.scene.objectsToDraw.forEach(object =>
+          object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005)
+        )
       }
     }
   }
@@ -173,7 +175,7 @@ const ExampleUniverse = () => {
   universe.addAnimation(earthquake)
 
   const shepherdAbilities = {
-    center: [-.2, -2, 1],
+    center: [-0.2, -2, 1],
     angle: Math.PI / 2,
     toggleFlying: function () {
       this.flying = !this.flying
@@ -188,18 +190,19 @@ const ExampleUniverse = () => {
       this.rightTurn = !this.rightTurn
       this.leftTurn = false
     },
-    tick: function(progress) {
+    tick: function (progress) {
       if (this.flying) {
-        shepherd.translate(Math.cos(this.angle)*.02, Math.sin(this.angle)*.02, 0)
-        this.center[0] += Math.cos(this.angle)*.02
-        this.center[1] += Math.sin(this.angle)*.02
+        shepherd.translate(Math.cos(this.angle) * 0.02, Math.sin(this.angle) * 0.02, 0)
+        this.center[0] += Math.cos(this.angle) * 0.02
+        this.center[1] += Math.sin(this.angle) * 0.02
       }
       if (this.leftTurn) {
-        this.angle -= .075
-        shepherd.rotateAboutPoint([this.center[0], this.center[1], this.center[2]], [0, 0, -.075])
-      } if (this.rightTurn) {
-        shepherd.rotateAboutPoint([this.center[0], this.center[1], this.center[2]], [0, 0, .075])
-        this.angle += .075
+        this.angle -= 0.075
+        shepherd.rotateAboutPoint([this.center[0], this.center[1], this.center[2]], [0, 0, -0.075])
+      }
+      if (this.rightTurn) {
+        shepherd.rotateAboutPoint([this.center[0], this.center[1], this.center[2]], [0, 0, 0.075])
+        this.angle += 0.075
       }
     }
   }
@@ -358,24 +361,23 @@ const ExampleWebGL = props => {
   //   thingsWeWant.toggleCamelAnimation()
   // }
 
-  return <article>
-    <ReactWebGL universe={universe.universe} />
-    <section>
-      <button onClick={thingsWeWant.toggleUnleshCurse}>Unleash Ancient Curse</button>
-      <button onClick={thingsWeWant.toggleCamelAnimation}>Straight vibing</button>
-      <button onClick={thingsWeWant.toggleBreakItAll}>Break it all </button>
-      <button onClick={thingsWeWant.makeWireframe}>Toggle wireframe</button>
-      <button onClick={thingsWeWant.togglem}>Toggle camera move</button>
-      <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
-      <button onClick={thingsWeWant.changeCamera}>Toggle perspective / orthographic</button>
-      <br />
-      <button onClick={thingsWeWant.toggleLeft}>⏪</button>
-      <button onClick={thingsWeWant.toggleFlying}>Fly!</button>
-      <button onClick={thingsWeWant.toggleRight}>⏩</button>
-
-
-    </section>
-  </article>
+  return (
+    <article>
+      <ReactWebGL universe={universe.universe} />
+      <section>
+        <button onClick={thingsWeWant.toggleUnleshCurse}>Unleash Ancient Curse</button>
+        <button onClick={thingsWeWant.toggleCamelAnimation}>Straight vibing</button>
+        <button onClick={thingsWeWant.toggleBreakItAll}>Break it all </button>
+        <button onClick={thingsWeWant.makeWireframe}>Toggle wireframe</button>
+        <button onClick={thingsWeWant.togglem}>Toggle camera move</button>
+        <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
+        <br />
+        <button onClick={thingsWeWant.toggleLeft}>⏪</button>
+        <button onClick={thingsWeWant.toggleFlying}>Fly!</button>
+        <button onClick={thingsWeWant.toggleRight}>⏩</button>
+      </section>
+    </article>
+  )
 }
 
 export { ExampleWebGL }
