@@ -1,37 +1,44 @@
 import { Our3DObject, OurMesh, Our3DGroup } from '../VIBAH/Our3DObject'
-import { Sphere, Cone, RegularPolygon } from '../VIBAH/OurGeometryLibrary'
+import { Sphere, RegularPolygon, Cylinder, Cone } from '../VIBAH/OurGeometryLibrary'
 import { MatrixLibrary } from '../VIBAH/OurMatrix'
 
 const UFOFactory = () => {
   // Define the main body of our ship
-  const saucer = Our3DObject(OurMesh(Sphere(1, 8)), [0.5, 0.5, 0.5], 'saucer')
-  saucer.scale(1, 0.2, 1)
-  const cockpit = Our3DObject(OurMesh(Sphere(0.5, 8), true), [0.5, 0.7, 1], 'cockpit')
-  cockpit
-    .rotate(0, Math.PI / 2, 0)
-    .translate(0, 0.2, 0)
-    .scale(1, 0.9, 1)
-  const interior = Our3DObject(OurMesh(RegularPolygon(16)), [0, 0, 0.05], 'interior')
-  interior
-    .rotate(Math.PI / 2, 0, 0)
-    .translate(0, 0.38, 0)
-    .scale(0.5, 0.5, 0.5)
-  const ship = Our3DGroup([saucer, cockpit, interior])
-
   const ShipFactory = () => {
-    //   const socket = Our3DObject(OurMesh(Sphere(1, 2, 8, 8), false), [0, 0, 0])
-    //   const sclera = Our3DObject(OurMesh(Sphere(1, 2, 8, 8), false), [10, 10, 10])
-    //   const iris = Our3DObject(OurMesh(Sphere(1, 2, 8, 8), false), [0.3, 0.8, 0.8])
-    //   socket.transform(MatrixLibrary.scaleMatrix(1.5, 1, 1))
-    //   sclera.transform(MatrixLibrary.scaleMatrix(1, 0.7, 0.7))
-    //   sclera.transform(MatrixLibrary.translationMatrix(-0.1, 0, 0))
-    //   iris.transform(MatrixLibrary.scaleMatrix(0.8, 0.5, 0.5))
-    //   iris.transform(MatrixLibrary.translationMatrix(-0.2, 0, 0))
-    //   const eye = Our3DGroup([socket, sclera, iris])
-    //   eye.transform(MatrixLibrary.rotationMatrix(0, Math.PI / 2, 0))
-    //   eye.transform(MatrixLibrary.scaleMatrix(0.14, 0.07, 0.14))
-    //   return eye
+    const saucer = Our3DObject(OurMesh(Sphere(1, 8)), [0.5, 0.5, 0.5])
+    saucer.scale(1, 0.2, 1)
+    const cockpit = Our3DObject(OurMesh(Sphere(0.5, 8), true), [0.5, 0.7, 1])
+    cockpit
+      .rotate(0, Math.PI / 2, 0)
+      .translate(0, 0.2, 0)
+      .scale(1, 0.9, 1)
+    const interior = Our3DObject(OurMesh(RegularPolygon(16)), [0, 0, 0.05])
+    interior
+      .rotate(Math.PI / 2, 0, 0)
+      .translate(0, 0.39, 0)
+      .scale(0.5, 0.5, 0.5)
+
+    const ship = Our3DGroup([saucer, cockpit, interior])
+
+    return ship
   }
+
+  const ship = ShipFactory()
+
+  const AlienFactory = () => {
+    const head = Our3DObject(OurMesh(Sphere(0.1, 8)), [0, 0.8, 0.6])
+    head.translate(0, 0.25, 0).scale(1, 1.2, 1)
+    const body = Our3DObject(OurMesh(Sphere(0.15, 8)), [0, 0.8, 0.6])
+    body.scale(1, 1.5, 1)
+    const arm1 = Our3DObject(OurMesh(Cylinder(0.05, 0.2, 8)), [0, 0.8, 0.6])
+
+    const alien = Our3DGroup([head, body])
+
+    return alien
+  }
+
+  const alien = AlienFactory()
+  alien.translate(0, 0.2, 0)
 
   // const face = Our3DObject(OurMesh(Sphere(0.5, 5), false), [1.1, 1, 0.1])
   // const mouth = Our3DObject(OurMesh(Sphere(0.1, 5), false), [0.3, 0.3, 0])
@@ -77,7 +84,7 @@ const UFOFactory = () => {
   // eyes.translate(-0.05, -1, 1.05)
   // mouth.translate(0.3, -0.1, 0.3)
 
-  const UFO = Our3DGroup([ship])
+  const UFO = Our3DGroup([ship, alien])
 
   // UFO.scale(0.8, 0.8, 0.8)
   // UFO.translate(-2, -0.9, -1)
