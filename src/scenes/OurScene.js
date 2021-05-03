@@ -23,7 +23,7 @@ import {
 } from '../VIBAH/VIBAH'
 
 // Alternatively can import as
-// import * as LIBRARY from './OurLibrary/OurLibrary
+// import * as VIBAH from './VIBAH/VIBAH
 
 const ExampleUniverse = () => {
   let universe = BigBang()
