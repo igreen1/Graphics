@@ -5,6 +5,7 @@ import { StarFactory, PyramidFactory } from '../objects/Detroit'
 import { ShepherdFactory } from '../objects/shepherd'
 import { UFOFactory } from '../objects/UFO'
 import { MummyFactory } from '../objects/mummy'
+import { Vineyard } from '../objects/vineyard'
 
 // Import our library
 import {
@@ -143,6 +144,9 @@ const ExampleUniverse = () => {
     }
   })
 
+  const bunchOfGrapes = Vineyard().Bunch
+  universe.addToUniverse(bunchOfGrapes)
+
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
   // const camera = OurCamera([0, 1, -5], [0, 0, 0], [1, -1, 1, -1, 2, -2], MatrixLibrary.orthographicProjectionMatrix)
@@ -197,15 +201,15 @@ const ExampleUniverse = () => {
           }
           this.brighten = !this.brighten
           pyramid.toggleWireframe()
-          mummy.getObjectByName('mummy').rotate(0.001,0,0)
+          mummy.getObjectByName('mummy').rotate(0.001, 0, 0)
           this.displacement++
         } else if (this.displacement < 351) {
-          AmbientLight.newLight = [3,3,3]
+          AmbientLight.newLight = [3, 3, 3]
           pyramid.toggleWireframe()
-          
+
           sphinx = SphinxFactory()
           universe.addToUniverse(sphinx)
-          sphinx.getObjectByName('eyes').translate(.2,0,.1)
+          sphinx.getObjectByName('eyes').translate(0.2, 0, 0.1)
 
           this.displacement++
         }
@@ -230,6 +234,22 @@ const ExampleUniverse = () => {
   }
 
   universe.addAnimation(earthquake)
+
+  // const dancingGrapes = {
+  //   dancing: false,
+  //   toggleDancing: function () {
+  //     this.dancing = !this.dancing
+  //   },
+  //   tick: function () {
+  //     if (this.dancing) {
+  //       bunchOfGrapes.first_grape_in_bunch.rotateAboutPoint(...bunchOfGrapes.first_grape_position)
+  //       bunchOfGrapes.second_grape_in_bunch.rotateAboutPoint(...bunchOfGrapes.second_grape_position)
+  //       bunchOfGrapes.third_grape_in_bunch.rotateAboutPoint(...bunchOfGrapes.third_grape_position)
+  //     }
+  //   }
+  // }
+
+  // universe.addAnimation(dancingGrapes)
 
   const shepherdAbilities = {
     center: [-0.2, -2, 1],
@@ -388,6 +408,9 @@ const ExampleUniverse = () => {
     toggleBreakItAll: () => {
       breakEverything.toggleBreakItAll()
     },
+    // toggleDancing: () => {
+    //   dancingGrapes.toggleDancing()
+    // },
     toggleEarthquake: () => {
       earthquake.toggleEarthquake()
     },
@@ -434,6 +457,7 @@ const ExampleWebGL = props => {
         <button onClick={thingsWeWant.toggleMoveCamera}>Toggle camera move</button>
         <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
         <button onClick={thingsWeWant.changeCamera}>Toggle camera</button>
+        {/* <button onClick={thingsWeWant.toggleDancing}>Dancing Grapes</button> */}
         <br />
         <button onClick={thingsWeWant.toggleLeft}>⏪</button>
         <button onClick={thingsWeWant.toggleFlying}>Fly!</button>
