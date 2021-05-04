@@ -44,13 +44,13 @@ const ExampleUniverse = () => {
         if (this.movingUp) {
           pyramid3.translate(0, 0.01, 0)
           this.displacement++
-          if (this.displacement == 100) {
+          if (this.displacement === 100) {
             this.movingUp = false
           }
         } else {
           pyramid3.translate(0, -0.01, 0)
           this.displacement--
-          if (this.displacement == 0) {
+          if (this.displacement === 0) {
             this.movingUp = true
           }
         }
