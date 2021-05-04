@@ -238,16 +238,22 @@ const ExampleUniverse = () => {
   const dancingGrapes = {
     dancing: false,
     rave: false,
+<<<<<<< HEAD
     ferrisWheel: false,
+=======
+>>>>>>> 3de1ced7a266d17249b52f8ebb7d1e64d8376a7d
     toggleDancing: function () {
       this.dancing = !this.dancing
     },
     toggleRave: function () {
       this.rave = !this.rave
     },
+<<<<<<< HEAD
     toggleferrisWheel: function () {
       this.ferrisWheel = !this.ferrisWheel
     },
+=======
+>>>>>>> 3de1ced7a266d17249b52f8ebb7d1e64d8376a7d
     tick: function () {
       if (this.dancing) {
         bunchOfGrapes.first_grape_in_bunch.rotateAboutPoint([...bunchOfGrapes.first_grape_position], [0, -0.05, 0])
@@ -268,10 +274,13 @@ const ExampleUniverse = () => {
           [Math.random() * 0.25, Math.random() * -0.25, Math.random() * 0.25]
         )
       }
+<<<<<<< HEAD
       if (this.ferrisWheel) {
         const point = [Math.random(), Math.random(), Math.random() * -1]
         bunchOfGrapes.Bunch.group.forEach(grape => grape.rotateAboutPoint([...point], [0, 0, 0.08]))
       }
+=======
+>>>>>>> 3de1ced7a266d17249b52f8ebb7d1e64d8376a7d
     }
   }
 
@@ -440,9 +449,12 @@ const ExampleUniverse = () => {
     toggleRave: () => {
       dancingGrapes.toggleRave()
     },
+<<<<<<< HEAD
     toggleferrisWheel: () => {
       dancingGrapes.toggleferrisWheel()
     },
+=======
+>>>>>>> 3de1ced7a266d17249b52f8ebb7d1e64d8376a7d
     toggleEarthquake: () => {
       earthquake.toggleEarthquake()
     },
@@ -489,10 +501,15 @@ const ExampleWebGL = props => {
         <button onClick={thingsWeWant.toggleMoveCamera}>Toggle camera move</button>
         <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
         <button onClick={thingsWeWant.changeCamera}>Toggle camera</button>
+<<<<<<< HEAD
         <br />
         <button onClick={thingsWeWant.toggleDancing}> Dancing 💃🏻 🕺🏻 🍇 </button>
         <button onClick={thingsWeWant.toggleRave}> Rave 🍇 ❓ ❔</button>
         <button onClick={thingsWeWant.toggleferrisWheel}> 🎡 🍇 Ferris Wheel 🍇 🎡</button>
+=======
+        <button onClick={thingsWeWant.toggleDancing}>💃🏻🕺🏻🍇</button>
+        <button onClick={thingsWeWant.toggleRave}> Rave 🍇 ❓ ❔</button>
+>>>>>>> 3de1ced7a266d17249b52f8ebb7d1e64d8376a7d
         <br />
         <button onClick={thingsWeWant.toggleLeft}>⏪</button>
         <button onClick={thingsWeWant.toggleFlying}>Fly!</button>
