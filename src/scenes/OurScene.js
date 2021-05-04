@@ -250,9 +250,18 @@ const ExampleUniverse = () => {
     },
     tick: function () {
       if (this.dancing) {
-        bunchOfGrapes.first_grape_in_bunch.rotateAboutPoint([...bunchOfGrapes.first_grape_position], [0, -0.05, 0])
-        bunchOfGrapes.second_grape_in_bunch.rotateAboutPoint([...bunchOfGrapes.second_grape_position], [0, -0.05, 0])
-        bunchOfGrapes.third_grape_in_bunch.rotateAboutPoint([...bunchOfGrapes.third_grape_position], [0, -0.05, 0])
+        bunchOfGrapes.first_grape_in_bunch.rotateAboutPoint(
+          [...bunchOfGrapes.first_grape_tracking_position],
+          [0, -0.05, 0]
+        )
+        bunchOfGrapes.second_grape_in_bunch.rotateAboutPoint(
+          [...bunchOfGrapes.second_grape_tracking_position],
+          [0, -0.05, 0]
+        )
+        bunchOfGrapes.third_grape_in_bunch.rotateAboutPoint(
+          [...bunchOfGrapes.third_grape_tracking_position],
+          [0, -0.05, 0]
+        )
       }
       if (this.rave) {
         bunchOfGrapes.first_grape_in_bunch.rotateAboutPoint(
