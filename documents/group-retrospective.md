@@ -1,2 +1,4 @@
 ## Booker Martin
 Booker's personal contributions include the Extrude 3D geometry, the rotation matrix, and the UFO and alien in the final demo scene as well as the ability to load scenes from JSONs. In addition to coming to all group meetings and assisting with the general code and design, he helped work on the code for colorByFaces and colorByVertex. He also added the basis for extrude lighting and helped debug lighting and fix the face mappings on 3D geometries such as spheres.
+## Veronica Backer-Peral
+Veronica individually worked on the Cone geometry, scale matrix, and Sphinx and pyramids in the final scene, as well as adding a test suite for the Geometries libraries. Alongside her team members, she worked on implementing successful grouping, lighting, normal vectors and camera movements, as well as setting up the Matrix Library, and actively participated during group meetings.
