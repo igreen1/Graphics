@@ -37,9 +37,23 @@ const ExampleUniverse = () => {
   universe.addToUniverse(pyramid3)
 
   universe.addAnimation({
+    movingUp: true,
+    displacement: 0,
     tick: function (progress) {
       if (this.isActive) {
-        pyramid.translate(0.01, 0.01, 0.01)
+        if (this.movingUp) {
+          pyramid3.translate(0, 0.01, 0)
+          this.displacement++
+          if (this.displacement == 100) {
+            this.movingUp = false
+          }
+        } else {
+          pyramid3.translate(0, -0.01, 0)
+          this.displacement--
+          if (this.displacement == 0) {
+            this.movingUp = true
+          }
+        }
       }
     },
     click: function () {
@@ -347,22 +361,6 @@ const ExampleUniverse = () => {
   }
   universe.addAnimation(camelInternalAnimation)
 
-  const breakEverything = {
-    // Just for fun
-    breakItAll: false,
-    toggleBreakItAll: function () {
-      this.breakItAll = !this.breakItAll
-    },
-    tick: function () {
-      if (this.breakItAll) {
-        universe.universe.scene.objectsToDraw.forEach(object =>
-          object.translate(Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005, Math.random() * 0.01 - 0.005)
-        )
-      }
-    }
-  }
-  universe.addAnimation(breakEverything)
-
   const moveCamera = {
     // Demonstrate "Ability to change camera position and viewpoint"
     moving: false,
@@ -408,7 +406,7 @@ const ExampleUniverse = () => {
         const orthagraphicCamera = OurCamera(
           [0, 1, -5],
           [0, 0, 0],
-          [5, -5, 5, -5, -5, 10],
+          [2.5, -2.5, 5, -5, -5, 10],
           MatrixLibrary.orthographicProjectionMatrix
         )
         universe.addToUniverse(orthagraphicCamera)
@@ -440,9 +438,6 @@ const ExampleUniverse = () => {
     },
     toggleCamelAnimation: () => {
       camelInternalAnimation.toggleAnimation()
-    },
-    toggleBreakItAll: () => {
-      breakEverything.toggleBreakItAll()
     },
     toggleDancing: () => {
       dancingGrapes.toggleDancing()
@@ -481,24 +476,17 @@ const ExampleUniverse = () => {
 
 const ExampleWebGL = props => {
   const { universe, thingsWeWant } = ExampleUniverse()
-  //  return < ReactWebGL universe={universe} />
-
-  // const camelHeadBob = () => {
-  //   // Make the camels VIBE
-  //   thingsWeWant.toggleCamelAnimation()
-  // }
 
   return (
     <article>
       <ReactWebGL universe={universe.universe} />
       <section>
-        <button onClick={thingsWeWant.toggleUnleshCurse}>Unleash Ancient Curse</button>
-        <button onClick={thingsWeWant.toggleCamelAnimation}>Straight vibing</button>
-        <button onClick={thingsWeWant.toggleBreakItAll}>Break it all </button>
         <button onClick={thingsWeWant.makeWireframe}>Toggle wireframe</button>
         <button onClick={thingsWeWant.toggleMoveCamera}>Toggle camera move</button>
-        <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
         <button onClick={thingsWeWant.changeCamera}>Toggle camera</button>
+        <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
+        <button onClick={thingsWeWant.toggleUnleshCurse}>Unleash Ancient Curse</button>
+        <button onClick={thingsWeWant.toggleCamelAnimation}>Straight vibing</button>
         <br />
         <button onClick={thingsWeWant.toggleDancing}> Dancing 💃🏻 🕺🏻 🍇 </button>
         <button onClick={thingsWeWant.toggleRave}> Rave 🍇 ❓ ❔</button>
