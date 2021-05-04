@@ -3,7 +3,7 @@ The year is 50 BC, 19 years after the birth of co-regent Cleopatra and 1 year af
 
 # Animations
 -The UFO autonomously hovers up and down and rotates 360 degrees. The tractor beam is split into two layers, with one rotating 360 degrees counter-clockwise and the other rotating 360 degrees clockwise.\
--The sphinx's eyes translate left and right, searching for those who intend to breach Ptolemy XII's final resting place.\
+-The sphinx's eyes translate left and right, searching for those who intend to breach Ptolemy XII's final resting place.
 
 # Interaction
 -Toggle wireframe button will cause all solid objects to turn on wireframe and all wireframe objects to turn solid.\
