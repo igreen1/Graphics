@@ -245,7 +245,6 @@ const ExampleUniverse = () => {
     toggleRave: function () {
       this.rave = !this.rave
     },
-
     toggleferrisWheel: function () {
       this.ferrisWheel = !this.ferrisWheel
     },
@@ -494,8 +493,6 @@ const ExampleWebGL = props => {
         <button onClick={thingsWeWant.toggleDancing}> Dancing 💃🏻 🕺🏻 🍇 </button>
         <button onClick={thingsWeWant.toggleRave}> Rave 🍇 ❓ ❔</button>
         <button onClick={thingsWeWant.toggleferrisWheel}> 🎡 🍇 Ferris Wheel 🍇 🎡</button>
-        <button onClick={thingsWeWant.toggleDancing}>💃🏻🕺🏻🍇</button>
-        <button onClick={thingsWeWant.toggleRave}> Rave 🍇 ❓ ❔</button>
         <br />
         <button onClick={thingsWeWant.toggleLeft}>⏪</button>
         <button onClick={thingsWeWant.toggleFlying}>Fly!</button>
