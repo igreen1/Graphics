@@ -278,8 +278,9 @@ const ExampleUniverse = () => {
         )
       }
       if (this.ferrisWheel) {
-        const point = [Math.random(), Math.random(), Math.random() * -1]
-        bunchOfGrapes.Bunch.group.forEach(grape => grape.rotateAboutPoint([...point], [0, 0, 0.08]))
+        const point = [Math.random() * 0.5, Math.random() * 0.5, Math.random() * -1]
+        const rotation = [0, 0, Math.random() * 0.5]
+        bunchOfGrapes.Bunch.group.forEach(grape => grape.rotateAboutPoint([...point], [...rotation]))
       }
     }
   }
