@@ -238,11 +238,15 @@ const ExampleUniverse = () => {
   const dancingGrapes = {
     dancing: false,
     rave: false,
+    ferrisWheel: false,
     toggleDancing: function () {
       this.dancing = !this.dancing
     },
     toggleRave: function () {
       this.rave = !this.rave
+    },
+    toggleferrisWheel: function () {
+      this.ferrisWheel = !this.ferrisWheel
     },
     tick: function () {
       if (this.dancing) {
@@ -263,6 +267,10 @@ const ExampleUniverse = () => {
           [...bunchOfGrapes.third_grape_position],
           [Math.random() * 0.25, Math.random() * -0.25, Math.random() * 0.25]
         )
+      }
+      if (this.ferrisWheel) {
+        const point = [Math.random(), Math.random(), Math.random() * -1]
+        bunchOfGrapes.Bunch.group.forEach(grape => grape.rotateAboutPoint([...point], [0, 0, 0.08]))
       }
     }
   }
@@ -432,6 +440,9 @@ const ExampleUniverse = () => {
     toggleRave: () => {
       dancingGrapes.toggleRave()
     },
+    toggleferrisWheel: () => {
+      dancingGrapes.toggleferrisWheel()
+    },
     toggleEarthquake: () => {
       earthquake.toggleEarthquake()
     },
@@ -478,8 +489,10 @@ const ExampleWebGL = props => {
         <button onClick={thingsWeWant.toggleMoveCamera}>Toggle camera move</button>
         <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
         <button onClick={thingsWeWant.changeCamera}>Toggle camera</button>
-        <button onClick={thingsWeWant.toggleDancing}>💃🏻🕺🏻🍇</button>
+        <br />
+        <button onClick={thingsWeWant.toggleDancing}> Dancing 💃🏻 🕺🏻 🍇 </button>
         <button onClick={thingsWeWant.toggleRave}> Rave 🍇 ❓ ❔</button>
+        <button onClick={thingsWeWant.toggleferrisWheel}> 🎡 🍇 Ferris Wheel 🍇 🎡</button>
         <br />
         <button onClick={thingsWeWant.toggleLeft}>⏪</button>
         <button onClick={thingsWeWant.toggleFlying}>Fly!</button>

@@ -5,42 +5,42 @@ import { MatrixLibrary } from '../VIBAH/OurMatrix'
 const Vineyard = () => {
   const GrapeFactory = () => {
     // Stem
-    const stem = Our3DObject(OurMesh(Cylinder(0.25, 1.5), false), [0, 1, 0])
+    const stem = Our3DObject(OurMesh(Cylinder(0.25, 1.5, 6), false), [0, 1, 0])
     stem.translate(-1.5, 0, -1.5)
     stem.transform(MatrixLibrary.rotationMatrix(Math.PI / 2, 0, 0))
     stem.scale(0.3, 0.3, 0.3)
 
     // Top row of grapes
-    const toprow_grape1 = Our3DObject(OurMesh(Sphere(0.25, 10), false), [0.63, 0.13, 0.94])
+    const toprow_grape1 = Our3DObject(OurMesh(Sphere(0.25, 6), false), [0.63, 0.13, 0.94])
 
-    const toprow_grape2 = Our3DObject(OurMesh(Sphere(0.25, 10), false), [0.63, 0.13, 0.94])
+    const toprow_grape2 = Our3DObject(OurMesh(Sphere(0.25, 6), false), [0.63, 0.13, 0.94])
     toprow_grape2.translate(-0.3, 0, 0)
 
-    const toprow_grape3 = Our3DObject(OurMesh(Sphere(0.25, 10), false), [0.63, 0.13, 0.94])
+    const toprow_grape3 = Our3DObject(OurMesh(Sphere(0.25, 6), false), [0.63, 0.13, 0.94])
     toprow_grape3.translate(-0.6, 0, 0)
 
-    const toprow_grape4 = Our3DObject(OurMesh(Sphere(0.25, 10), false), [0.63, 0.13, 0.94])
+    const toprow_grape4 = Our3DObject(OurMesh(Sphere(0.25, 6), false), [0.63, 0.13, 0.94])
     toprow_grape4.translate(-0.9, 0, 0)
 
     // Second row of grapes
-    const secondrow_grape1 = Our3DObject(OurMesh(Sphere(0.25, 10), false), [0.63, 0.13, 0.94])
+    const secondrow_grape1 = Our3DObject(OurMesh(Sphere(0.25, 6), false), [0.63, 0.13, 0.94])
     secondrow_grape1.translate(-0.15, -0.3, 0)
 
-    const secondrow_grape2 = Our3DObject(OurMesh(Sphere(0.25, 10), false), [0.63, 0.13, 0.94])
+    const secondrow_grape2 = Our3DObject(OurMesh(Sphere(0.25, 6), false), [0.63, 0.13, 0.94])
     secondrow_grape2.translate(-0.45, -0.3, 0)
 
-    const secondrow_grape3 = Our3DObject(OurMesh(Sphere(0.25, 10), false), [0.63, 0.13, 0.94])
+    const secondrow_grape3 = Our3DObject(OurMesh(Sphere(0.25, 6), false), [0.63, 0.13, 0.94])
     secondrow_grape3.translate(-0.75, -0.3, 0)
 
     // Third row of grapes
-    const thirdrow_grape1 = Our3DObject(OurMesh(Sphere(0.25, 10), false), [0.63, 0.13, 0.94])
+    const thirdrow_grape1 = Our3DObject(OurMesh(Sphere(0.25, 6), false), [0.63, 0.13, 0.94])
     thirdrow_grape1.translate(-0.3, -0.6, 0)
 
-    const thirdrow_grape2 = Our3DObject(OurMesh(Sphere(0.25, 10), false), [0.63, 0.13, 0.94])
+    const thirdrow_grape2 = Our3DObject(OurMesh(Sphere(0.25, 6), false), [0.63, 0.13, 0.94])
     thirdrow_grape2.translate(-0.6, -0.6, 0)
 
     // Final grape
-    const final_grape = Our3DObject(OurMesh(Sphere(0.25, 10), false), [0.63, 0.13, 0.94])
+    const final_grape = Our3DObject(OurMesh(Sphere(0.25, 6), false), [0.63, 0.13, 0.94])
     final_grape.translate(-0.45, -0.9, 0)
 
     const GrapeFactory = Our3DGroup([
@@ -66,9 +66,13 @@ const Vineyard = () => {
   const second_grape_in_bunch = GrapeFactory().translate(-1, -1, -1)
   const third_grape_in_bunch = GrapeFactory().translate(1, -1, -1)
 
-  const first_grape_position = [-1.75, 0, -1]
-  const second_grape_position = [-2.5, -1, -1]
-  const third_grape_position = [-1, -1, -1]
+  const first_grape_position = [0, 0, -1]
+  const second_grape_position = [-1, -1, -1]
+  const third_grape_position = [1, -1, -1]
+
+  const first_grape_tracking_position = [-1.75, 0, -1]
+  const second_grape_tracking_position = [-2.5, -1, -1]
+  const third_grape_tracking_position = [-1, -1, -1]
 
   const Bunch = Our3DGroup([first_grape_in_bunch, second_grape_in_bunch, third_grape_in_bunch])
   return {
@@ -76,6 +80,9 @@ const Vineyard = () => {
     first_grape_position,
     second_grape_position,
     third_grape_position,
+    first_grape_tracking_position,
+    second_grape_tracking_position,
+    third_grape_tracking_position,
     first_grape_in_bunch,
     second_grape_in_bunch,
     third_grape_in_bunch
