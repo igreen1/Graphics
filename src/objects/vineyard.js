@@ -62,13 +62,13 @@ const Vineyard = () => {
     return GrapeFactory
   }
 
-  const first_grape_in_bunch = GrapeFactory().translate(0, 0, -1)
-  const second_grape_in_bunch = GrapeFactory().translate(-1, -1, -1)
-  const third_grape_in_bunch = GrapeFactory().translate(1, -1, -1)
+  const first_grape_in_bunch = GrapeFactory().translate(0, 0.75, -1)
+  const second_grape_in_bunch = GrapeFactory().translate(-1, -0.25, -1)
+  const third_grape_in_bunch = GrapeFactory().translate(1, -0.25, -1)
 
-  const first_grape_position = [0, 0, -1]
-  const second_grape_position = [-1, -1, -1]
-  const third_grape_position = [1, -1, -1]
+  const first_grape_position = [0, 0.75, -1]
+  const second_grape_position = [-1, -0.25, -1]
+  const third_grape_position = [1, -0.25, -1]
 
   const first_grape_tracking_position = [-1.75, 0, -1]
   const second_grape_tracking_position = [-2.5, -1, -1]
