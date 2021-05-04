@@ -1,20 +1,20 @@
 // Import our library
 import {
-  Geometries,
+  // Geometries,
   ReactWebGL,
   BigBang,
-  OurMesh,
-  Our3DGroup,
-  Our3DObject,
+  // OurMesh,
+  // Our3DGroup,
+  // Our3DObject,
   OurAmbientLight,
-  OurCamera,
-  MatrixLibrary,
-  Animations
+  OurCamera
+  // MatrixLibrary,
+  // Animations
 } from '../VIBAH/VIBAH'
 
-import { Cylinder, Sphere, Cone, Lathe } from '../VIBAH/OurGeometryLibrary'
-import { CamelFactory } from '../objects/camel'
-import { IceCreamFactory } from '../objects/Detroit'
+// import { Cylinder, Sphere, Cone, Lathe } from '../VIBAH/OurGeometryLibrary'
+// import { CamelFactory } from '../objects/camel'
+// import { IceCreamFactory } from '../objects/Detroit'
 import { Vineyard } from '../objects/vineyard'
 
 const Sandbox = () => {
@@ -29,7 +29,7 @@ const Sandbox = () => {
   // universe.addAnimation(Animations.RotateAboutPoint(IceCream, [3, -1, 0.5], [0, 0, 0.1]))
   //
 
-  const grapes = Vineyard()
+  const grapes = Vineyard().Bunch
   universe.addToUniverse(grapes)
 
   // We have to see something!

@@ -266,15 +266,15 @@ const ExampleUniverse = () => {
       if (this.rave) {
         bunchOfGrapes.first_grape_in_bunch.rotateAboutPoint(
           [...bunchOfGrapes.first_grape_position],
-          [Math.random() * 0.25, Math.random() * 0.25, Math.random() * 0.25]
+          [Math.random() * 0.025, Math.random() * 0.25, Math.random() * 0.025]
         )
         bunchOfGrapes.second_grape_in_bunch.rotateAboutPoint(
           [...bunchOfGrapes.second_grape_position],
-          [Math.random() * -0.25, Math.random() * 0.25, Math.random() * -0.25]
+          [Math.random() * -0.25, Math.random() * 0.025, Math.random() * -0.025]
         )
         bunchOfGrapes.third_grape_in_bunch.rotateAboutPoint(
           [...bunchOfGrapes.third_grape_position],
-          [Math.random() * 0.25, Math.random() * -0.25, Math.random() * 0.25]
+          [Math.random() * 0.25, Math.random() * -0.25, Math.random() * 0.025]
         )
       }
       if (this.ferrisWheel) {
