@@ -144,8 +144,8 @@ const ExampleUniverse = () => {
     }
   })
 
-  const bunchOfGrapes = Vineyard().Bunch
-  universe.addToUniverse(bunchOfGrapes)
+  const bunchOfGrapes = Vineyard()
+  universe.addToUniverse(bunchOfGrapes.Bunch)
 
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
@@ -235,21 +235,21 @@ const ExampleUniverse = () => {
 
   universe.addAnimation(earthquake)
 
-  // const dancingGrapes = {
-  //   dancing: false,
-  //   toggleDancing: function () {
-  //     this.dancing = !this.dancing
-  //   },
-  //   tick: function () {
-  //     if (this.dancing) {
-  //       bunchOfGrapes.first_grape_in_bunch.rotateAboutPoint(...bunchOfGrapes.first_grape_position)
-  //       bunchOfGrapes.second_grape_in_bunch.rotateAboutPoint(...bunchOfGrapes.second_grape_position)
-  //       bunchOfGrapes.third_grape_in_bunch.rotateAboutPoint(...bunchOfGrapes.third_grape_position)
-  //     }
-  //   }
-  // }
+  const dancingGrapes = {
+    dancing: false,
+    toggleDancing: function () {
+      this.dancing = !this.dancing
+    },
+    tick: function () {
+      if (this.dancing) {
+        bunchOfGrapes.first_grape_in_bunch.rotateAboutPoint([...bunchOfGrapes.first_grape_position], [0, -0.05, 0])
+        bunchOfGrapes.second_grape_in_bunch.rotateAboutPoint([...bunchOfGrapes.second_grape_position], [0, -0.05, 0])
+        bunchOfGrapes.third_grape_in_bunch.rotateAboutPoint([...bunchOfGrapes.third_grape_position], [0, -0.05, 0])
+      }
+    }
+  }
 
-  // universe.addAnimation(dancingGrapes)
+  universe.addAnimation(dancingGrapes)
 
   const shepherdAbilities = {
     center: [-0.2, -2, 1],
@@ -408,9 +408,9 @@ const ExampleUniverse = () => {
     toggleBreakItAll: () => {
       breakEverything.toggleBreakItAll()
     },
-    // toggleDancing: () => {
-    //   dancingGrapes.toggleDancing()
-    // },
+    toggleDancing: () => {
+      dancingGrapes.toggleDancing()
+    },
     toggleEarthquake: () => {
       earthquake.toggleEarthquake()
     },
@@ -457,7 +457,7 @@ const ExampleWebGL = props => {
         <button onClick={thingsWeWant.toggleMoveCamera}>Toggle camera move</button>
         <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
         <button onClick={thingsWeWant.changeCamera}>Toggle camera</button>
-        {/* <button onClick={thingsWeWant.toggleDancing}>Dancing Grapes</button> */}
+        <button onClick={thingsWeWant.toggleDancing}>Dancing Grapes</button>
         <br />
         <button onClick={thingsWeWant.toggleLeft}>⏪</button>
         <button onClick={thingsWeWant.toggleFlying}>Fly!</button>
