@@ -403,13 +403,13 @@ const ExampleUniverse = () => {
         universe.addToUniverse(perspectiveCamera)
         this.isPerspective = !this.isPerspective
       } else {
-        const orthagraphicCamera = OurCamera(
+        const orthographicCamera = OurCamera(
           [0, 1, -5],
           [0, 0, 0],
           [2.5, -2.5, 5, -5, -5, 10],
           MatrixLibrary.orthographicProjectionMatrix
         )
-        universe.addToUniverse(orthagraphicCamera)
+        universe.addToUniverse(orthographicCamera)
         this.isPerspective = !this.isPerspective
       }
     }
