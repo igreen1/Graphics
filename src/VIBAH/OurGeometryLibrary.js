@@ -275,6 +275,31 @@ const Sphere = (radius = 0.5, radialSegments = 32) => {
   return { vertices, facesByIndex }
 }
 
+// How we COULD implement geometry caching
+// const sphereCache = {
+//   cache: [],
+//   searchList: function(desiredSegments, desiredRadius){
+//     let result = this.list.find(element => element.radialSegments = desiredSegments)
+//     if(!result){
+//       result = SphereFactory(desiredRadius, desiredSegments)
+//       result.radialSegments = desiredSegments
+//       result.radius = desiredRadius
+//       this.cache.push(result)
+//       return result
+//     }
+//     return result
+    
+//   }
+// }
+// const CachedSphere = (radius = 0.5, radialSegments = 32) => {
+//   const sphere = sphereCache.searchList(radius, radialSegments)
+//   if(sphere.radius !== radius){
+//     return sphere.scale(radius/sphere.radius)
+//   } else { 
+//     return sphere
+//   }
+// }
+
 /**
  * Torus arcs a tube with radius tubeRadius around a given innerRadius with arc defaulted to 2 PI.
  * radialSegments & tubularSegments adjust depth & roundness of the tube, respectively.
