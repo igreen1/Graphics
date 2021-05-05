@@ -3,7 +3,11 @@ import { Our3DObject, OurMesh, Our3DGroup } from '../VIBAH/Our3DObject'
 import { MatrixLibrary } from '../VIBAH/OurMatrix'
 
 const Vineyard = () => {
-  const GrapeFactory = (grapeColor = [0.63, 0.13, 0.94], stemColor = [0, 1, 0]) => {
+  const GrapeFactory = () => {
+    // Colors
+    const grapeColor = [0.63, 0.13, 0.94]
+    const stemColor = [0, 1, 0]
+
     // Stem
     const stem = Our3DObject(OurMesh(Cylinder(0.25, 1.5, 6), false), [...stemColor])
     stem.translate(-1.5, 0, -1.5)
