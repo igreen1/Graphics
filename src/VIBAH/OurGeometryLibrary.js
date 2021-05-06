@@ -1,3 +1,6 @@
+// return type that points to itself
+// geos gotta know their size slurpq!
+
 /*
  * This module defines/generates vertex arrays for certain predefined shapes.
  * The "shapes" are returned as indexed vertices, with utility functions for
@@ -16,6 +19,8 @@ const icosahedron = () => {
   const Z = 0.850650808352039932
 
   return {
+    type: icosahedron,
+    params: {},
     vertices: [
       [-X, 0.0, Z],
       [X, 0.0, Z],
@@ -87,7 +92,7 @@ const Cone = (radius = 0.5, height = 1, radialSegments = 32, heightSegments = 32
     facesByIndex.push([i, i + radialSegments + 1, i + radialSegments])
   }
 
-  return { vertices, facesByIndex }
+  return { params: { radius, height, radialSegments, heightSegments, type: Cone }, vertices, facesByIndex }
 }
 
 /*
@@ -129,7 +134,7 @@ const Cylinder = (radius = 0.5, height = 0.5, radialSegments = 32, heightSegment
     }
   }
 
-  return { vertices, facesByIndex }
+  return { params: { radius, height, radialSegments, heightSegments, type: Cylinder }, vertices, facesByIndex }
 }
 
 /*
@@ -169,7 +174,7 @@ const Extrude = (vertices2D, faces2D, depth = 0.5) => {
     return facesByIndex
   })(vertices, faces2D)
 
-  return { vertices, facesByIndex }
+  return { params: { vertices2D, faces2D, depth, type: Extrude }, vertices, facesByIndex }
 }
 
 /*
@@ -202,13 +207,14 @@ const Lathe = (points, segments = 32, phiStart = 0, phiLength = 2 * Math.PI) => 
   }
 
   return {
+    params: { points, segments, phiStart, phiLength, type: Lathe },
     vertices,
     facesByIndex
   }
 }
 
 /*
-Regular Polygon
+  Regular Polygon
 */
 
 const RegularPolygon = numberOfSides => {
@@ -230,7 +236,7 @@ const RegularPolygon = numberOfSides => {
       facesByIndex.push([0, i, 1])
     }
   }
-  return { vertices, facesByIndex }
+  return { params: { numberOfSides, type: RegularPolygon }, vertices, facesByIndex }
 }
 
 /*
@@ -272,33 +278,8 @@ const Sphere = (radius = 0.5, radialSegments = 32) => {
     facesByIndex.push([i, i + radialSegments + 1, i + radialSegments])
   }
 
-  return { vertices, facesByIndex }
+  return { params: { radius, radialSegments, type: Sphere }, vertices, facesByIndex }
 }
-
-// How we COULD implement geometry caching
-// const sphereCache = {
-//   cache: [],
-//   searchList: function(desiredSegments, desiredRadius){
-//     let result = this.list.find(element => element.radialSegments = desiredSegments)
-//     if(!result){
-//       result = SphereFactory(desiredRadius, desiredSegments)
-//       result.radialSegments = desiredSegments
-//       result.radius = desiredRadius
-//       this.cache.push(result)
-//       return result
-//     }
-//     return result
-    
-//   }
-// }
-// const CachedSphere = (radius = 0.5, radialSegments = 32) => {
-//   const sphere = sphereCache.searchList(radius, radialSegments)
-//   if(sphere.radius !== radius){
-//     return sphere.scale(radius/sphere.radius)
-//   } else { 
-//     return sphere
-//   }
-// }
 
 /**
  * Torus arcs a tube with radius tubeRadius around a given innerRadius with arc defaulted to 2 PI.
@@ -337,11 +318,15 @@ const Torus = (innerRadius = 0.5, tubeRadius = 0.2, radialSegments = 36, tubular
       ])
     }
   }
-  return { vertices, facesByIndex }
+  return {
+    params: { innerRadius, tubeRadius, radialSegments, tubularSegments, arc, type: Torus },
+    vertices,
+    facesByIndex
+  }
 }
 
 /*
-Tube... add description
+  Tube is two Cylinder objects, one nested inside the other, connected by faces
 */
 
 const Tube = (innerRadius = 0.1, outerRadius = 0.6, height = 0.5, radialSegments = 24, heightSegments = 32) => {
@@ -420,7 +405,11 @@ const Tube = (innerRadius = 0.1, outerRadius = 0.6, height = 0.5, radialSegments
     facesByIndex.push([i, i + 1, i + radialSegments + 1])
   }
 
-  return { vertices, facesByIndex }
+  return {
+    params: { innerRadius, outerRadius, height, radialSegments, heightSegments, type: Tube },
+    vertices,
+    facesByIndex
+  }
 }
 
 export { icosahedron, Cone, Cylinder, Extrude, Lathe, RegularPolygon, Sphere, Torus, Tube }
