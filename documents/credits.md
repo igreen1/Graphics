@@ -3,7 +3,7 @@ This UFO is scanning its newly generated pyramid with its layered, 360 rotating 
 ## Grapes - Halle Vogelpohl
 These versatile fruits earned their title as one of the 7 Wonders of The World due to their majestic dancing abilities: They can traverse the sky in an eerily synchronized fashion, rave like it's the 90's, and rotate like the classic Ferris Wheel-- then return back to their choreographic trance with the toggle of a few buttons. In short, these grapes serve as an omen to postmodern dance, millenia before the style rose to popularity.
 ## Sphinx, Pyramids, Mummy and Background - Veronica Backer-Peral
-Leonardo DaVinci may have painted the Mona Lisa to appear as if her eyes move, but if you look closely at the Sphinx of Giza you will see that her eyes really do move, following your every step. Watch out — if you make any wrong moves, you might unleash an ancient curse, animating the Sphinx into a viscious monster ready to attack and alert the Pharoah's mummy of your presence.
+Leonardo DaVinci may have painted the Mona Lisa to appear as if her eyes move, but if you look closely at the Sphinx of Giza you will see that her eyes really do move, following your every step. Watch out — if you make any wrong moves, you might unleash an ancient curse, animating the Sphinx into a vicious monster ready to attack and alert the Pharaoh's mummy of your presence.
 ## Shepherd - Andrew Seaman
 The shepherd may not look like much on the surface, but when the aliens first visited ancient Egypt they bestowed upon him the power of flight.  He has been practicing flying every other weekend, and has perfected his turn radius.  However, sometimes he feels like something or someone from outside of this world is controlling his flight pattern.
 ## Camels - Ian Green
