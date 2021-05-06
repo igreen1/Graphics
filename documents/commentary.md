@@ -13,6 +13,8 @@ And, of course, all WebGL code is entirely hidden from the user.
 We took a ThreeJS approach to this library, so the programmer requirements are similar to ThreeJS. Users of our library must create their objects (though we've provided some nifty geometries to help), group them, place them in the scene, and define their own animations. Animations can be defined either directly as matrix transformations or as groupings of some of our basics transformations. The user must also add their objects to the universe via a simple function call. While we split up our universe code, this is not required. So, the user can directly interact with our universe in React with the right React know-how. 
 
 The user, in short, defines a scene (either a scene or Universe) and either grabs a React component wrapping a canvas, or just the canvasref element.
+
+The user has to manually implement geometry/mesh caching to improve efficiency (especially on load times). This was to be added after recommendations from Prof. But these recommendations were received on May 5th and its finals week. 
   
 ## How much code for using your library is the same at the application level, regardless of the specific scene?  
   
@@ -34,3 +36,5 @@ Overall, our React knowledge was limited and it shows in the early design stages
 Using classes likely would have saved many, many headaches (like the need for so many getters and setters). This one came down to @igreen1 liking functional programming and strong-arming the group into it
 
 Also, we would refactor our group code to more efficiently handle the geometries. While more difficult, it should be fairly achievable to create 'new' meshes from our groups when objects are added. And, because of our scene being a group, this could create lods of new efficiencies, especially in load times (when normals are calculated)
+
+After a talk with Prof., we attempted to implement geometry/mesh caching. This attempt was extremely efficient; however, it required some serious refactoring as it would touch the core of our library. And, its finals week. Unfortunate. We left an example code in `OurSandbox` of vaguely how it could be done at the application level.
