@@ -87,6 +87,10 @@ const OurMesh = ({ vertices, facesByIndex }, wireframe = false, faceted = false)
       this.updateCachedNormals()
       return this
     },
+    toggleIsFaceted:function(){
+      this.setIsFaceted(!isFaceted)
+      return this
+    },
     get normals() {
       if (!cachedNormals) {
         this.updateCachedNormals()
@@ -271,13 +275,12 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
   return {
     ...TransformableObject(),
     type: Our3DObject,
-    // change: true,
     set change(newVal) {
       change = newVal
       this.mesh.change = newVal
     },
     get change() {
-      return change
+      return change || this.mesh.change
     },
     name,
     mesh,
@@ -380,10 +383,10 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
       return this
     },
     toggleFaceted: function () {
-      this.setIsFaceted(!this.isFaceted)
+      this.mesh.toggleFaceted()
     },
     setIsFaceted: function (newVal) {
-      mesh.setIsFaceted(newVal)
+      this.mesh.setIsFaceted(newVal)
       return this
     },
     get isFaceted() {
