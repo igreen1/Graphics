@@ -382,8 +382,12 @@ const Our3DObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => {
       cachedColors = this.calcColors()
       return this
     },
+    toggleIsFaceted: function(){
+      return this.toggleFaceted()
+    },
     toggleFaceted: function () {
-      this.mesh.toggleFaceted()
+      this.mesh.toggleIsFaceted()
+      return this;
     },
     setIsFaceted: function (newVal) {
       this.mesh.setIsFaceted(newVal)
