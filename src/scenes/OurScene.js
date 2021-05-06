@@ -430,6 +430,20 @@ const ExampleUniverse = () => {
     }
   })
 
+  const facetedAnimation = {
+    change: false,
+    tick: function(){
+      if(this.change){
+        this.change = false
+        universe.universe.scene.objectsToDraw.forEach(sceneObject => sceneObject.toggleFaceted())
+      }
+    },
+    sceneToggleFaceted: function(){
+      this.change = true
+    }
+  }
+  universe.addAnimation(facetedAnimation)
+
   // put the things we want to connect directly to react
   const thingsWeWant = {
     addAnimation: universe.addAnimation,
@@ -469,6 +483,9 @@ const ExampleUniverse = () => {
     },
     changeCamera: () => {
       changeView.toggleView()
+    },
+    sceneToggleFaceted: () => {
+      facetedAnimation.sceneToggleFaceted()
     }
   }
   return { universe, thingsWeWant }
@@ -482,6 +499,7 @@ const ExampleWebGL = props => {
       <ReactWebGL universe={universe.universe} />
       <section>
         <button onClick={thingsWeWant.makeWireframe}>Toggle wireframe</button>
+        <button onClick={thingsWeWant.sceneToggleFaceted}>Toggle Faceted/Smooth</button>
         <button onClick={thingsWeWant.toggleMoveCamera}>Toggle camera move</button>
         <button onClick={thingsWeWant.changeCamera}>Toggle camera</button>
         <button onClick={thingsWeWant.toggleEarthquake}>You make my earth quake</button>
