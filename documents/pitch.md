@@ -16,4 +16,4 @@ The year is 50 BC, 19 years after the birth of co-regent Cleopatra and 1 year af
 -Dancing will make the grapes traverse the screen in a synchronized fashion\
 -Rave will make the grapes traverse the screen like they're intoxicated (wine pun here?)\
 -Ferris Wheel has the grapes rotate around a point (like a ferris wheel)\
--Fly
+-Flying allows the Shepherd to showcase their new gift of flight, use the main button to toggle straight translation and the two buttons on either side to toggle rotation in the corresponding direction.
