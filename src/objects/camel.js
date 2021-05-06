@@ -6,14 +6,16 @@ const CamelFactory = (fidelity = 1) => {
   const neck = Our3DObject(OurMesh(Geometries.Cylinder(0.2, 1.5, 5 * fidelity, 10 * fidelity), false), [0, 0, 0], 'neck')
   const body = Our3DObject(OurMesh(Geometries.Cylinder(1, 3.3, 5 * fidelity, 10 * fidelity), false), [0, 0, 0], 'body')
 
-  const legFL = Our3DObject(OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false), [0, 0, 0], 'legFL')
-  const legFR = Our3DObject(OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false), [0, 0, 0], 'legFL')
-  const legBL = Our3DObject(OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false), [0, 0, 0], 'legFL')
-  const legBR = Our3DObject(OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false), [0, 0, 0], 'legFL')
+  const legMesh = OurMesh(Geometries.Cylinder(0.25, 2, 5 * fidelity, 10 * fidelity), false)
+  const legFL = Our3DObject(legMesh, [0, 0, 0], 'legFL')
+  const legFR = Our3DObject(legMesh, [0, 0, 0], 'legFL')
+  const legBL = Our3DObject(legMesh, [0, 0, 0], 'legFL')
+  const legBR = Our3DObject(legMesh, [0, 0, 0], 'legFL')
   const legs = Our3DGroup([legFL, legFR, legBL, legBR], 'legs')
 
-  const hump1 = Our3DObject(OurMesh(Geometries.Sphere(0.8, 5 * fidelity), false), [0, 0, 0], 'hump')
-  const hump2 = Our3DObject(OurMesh(Geometries.Sphere(0.8, 5 * fidelity), false), [0, 0, 0], 'hump')
+  const humpMesh = OurMesh(Geometries.Sphere(0.8, 5 * fidelity), false)
+  const hump1 = Our3DObject(humpMesh, [0, 0, 0], 'hump')
+  const hump2 = Our3DObject(humpMesh, [0, 0, 0], 'hump')
   const humps = Our3DGroup([hump1, hump2], 'humps')
 
   // Orientate everything
