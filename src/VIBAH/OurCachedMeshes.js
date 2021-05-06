@@ -151,6 +151,7 @@ const OurCachedMesh = ({ vertices, facesByIndex, params }, wireframe = false, fa
       this.facesChanged = true
       isFaceted = newVal
       this.updateCachedNormals()
+      this.updateCachedVertices()
       return this
     },
     toggleIsFaceted:function(){
@@ -169,7 +170,7 @@ const OurCachedMesh = ({ vertices, facesByIndex, params }, wireframe = false, fa
       // so just keep the cache, memory is cheaper than normal calculations
       // caches ALL normals if they are requested once
 
-      if (this.ifFaceted) {
+      if (this.isFaceted) {
         if (this.isWireframe) {
           if (!cachedFacetedWireframeNormals) {
             cachedFacetedWireframeNormals = this.facetedNormals
