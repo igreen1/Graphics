@@ -153,6 +153,10 @@ const OurCachedMesh = ({ vertices, facesByIndex, params }, wireframe = false, fa
       this.updateCachedNormals()
       return this
     },
+    toggleIsFaceted:function(){
+      this.setIsFaceted(!isFaceted)
+      return this
+    },
     get normals() {
       if (!cachedNormals) {
         this.updateCachedNormals()
@@ -345,13 +349,12 @@ const OurCachedObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => 
   const OurObject = {
     ...TransformableObject(),
     type: Our3DObject,
-    // change: true,
     set change(newVal) {
       change = newVal
       this.mesh.change = newVal
     },
     get change() {
-      return change
+      return change || this.mesh.change
     },
     name,
     mesh: cachedMesh,
@@ -453,11 +456,15 @@ const OurCachedObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => 
       cachedColors = this.calcColors()
       return this
     },
+    toggleIsFaceted: function(){
+      return this.toggleFaceted()
+    },
     toggleFaceted: function () {
-      this.setIsFaceted(!this.isFaceted)
+      this.mesh.toggleIsFaceted()
+      return this;
     },
     setIsFaceted: function (newVal) {
-      mesh.setIsFaceted(newVal)
+      this.mesh.setIsFaceted(newVal)
       return this
     },
     get isFaceted() {
