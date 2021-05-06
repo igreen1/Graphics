@@ -4,10 +4,6 @@ import { toRawLineArray, toRawTriangleArray, Vector } from './OurUtilities'
 import { TransformableObject } from './OurTransformations'
 import { Our3DObject } from './Our3DObject'
 
-// User can make object but not mesh --> mesh contains geometry
-// object accepts mesh & geo
-
-// Cone, RegularPolygon, Torus, Tube
 const scaleFactor = (mesh, cachedMesh) => {
   if (mesh === cachedMesh || mesh.type === Geometries.icosahedron) {
     return MatrixLibrary.scaleMatrix(1, 1, 1)
@@ -26,12 +22,10 @@ const scaleFactor = (mesh, cachedMesh) => {
     return MatrixLibrary.scaleMatrix(1, 1, zFactor)
   }
 
-  // default if Geometry caching not supported !(cylinder || sphere || cone || tube)
+  // default if Geometry caching not supported
   return MatrixLibrary.scaleMatrix(1, 1, 1)
 }
 
-// if dif --> just gotta recalc
-// cache holds the faces, wireframe, faceted, smooth data
 const cachedMeshes = []
 const searchForCachedMesh = mesh => {
   // Torus was lowkey complicated since innerRadius & tubeRadius affect e/o...
@@ -154,7 +148,7 @@ const OurCachedMesh = ({ vertices, facesByIndex, params }, wireframe = false, fa
       this.updateCachedVertices()
       return this
     },
-    toggleIsFaceted:function(){
+    toggleIsFaceted: function () {
       this.setIsFaceted(!isFaceted)
       return this
     },
@@ -457,12 +451,12 @@ const OurCachedObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => 
       cachedColors = this.calcColors()
       return this
     },
-    toggleIsFaceted: function(){
+    toggleIsFaceted: function () {
       return this.toggleFaceted()
     },
     toggleFaceted: function () {
       this.mesh.toggleIsFaceted()
-      return this;
+      return this
     },
     setIsFaceted: function (newVal) {
       this.mesh.setIsFaceted(newVal)
