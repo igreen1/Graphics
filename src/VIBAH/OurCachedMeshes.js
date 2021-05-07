@@ -55,8 +55,10 @@ const searchForCachedMesh = mesh => {
   )
 
   if (result) {
+    console.log("Cache hit")
     return result
   } else {
+    console.log("Cache miss")
     cachedMeshes.push(mesh)
     return mesh
   }
@@ -334,8 +336,8 @@ const OurCachedObject = (mesh, colorArray = [0, 0, 0], name = 'A 3D Object') => 
   let change = true
   let cachedMesh
 
-  if (mesh.type && mesh.params) {
-    // caching logic :P
+  if (mesh.geometry) {
+    // caching logic requires geometry information
     cachedMesh = searchForCachedMesh(mesh)
   } else {
     cachedMesh = mesh

@@ -32,9 +32,14 @@ const Sandbox = () => {
   universe.addToUniverse(oldcylinder)
   console.log('old cylinder', oldcylinder)
 
-  const newcylinder = CachedObjects.OurCachedObject(OurMesh(Cylinder())).translate(1, 1, 1)
+  const newcylinder = CachedObjects.OurCachedObject(CachedObjects.OurCachedMesh(Cylinder())).translate(1, 1, 1)
   universe.addToUniverse(newcylinder)
   console.log('new cylinder', newcylinder)
+
+
+  const cylinder2 = CachedObjects.OurCachedObject(CachedObjects.OurCachedMesh(Cylinder())).translate(1, 1, 1)
+  universe.addToUniverse(cylinder2)
+  console.log('new cylinder 2', cylinder2)
 
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
