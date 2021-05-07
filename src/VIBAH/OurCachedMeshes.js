@@ -9,16 +9,16 @@ const scaleFactor = (mesh, cachedMesh) => {
     return MatrixLibrary.scaleMatrix(1, 1, 1)
   }
 
-  if (mesh.type === Geometries.Cylinder || mesh.type === Geometries.Cone) {
-    const xFactor = mesh.params.radius / cachedMesh.params.radius
+  if (mesh.geometry.type === Geometries.Cylinder || mesh.geometry.type === Geometries.Cone) {
+    const xFactor = mesh.geometry.radius / cachedMesh.geometry.radius
     const yFactor = xFactor
-    const zFactor = mesh.params.height / cachedMesh.params.height
+    const zFactor = mesh.geometry.height / cachedMesh.geometry.height
     return MatrixLibrary.scaleMatrix(xFactor, yFactor, zFactor)
-  } else if (mesh.type === Geometries.Sphere) {
-    const factor = mesh.params.radius / cachedMesh.params.radius
+  } else if (mesh.geometry.type === Geometries.Sphere) {
+    const factor = mesh.geometry.radius / cachedMesh.geometry.radius
     return MatrixLibrary.scaleMatrix(factor, factor, factor)
-  } else if (mesh.type === Geometries.Tube) {
-    const zFactor = mesh.params.height / cachedMesh.params.height
+  } else if (mesh.geometry.type === Geometries.Tube) {
+    const zFactor = mesh.geometry.height / cachedMesh.geometry.height
     return MatrixLibrary.scaleMatrix(1, 1, zFactor)
   }
 
@@ -30,7 +30,11 @@ const cachedMeshes = []
 const searchForCachedMesh = mesh => {
   // Torus was lowkey complicated since innerRadius & tubeRadius affect e/o...
   // so we're not gonna worry ab it since we're refactoring on Thursday of finals week lol
-  if (mesh.type === Geometries.Lathe || mesh.type === Geometries.Extrude || mesh.type === Geometries.Torus) {
+  if (
+    mesh.geometry.type === Geometries.Lathe ||
+    mesh.geometry.type === Geometries.Extrude ||
+    mesh.geometry.type === Geometries.Torus
+  ) {
     return mesh
   }
 
@@ -47,18 +51,17 @@ const searchForCachedMesh = mesh => {
         mesh.geometry.type !== Geometries.Sphere &&
         mesh.geometry.type !== Geometries.Tube) ||
         mesh.geometry.radialSegments === cachedMesh.geometry.radialSegments) &&
-      ((mesh.type !== Geometries.Cylinder && mesh.type !== Geometries.Cone) ||
+      ((mesh.geometry.type !== Geometries.Cylinder && mesh.geometry.type !== Geometries.Cone) ||
         mesh.geometry.heightSegments === cachedMesh.geometry.heightSegments) &&
-      (mesh.type !== Geometries.Tube ||
+      (mesh.geometry.type !== Geometries.Tube ||
         (mesh.geometry.innerRadius === cachedMesh.geometry.innerRadius &&
           mesh.geometry.outerRadius === cachedMesh.geometry.outerRadius))
   )
 
   if (result) {
-    console.log("Cache hit")
+    console.log('Cache hit')
     return result
   } else {
-    console.log("Cache miss")
     cachedMeshes.push(mesh)
     return mesh
   }
