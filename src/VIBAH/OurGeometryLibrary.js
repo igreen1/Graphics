@@ -178,7 +178,7 @@ const Extrude = (vertices2D, faces2D, depth = 0.5) => {
 }
 
 /*
-Lathe description
+Lathe
 */
 
 const Lathe = (points, segments = 32, phiStart = 0, phiLength = 2 * Math.PI) => {
