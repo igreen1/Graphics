@@ -1,7 +1,7 @@
 // Import our library
 import { ReactWebGL, BigBang, OurAmbientLight, OurCamera, Animations } from '../VIBAH/VIBAH'
 // import * as VIBAH from '../VIBAH/VIBAH'
-import * as CachedObjects from '../VIBAH/OurCachedMeshes'
+// import * as CachedObjects from '../VIBAH/OurCachedMeshes'
 import { Our3DObject, OurMesh } from '../VIBAH/Our3DObject'
 import { Cylinder } from '../VIBAH/OurGeometryLibrary'
 import { IceCreamFactory } from '../objects/Detroit'
@@ -28,23 +28,23 @@ const Sandbox = () => {
   const camel = CamelFactory().scale(0.5, 0.5, 0.5).translate(-2.5, 0, 0)
   universe.addToUniverse(camel)
 
-  const oldcylinder = Our3DObject(OurMesh(Cylinder())).translate(-1, -1, -1)
-  universe.addToUniverse(oldcylinder)
-  console.log('old cylinder', oldcylinder)
+  const cylinder = Our3DObject(OurMesh(Cylinder())).translate(-1, -1, -1)
+  universe.addToUniverse(cylinder)
+  // console.log('old cylinder', cylinder)
 
-  const newcylinder = CachedObjects.OurCachedObject(CachedObjects.OurCachedMesh(Cylinder())).translate(1, 1, 1)
-  universe.addToUniverse(newcylinder)
-  console.log('new cylinder', newcylinder)
+  // Our cache testing - not effective (even 80 cache hits only reduces load time by 8s)
+  // const newcylinder = CachedObjects.OurCachedObject(CachedObjects.OurCachedMesh(Cylinder())).translate(1, 1, 1)
+  // universe.addToUniverse(newcylinder)
+  // console.log('new cylinder', newcylinder)
 
 
-  const cylinder2 = CachedObjects.OurCachedObject(CachedObjects.OurCachedMesh(Cylinder())).translate(1, 1, 1)
-  universe.addToUniverse(cylinder2)
-  console.log('new cylinder 2', cylinder2)
+  // const cylinder2 = CachedObjects.OurCachedObject(CachedObjects.OurCachedMesh(Cylinder())).translate(1, 1, 1)
+  // universe.addToUniverse(cylinder2)
+  // console.log('new cylinder 2', cylinder2)
 
   // We have to see something!
   const camera = OurCamera([0, 1, -5], [0, 0, 0], [0.5, -0.5, 1, -1, 1, 10])
   universe.addToUniverse(camera)
-  // console.log(camel)
 
   const light = OurAmbientLight([1, 1, 1])
   universe.addToUniverse(light)
