@@ -62,7 +62,7 @@ const icosahedron = () => {
 }
 
 /*
-Cone... add description
+Cone
 */
 
 const Cone = (radius = 0.5, height = 1, radialSegments = 32, heightSegments = 32) => {
@@ -240,7 +240,7 @@ const RegularPolygon = numberOfSides => {
 }
 
 /*
-Sphere ... add description
+Sphere
 */
 
 const Sphere = (radius = 0.5, radialSegments = 32) => {
@@ -274,8 +274,13 @@ const Sphere = (radius = 0.5, radialSegments = 32) => {
   const facesByIndex = []
 
   for (let i = 0; i < vertices.length - radialSegments - 1; i++) {
-    facesByIndex.push([i + 1, i, i + radialSegments + 1])
-    facesByIndex.push([i, i + radialSegments + 1, i + radialSegments])
+    if (i <= (vertices.length - radialSegments - 1) / 2) {
+      facesByIndex.push([i + 1, i, i + radialSegments + 1])
+      facesByIndex.push([i + radialSegments + 1, i, i + radialSegments])
+    } else {
+      facesByIndex.push([i, i + 1, i + radialSegments + 1])
+      facesByIndex.push([i, i + radialSegments + 1, i + radialSegments])
+    }
   }
 
   return { params: { radius, radialSegments, type: Sphere }, vertices, facesByIndex }
