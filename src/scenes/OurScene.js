@@ -110,6 +110,7 @@ const ExampleUniverse = () => {
     .translate(-1, -1.5, -1)
     .rotateAboutPoint([-1, -1.5, -1], [0, Math.PI, 0])
     .setWireframe(true)
+    .setColors([0,100,0])
   const camelHerd = Our3DGroup().add(camel1).add(camel2)
   universe.addToUniverse(camelHerd)
 
