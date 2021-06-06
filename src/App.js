@@ -22,6 +22,9 @@ const Greeting = () => (
       `Our Scene` contains a fun Egyptian scene.
       `Our Sandbox` has a bunch of random objects
     </p>
+    <p>
+      <bold> WARNING: normals are computed on load so the load will take a very long time. Eventually, these will be cached (after the first load) but the initial load and some buttons may take a while </bold>
+    </p>
   </article>
 )
 
